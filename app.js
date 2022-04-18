@@ -5,14 +5,16 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
-var mysqlStore = require('express-mysql-session')(session);
-var db = require('./utils/db');
+// module1 for storing Session in MySQL Database
+var mysqlStore = require('express-mysql-session')(session); 
 
+var db = require('./utils/db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 
-var sessionStore = new mysqlStore(db.options);
+// module2 for storing Session in MySQL Database
+var sessionStore = new mysqlStore(db.options);  
 
 var app = express();
 
@@ -21,14 +23,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+
+// configure Passport to manage the login session
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: false,
-  store: sessionStore
+  // Reference: https://darifnemma.medium.com/how-to-store-session-in-mysql-database-using-express-mysql-session-ae2f67ef833e
+  store: sessionStore // storing Session in MySQL Database
 }));
 app.use(passport.authenticate('session'));
+
 
 app.use(bodyParser.json());
 app.use(
@@ -37,13 +43,15 @@ app.use(
   })
 );
 
+
 app.use(function (req, _, next) {
   req.pool = db.connectionPool;
   next();
 });
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
+app.use('/', indexRouter); 
+app.use('/users', usersRouter); 
 app.use('/', authRouter);
 
 
