@@ -3,9 +3,17 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var mysql = require('mysql');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+var dbConnectionPool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'social',
+});
 
 var app = express();
 
@@ -20,6 +28,11 @@ app.use(
     extended: true,
   })
 );
+
+app.use(function (req, _, next) {
+  req.pool = dbConnectionPool;
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
