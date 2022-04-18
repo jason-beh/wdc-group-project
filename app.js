@@ -10,6 +10,8 @@ var usersRouter = require('./routes/users');
 
 var dbConnectionPool = mysql.createPool({
   host: 'localhost',
+  user: 'root',
+  password: 'password',
   database: 'social',
 });
 
