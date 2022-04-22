@@ -52,7 +52,7 @@ app.use(function (req, _, next) {
 
 app.use('/', indexRouter); 
 app.use('/users', usersRouter); 
-app.use('/', authRouter);
+app.use('/auth', authRouter);
 
 
 module.exports = app;

@@ -33,9 +33,9 @@ passport.use(new LocalStrategy({
             // Verify the hashed password
             var user = rows[0];
             // Table types: email---varchar(255) | password,varbinary(255) | salt,varbinary(255)
-            argon2.verify(user["password"], password).then(function() {
+            argon2.verify(user["password"], password).then(function () {
                 return cb(null, rows);
-            }).catch(function(err) {
+            }).catch(function (err) {
                 return cb(null, false, { message: 'Incorrect email or password.' });
             });
         });
@@ -43,6 +43,7 @@ passport.use(new LocalStrategy({
 }));
 
 
+// create session
 passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
         cb(null, { id: user.id, email: user.email });
@@ -50,6 +51,7 @@ passport.serializeUser(function (user, cb) {
 });
 
 
+// read from session
 passport.deserializeUser(function (user, cb) {
     process.nextTick(function () {
         return cb(null, user);
@@ -57,31 +59,27 @@ passport.deserializeUser(function (user, cb) {
 });
 
 
-router.get('/login', function (req, res, next) {
-    res.render('login');
-});
-
-
 // process the form on the login page
-router.post('/login/password', passport.authenticate('local', {
+router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login'
 }));
 
 
-router.get('/signup', function (req, res, next) {
-    res.render('signup');
-});
-
 router.post('/signup', function (req, res, next) {
     // hashing the password    
-    argon2.hash(req.body.password).then(function(hashedPassword) {
+    argon2.hash(req.body.password).then(function (hashedPassword) {
         db.connectionPool.getConnection(function (err, connection) {
             if (err) { return next(err); }
+            // Check if user exists
+            var query = "SELECT * FROM Authentication WHERE email = ?";
+            connection.query(query, [req.body.email], function (err, rows, fields) {
+                if (err) { return next(err); }
+                if (rows && rows.length == 1) { return next("The user already exists! ERROR!!!"); }
+            });
             // Query the database
-            var query = "INSERT INTO Authentication (email, password) VALUES (?, ?)";
+            query = "INSERT INTO Authentication (email, password) VALUES (?, ?)";
             connection.query(query, [req.body.email, hashedPassword], function (err) {
-                connection.release();
                 if (err) { return next(err); }
                 var user = {
                     id: this.lastID,
@@ -92,14 +90,20 @@ router.post('/signup', function (req, res, next) {
                     res.redirect('/');
                 });
             });
+            // Create user profile
+            query = "insert into User_Profile (email) values (?)";
+            connection.query(query, [req.body.email], function (err) {
+                connection.release();
+                if (err) { return next(err); }
+            });
         });
-    }).catch(function(err) {
+    }).catch(function (err) {
         return next(err);
     });
 });
 
 
-router.get('/logout', function (req, res, next) {
+router.post('/logout', function (req, res, next) {
     req.logout();
     res.redirect('/');
 });
