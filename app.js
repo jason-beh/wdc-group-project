@@ -6,15 +6,16 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
 // module1 for storing Session in MySQL Database
-var mysqlStore = require('express-mysql-session')(session); 
+var mysqlStore = require('express-mysql-session')(session);
 
 var db = require('./utils/db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
+var profileRouter = require('./routes/profile');
 
 // module2 for storing Session in MySQL Database
-var sessionStore = new mysqlStore(db.options);  
+var sessionStore = new mysqlStore(db.options);
 
 var app = express();
 
@@ -50,9 +51,10 @@ app.use(function (req, _, next) {
 });
 
 
-app.use('/', indexRouter); 
-app.use('/users', usersRouter); 
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+app.use('/', profileRouter);
 
 
 module.exports = app;
