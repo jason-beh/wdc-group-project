@@ -36,10 +36,19 @@ router.post('/create-event', function (req, res, next) {
 
 router.post('/edit-event', function (req, res, next) {
     // Ensure an user is logged in
-    if (!req.user) {
+    if (!req.user || objects.isEmpty(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
-
+    db.connectionPool.getConnection(function(err, connection) {
+        if (err) {return next(err); }
+        var { title, description, proposal_date, start_date, end_date, address_line, state, country, postcode, event_id } = req.body;
+        var query = "UPDATE Events set title = ?, description = ?, proposal_date = ?, start_date = ?, end_date = ?, address_line = ?, state = ?, country = ?, postcode = ? where event_id = ?";
+        connection.query(query, [title, description, proposal_date, start_date, end_date, address_line, state, country, postcode, event_id], function(err, rows, fields) {
+            connection.release();
+            if (err) { return next(err); }
+            return res.send("Success in modifying the event!");
+        });
+    });
 });
 
 router.get('/my-events/organized', function(req, res, next) {
