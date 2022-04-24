@@ -37,7 +37,7 @@ passport.use(new LocalStrategy({
             if (!rows || rows.length == 0) { return cb(null, false, { message: 'Incorrect email or password.' }); }
             // Verify the hashed password
             var user = rows[0];
-            // Table types: email---varchar(255) | password,varbinary(255) | salt,varbinary(255)
+            // Table types: email---varchar(255) | password---varchar(255)
             argon2.verify(user["password"], password).then(function () {
                 return cb(null, user);
             }).catch(function (err) {
