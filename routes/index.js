@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+var path = require('path');
+const { userIsLoggedIn } = require('../utils/auth');
+const { pathToHtml } = require('../utils/routes');
 
 router.get('/test-db', function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
@@ -24,23 +23,9 @@ router.get('/test-db', function (req, res, next) {
   });
 });
 
-router.get('/aa', function(req, res, next) {
-  req.pool.getConnection(function (err, connection) {
-    if (err) {
-      res.sendStatus(500);
-      return;
-    }
-    var username = req.query.username;
-    var query = "";
-    connection.query(query, [username], function(err, rows, fields) {
-      connection.release();
-      if (err) {
-        res.sendStatus(500);
-        return;
-      }
-      res.json(rows);
-    });
-  });
+// Rendering Pages
+router.get('/', function (req, res, next) {
+  res.sendFile(pathToHtml('index.html'));
 });
 
 module.exports = router;

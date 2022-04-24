@@ -3,6 +3,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var db = require('../utils/db');
 var argon2 = require('argon2');
+const { userIsLoggedIn } = require('../utils/auth');
+const { pathToHtml } = require('../utils/routes');
 
 var router = express.Router();
 
@@ -26,7 +28,7 @@ router.post('/edit-profile', function (req, res, next) {
     });
 });
 
-router.get('/profile', function(req, res, next) {
+router.get('/get-profile', function(req, res, next) {
     if (!req.user) {
         return res.status(401).send('Unauthorized Access !!'); 
     }
@@ -44,6 +46,14 @@ router.get('/profile', function(req, res, next) {
             return res.send(rows[0]);
         });
     });
+});
+
+// Rendering Pages
+router.get('/profile', function(req, res, next) {
+    if (!userIsLoggedIn(req.user)) {
+        res.redirect('/');
+    }
+    res.sendFile(pathToHtml('profile.html'));
 });
 
 module.exports = router;
