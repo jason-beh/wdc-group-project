@@ -4,6 +4,8 @@ var LocalStrategy = require('passport-local');
 var db = require('../utils/db');
 var objects = require('../utils/objects');
 var argon2 = require('argon2');
+const req = require('express/lib/request');
+const res = require('express/lib/response');
 
 var router = express.Router();
 
@@ -39,6 +41,24 @@ router.post('/edit-event', function (req, res, next) {
             connection.release();
             if (err) { return next(err); }
             return res.send("Success in modifying the event!");
+        });
+    });
+});
+
+router.delete('/delete-event', function(req, res, next) {
+    // Ensure an user is logged in
+    if (!req.user || objects.isEmpty(req.user)) {
+        return res.status(401).send('Unauthorized Access!!');
+    }
+    db.connectionPool.getConnection(function(err, connection) {
+        if (err) { return next(err); }
+        var {event_id} = req.body;
+        console.log(event_id);
+        var query = "DELETE from Events where event_id = ?";
+        connection.query(query, [event_id], function(err, rows, fields) {
+            connection.release();
+            if (err) { return next(err); }
+            return res.send("Success in deleting an event!");
         });
     });
 });
