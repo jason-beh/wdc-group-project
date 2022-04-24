@@ -13,12 +13,15 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var db = require('../utils/db');
 var argon2 = require('argon2');
+var path = require('path');
+const { userIsLoggedIn } = require('../utils/auth');
+const { pathToHtml } = require('../utils/routes');
 
 var router = express.Router();
 
 // TODO: users must logout first before logging in or signing up again
 
-// Verify Password
+// Login
 passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -36,7 +39,7 @@ passport.use(new LocalStrategy({
             var user = rows[0];
             // Table types: email---varchar(255) | password---varchar(255)
             argon2.verify(user["password"], password).then(function () {
-                return cb(null, rows);
+                return cb(null, user);
             }).catch(function (err) {
                 return cb(null, false, { message: 'Incorrect email or password.' });
             });
@@ -61,14 +64,22 @@ passport.deserializeUser(function (user, cb) {
 });
 
 
-// process the form on the login page
-router.post('/login', passport.authenticate('local', {
+router.post('/login', function(req,res,next) {
+    if(userIsLoggedIn(req.user)) {
+        return res.redirect('/');
+    }
+    next();
+}, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login'
 }));
 
 
 router.post('/signup', function (req, res, next) {
+    if (userIsLoggedIn(req.user)) {
+        return res.redirect('/');
+    }
+
     // hashing the password    
     argon2.hash(req.body.password).then(function (hashedPassword) {
         db.connectionPool.getConnection(function (err, connection) {
@@ -109,8 +120,23 @@ router.get('/logout', function (req, res, next) {
     res.redirect('/');
 });
 
-router.get('/check', function (req, res, next) {
+router.get('/check-user', function (req, res, next) {
     res.send(req.user);
+});
+
+// Rendering Pages
+router.get('/login', function(req, res, next) {
+    if (userIsLoggedIn(req.user)) {
+        res.redirect('/');
+    }
+    res.sendFile(pathToHtml('login.html'));
+});
+
+router.get('/signup', function(req, res, next) {
+    if (userIsLoggedIn(req.user)) {
+        return res.redirect('/');
+    }
+    res.sendFile(pathToHtml('signup.html'));
 });
 
 module.exports = router;

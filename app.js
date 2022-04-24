@@ -10,7 +10,6 @@ var mysqlStore = require('express-mysql-session')(session);
 
 var db = require('./utils/db');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var profileRouter = require('./routes/profile');
 var eventRouter = require('./routes/event');
@@ -53,8 +52,7 @@ app.use(function (req, _, next) {
 
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/auth', authRouter);
+app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', eventRouter);
 

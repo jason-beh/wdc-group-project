@@ -1,15 +1,16 @@
 var express = require('express');
 var passport = require('passport');
-var LocalStrategy = require('passport-local');
 var db = require('../utils/db');
 var objects = require('../utils/objects');
-var argon2 = require('argon2');
+var path = require('path');
+const { userIsLoggedIn } = require('../utils/auth');
+const { pathToHtml } = require('../utils/routes');
 
 var router = express.Router();
 
 router.post('/create-event', function (req, res, next) {
     // Ensure an user is logged in
-    if (!req.user || objects.isEmpty(req.user)) {
+    if(userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     // Get all data from request body
@@ -26,17 +27,9 @@ router.post('/create-event', function (req, res, next) {
     });
 });
 
-// 1. Modify create event -> Remove id, put in a slug {title}-{id}
-// Eg adelaide-gin-festival-868261823
-// npm package slugify
-// 2. Create two routes
-//      i. List events that I organized
-//     ii. List events that I attended
-// 3. 
-
 router.post('/edit-event', function (req, res, next) {
     // Ensure an user is logged in
-    if (!req.user || objects.isEmpty(req.user)) {
+    if(userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     db.connectionPool.getConnection(function(err, connection) {
@@ -70,7 +63,7 @@ router.delete('/delete-event', function(req, res, next) {
 
 router.get('/my-events/organized', function(req, res, next) {
     // Ensure an user is logged in
-    if (!req.user || objects.isEmpty(req.user)) {
+    if(userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     db.connectionPool.getConnection(function (err, connection) {
@@ -82,6 +75,21 @@ router.get('/my-events/organized', function(req, res, next) {
             return res.send(rows);
         });
     });
+});
+
+// Rendering Pages
+router.get('/create-event', function(req, res, next) {
+    if (!userIsLoggedIn(req.user)) {
+        res.redirect('/login');
+    }
+    res.sendFile(pathToHtml('create-event.html'));
+});
+
+router.get('/edit-event', function(req, res, next) {
+    if (!userIsLoggedIn(req.user)) {
+        res.redirect('/login');
+    }
+    res.sendFile(pathToHtml('edit-event.html'));
 });
 
 module.exports = router;
