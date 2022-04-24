@@ -13,6 +13,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var profileRouter = require('./routes/profile');
+var eventRouter = require('./routes/event');
 
 // module2 for storing Session in MySQL Database
 var sessionStore = new mysqlStore(db.options);
@@ -55,6 +56,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 app.use('/', profileRouter);
+app.use('/', eventRouter);
+
 
 
 module.exports = app;
