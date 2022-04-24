@@ -16,6 +16,8 @@ var argon2 = require('argon2');
 
 var router = express.Router();
 
+// TODO: users must logout first before logging in or signing up again
+
 // Verify Password
 passport.use(new LocalStrategy({
     usernameField: 'email',
@@ -46,7 +48,8 @@ passport.use(new LocalStrategy({
 // create session
 passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-        cb(null, { id: user.id, email: user.email });
+        // Bug fixed: 'users' becomes an array
+        cb(null, { email: user[0].email });
     });
 });
 
@@ -102,10 +105,14 @@ router.post('/signup', function (req, res, next) {
     });
 });
 
-
-router.post('/logout', function (req, res, next) {
+// TODO: change to POST later
+router.get('/logout', function (req, res, next) {
     req.logout();
     res.redirect('/');
+});
+
+router.get('/check', function (req, res, next) {
+    res.send(req.user);
 });
 
 module.exports = router;

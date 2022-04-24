@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Create an event</h1>
+    <form action="/create-event" method="post">
+        <section>
+            <label for="title">title</label>
+            <input id="title" name="title" type="text" autocomplete="title" required autofocus>
+        </section>
+        <section>
+            <label for="description">description</label>
+            <input id="description" name="description" type="text" autocomplete="description" required autofocus>
+        </section>
+        <section>
+            <label for="proposal_date">proposal_date</label>
+            <input id="proposal_date" name="proposal_date" type="text" autocomplete="proposal_date" required autofocus>
+        </section>
+        <section>
+            <label for="start_date">start_date</label>
+            <input id="start_date" name="start_date" type="text" autocomplete="start_date" required autofocus>
+        </section>
+        <section>
+            <label for="end_date">end_date</label>
+            <input id="end_date" name="end_date" type="text" autocomplete="end_date" required autofocus>
+        </section>
+        <section>
+            <label for="address_line">address_line</label>
+            <input id="address_line" name="address_line" type="text" autocomplete="address_line" required autofocus>
+        </section>
+        <section>
+            <label for="state">state</label>
+            <input id="state" name="state" type="text" autocomplete="state" required autofocus>
+        </section>
+        <section>
+            <label for="country">country</label>
+            <input id="country" name="country" type="text" autocomplete="country" required autofocus>
+        </section>
+        <section>
+            <label for="postcode">postcode</label>
+            <input id="postcode" name="postcode" type="text" autocomplete="postcode" required autofocus>
+        </section>
+        <button type="submit">Create an event</button>
+    </form>
+</body>
+
+</html>
