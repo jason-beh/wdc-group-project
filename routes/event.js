@@ -9,7 +9,6 @@ var router = express.Router();
 
 router.post('/create-event', function (req, res, next) {
     // Ensure an user is logged in
-    console.log(req.user);
     if (!req.user || objects.isEmpty(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
@@ -18,9 +17,6 @@ router.post('/create-event', function (req, res, next) {
         if (err) { return next(err); }
         // Deference
         var { title, description, proposal_date, start_date, end_date, address_line, state, country, postcode } = req.body;
-        console.log(req.body);
-        console.log(req.user);
-        console.log(req.user.email);
         var query = "INSERT INTO Events (title, description, created_by, proposal_date, start_date, end_date, custom_link, address_line, state, country, postcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         connection.query(query, [title, description, req.user.email, proposal_date, start_date, end_date, req.url, address_line, state, country, postcode], function (err, rows, fields) {
             connection.release();
@@ -32,10 +28,19 @@ router.post('/create-event', function (req, res, next) {
 
 router.post('/edit-event', function (req, res, next) {
     // Ensure an user is logged in
-    if (!req.user) {
+    if (!req.user || objects.isEmpty(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
-
+    db.connectionPool.getConnection(function(err, connection) {
+        if (err) {return next(err); }
+        var { title, description, proposal_date, start_date, end_date, address_line, state, country, postcode, event_id } = req.body;
+        var query = "UPDATE Events set title = ?, description = ?, proposal_date = ?, start_date = ?, end_date = ?, address_line = ?, state = ?, country = ?, postcode = ? where event_id = ?";
+        connection.query(query, [title, description, proposal_date, start_date, end_date, address_line, state, country, postcode, event_id], function(err, rows, fields) {
+            connection.release();
+            if (err) { return next(err); }
+            return res.send("Success in modifying the event!");
+        });
+    });
 });
 
 module.exports = router;
