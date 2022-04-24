@@ -48,8 +48,7 @@ passport.use(new LocalStrategy({
 // create session
 passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-        // Bug fixed: 'users' becomes an array
-        cb(null, { email: user[0].email });
+        cb(null, { email: user.email });
     });
 });
 
@@ -85,7 +84,6 @@ router.post('/signup', function (req, res, next) {
             connection.query(query, [req.body.email, hashedPassword], function (err) {
                 if (err) { return next(err); }
                 var user = {
-                    id: this.lastID,
                     email: req.body.email
                 };
                 req.login(user, function (err) {
