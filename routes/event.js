@@ -26,6 +26,14 @@ router.post('/create-event', function (req, res, next) {
     });
 });
 
+// 1. Modify create event -> Remove id, put in a slug {title}-{id}
+// Eg adelaide-gin-festival-868261823
+// npm package slugify
+// 2. Create two routes
+//      i. List events that I organized
+//     ii. List events that I attended
+// 3. 
+
 router.post('/edit-event', function (req, res, next) {
     // Ensure an user is logged in
     if (!req.user || objects.isEmpty(req.user)) {
@@ -51,12 +59,27 @@ router.delete('/delete-event', function(req, res, next) {
     db.connectionPool.getConnection(function(err, connection) {
         if (err) { return next(err); }
         var {event_id} = req.body;
-        console.log(event_id);
         var query = "DELETE from Events where event_id = ?";
         connection.query(query, [event_id], function(err, rows, fields) {
             connection.release();
             if (err) { return next(err); }
             return res.send("Success in deleting an event!");
+        });
+    });
+});
+
+router.get('/my-events/organized', function(req, res, next) {
+    // Ensure an user is logged in
+    if (!req.user || objects.isEmpty(req.user)) {
+        return res.status(401).send('Unauthorized Access!!');
+    }
+    db.connectionPool.getConnection(function (err, connection) {
+        if (err) { return next(err); }
+        var query = "SELECT * FROM Events WHERE created_by = ?";
+        connection.query(query, [req.user.email], function (err, rows, fields) {
+            connection.release();
+            if (err) { return next(err); }
+            return res.send(rows);
         });
     });
 });
