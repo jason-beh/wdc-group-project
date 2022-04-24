@@ -4,8 +4,6 @@ var LocalStrategy = require('passport-local');
 var db = require('../utils/db');
 var objects = require('../utils/objects');
 var argon2 = require('argon2');
-const req = require('express/lib/request');
-const res = require('express/lib/response');
 
 var router = express.Router();
 
