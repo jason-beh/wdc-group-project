@@ -1,93 +1,259 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+  crossorigin="anonymous"
+/>
+<link rel="stylesheet" href="/stylesheets/style.css" />
+<script
+  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+  crossorigin="anonymous"
+></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+  crossorigin="anonymous"
+></script>
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="scripts/ajax.js"></script>
 
     <title>Document</title>
-</head>
-<script>
+  </head>
+  <script>
     // TODO: move to separate script file
-    document.addEventListener('DOMContentLoaded', function() {
-        // Load profile
-        sendAJAX('GET', '/get-profile', null, function(err, res) {
-            if(err) {
-                // do something
-                console.log(err);
-            }
+    document.addEventListener("DOMContentLoaded", function () {
+      // Load profile
+      sendAJAX("GET", "/get-profile", null, function (err, res) {
+        if (err) {
+          // do something
+          console.log(err);
+        }
 
-            var res = JSON.parse(res);
-            var app = new Vue({
-                el: '#profile-form',
-                data() {
-                    return {
-                        first_name: res.first_name,
-                        last_name: res.last_name,
-                        birthday: res.birthday.substring(0, 10),
-                        instagram_handle: res.instagram_handle,
-                        facebook_handle: res.facebook_handle,
-                        state: res.state,
-                        country: res.country,
-                    }
-                },
-                methods: {
-                    onSubmit(e){
-                        e.preventDefault();
-                        var formData = {
-                            first_name: this.first_name,
-                            last_name: this.last_name,
-                            birthday: this.birthday,
-                            instagram_handle: this.instagram_handle,
-                            facebook_handle: this.facebook_handle,
-                            state: this.state,
-                            country: this.country,
-                        };
-                        sendAJAX('POST', '/edit-profile', JSON.stringify(formData), function(err, res) {
-                            // TODO: Notify user whether it fails or succeeds
-                        });
-                    }
+        var res = JSON.parse(res);
+        var app = new Vue({
+          el: "#profile-form",
+          data() {
+            return {
+              first_name: res.first_name,
+              last_name: res.last_name,
+              birthday: res.birthday.substring(0, 10),
+              instagram_handle: res.instagram_handle,
+              facebook_handle: res.facebook_handle,
+              state: res.state,
+              country: res.country,
+            };
+          },
+          methods: {
+            onSubmit(e) {
+              e.preventDefault();
+              var formData = {
+                first_name: this.first_name,
+                last_name: this.last_name,
+                birthday: this.birthday,
+                instagram_handle: this.instagram_handle,
+                facebook_handle: this.facebook_handle,
+                state: this.state,
+                country: this.country,
+              };
+              sendAJAX(
+                "POST",
+                "/edit-profile",
+                JSON.stringify(formData),
+                function (err, res) {
+                  // TODO: Notify user whether it fails or succeeds
                 }
-            })
-        })
-        
+              );
+            },
+          },
+        });
+      });
     });
-</script>
-<body>
-    <h1>Profile</h1>
-    <form @submit="onSubmit" id="profile-form">
-        <section>
-            <label for="first_name">first_name</label>
-            <input id="first_name" name="first_name" v-model="first_name" type="text" autocomplete="first_name" required autofocus>
+  </script>
+  <body>
+    <nav class="banner1 navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand banner1" href="#">Navbar</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="banner1 navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="banner1 nav-link" href="#"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link banner1" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle banner1"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Dropdown
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button
+            class="banner1 btn btn-outline-success my-2 my-sm-0"
+            type="submit"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    </nav>
+    <div class="banner1 div1"><h1>Profile</h1></div>
+    <div class="profileContainer">
+      <form @submit="onSubmit" id="profile-form" class="form1">
+        <section class="inputs">
+          <label for="first_name">First Name : </label>
+          <input
+            class="inputBox"
+            id="first_name"
+            name="first_name"
+            value="first_name"
+            v-model="first_name"
+            type="text"
+            autocomplete="first_name"
+            required
+            autofocus
+          />
         </section>
-        <section>
-            <label for="last_name">last_name</label>
-            <input id="last_name" name="last_name" v-model="last_name" type="text" autocomplete="last_name" required autofocus>
+        <section class="inputs">
+          <label for="last_name">Last Name : </label>
+          <input
+            class="inputBox"
+            id="last_name"
+            name="last_name"
+            value="last_name"
+            v-model="last_name"
+            type="text"
+            autocomplete="last_name"
+            required
+            autofocus
+          />
         </section>
-        <section>
-            <label for="birthday">birthday</label>
-            <input id="birthday" name="birthday" v-model="birthday" type="text" autocomplete="birthday" required autofocus>
+        <section class="inputs">
+          <label for="birthday">Birthday : </label>
+          <input
+            class="inputBox"
+            id="birthday"
+            name="birthday"
+            value="birthday"
+            v-model="birthday"
+            type="text"
+            autocomplete="birthday"
+            required
+            autofocus
+          />
         </section>
-        <section>
-            <label for="instagram_handle">instagram_handle</label>
-            <input id="instagram_handle" name="instagram_handle" v-model="instagram_handle" type="text" autocomplete="instagram_handle" required autofocus>
+        <section class="inputs">
+          <label for="instagram_handle">Instagram Handle : </label>
+          <input
+            class="inputBox"
+            id="instagram_handle"
+            name="instagram_handle"
+            value="instagram_handle"
+            v-model="instagram_handle"
+            type="text"
+            autocomplete="instagram_handle"
+            required
+            autofocus
+          />
         </section>
-        <section>
-            <label for="facebook_handle">facebook_handle</label>
-            <input id="facebook_handle" name="facebook_handle" v-model="facebook_handle" type="text" autocomplete="facebook_handle" required autofocus>
+        <section class="inputs">
+          <label for="facebook_handle">Facebook Handle : </label>
+          <input
+            class="inputBox"
+            id="facebook_handle"
+            name="facebook_handle"
+            value="facebook_handle"
+            v-model="facebook_handle"
+            type="text"
+            autocomplete="facebook_handle"
+            required
+            autofocus
+          />
         </section>
-        <section>
-            <label for="state">state</label>
-            <input id="state" name="state" v-model="state" type="text" autocomplete="state" required autofocus>
+        <section class="inputs">
+          <label for="state">State : </label>
+          <input
+            class="inputBox"
+            id="state"
+            name="state"
+            value="state"
+            v-model="state"
+            type="text"
+            autocomplete="state"
+            required
+            autofocus
+          />
         </section>
-        <section>
-            <label for="country">country</label>
-            <input id="country" name="country" v-model="country" type="text" autocomplete="country" required autofocus>
+        <section class="inputs">
+          <label for="country">Country : </label>
+          <input
+            class="inputBox"
+            id="country"
+            name="country"
+            value="country"
+            v-model="country"
+            type="text"
+            autocomplete="country"
+            required
+            autofocus
+          />
         </section>
-        <button type="submit" id="submit-button">Update my profile</button>
-    </form>
-</body>
+        <button type="submit" id="submit-button" class="inputs button1">
+          Update my profile
+        </button>
+      </form>
+      <img
+        src="/images/eventsIMG1.jpg"
+        alt="an image of events"
+        class="profIMG"
+      />
+    </div>
+  </body>
 </html>
