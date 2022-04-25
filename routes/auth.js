@@ -51,7 +51,7 @@ passport.use(new LocalStrategy({
 // create session
 passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-        cb(null, { email: user.email });
+        cb(null, { email: user.email, isAdmin: user.isAdmin });
     });
 });
 
