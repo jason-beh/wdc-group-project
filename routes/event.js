@@ -5,7 +5,6 @@ var objects = require('../utils/objects');
 var path = require('path');
 const { userIsLoggedIn } = require('../utils/auth');
 const { pathToHtml } = require('../utils/routes');
-const { futimesSync } = require('fs');
 
 var router = express.Router();
 
