@@ -10,7 +10,7 @@ var router = express.Router();
 
 router.post('/create-event', function (req, res, next) {
     // Ensure an user is logged in
-    if(userIsLoggedIn(req.user)) {
+    if(!userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     // Get all data from request body
@@ -29,7 +29,7 @@ router.post('/create-event', function (req, res, next) {
 
 router.post('/edit-event', function (req, res, next) {
     // Ensure an user is logged in
-    if(userIsLoggedIn(req.user)) {
+    if(!userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     db.connectionPool.getConnection(function(err, connection) {
@@ -46,7 +46,7 @@ router.post('/edit-event', function (req, res, next) {
 
 router.delete('/delete-event', function(req, res, next) {
     // Ensure an user is logged in
-    if (!req.user || objects.isEmpty(req.user)) {
+    if (!userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     db.connectionPool.getConnection(function(err, connection) {
@@ -63,12 +63,28 @@ router.delete('/delete-event', function(req, res, next) {
 
 router.get('/my-events/organized', function(req, res, next) {
     // Ensure an user is logged in
-    if(userIsLoggedIn(req.user)) {
+    if(!userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     db.connectionPool.getConnection(function (err, connection) {
         if (err) { return next(err); }
         var query = "SELECT * FROM Events WHERE created_by = ?";
+        connection.query(query, [req.user.email], function (err, rows, fields) {
+            connection.release();
+            if (err) { return next(err); }
+            return res.send(rows);
+        });
+    });
+});
+
+router.get('/my-events/attended', function(req, res, next) {
+    // Ensure an user is logged in
+    if (!userIsLoggedIn(req.user)) {
+        return res.status(401).send("Unauthorized Access!!");
+    }
+    db.connectionPool.getConnection(function (err, connection) {
+        if (err) { return next(err); }
+        var query = "select title, description, proposal_date, start_date, end_date, custom_link, address_line, state, country, postcode from Events inner join Attendance where Attendance.email = ? && Attendance.event_id = Events.event_id";
         connection.query(query, [req.user.email], function (err, rows, fields) {
             connection.release();
             if (err) { return next(err); }
