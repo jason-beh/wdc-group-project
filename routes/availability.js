@@ -21,5 +21,4 @@ router.post('/get-all-availability', function (req, res, next) {
     });
 });
 
-
 module.exports = router;
