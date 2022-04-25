@@ -6,7 +6,7 @@ var router = express.Router();
 
 router.post('/get-all-availability', function (req, res, next) {
     // Ensure an user is logged in
-    if(userIsLoggedIn(req.user)) {
+    if(!userIsLoggedIn(req.user)) {
         return res.status(401).send('Unauthorized Access!!');
     }
     db.connectionPool.getConnection(function(err, connection) {
