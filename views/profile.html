@@ -4,40 +4,85 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="scripts/ajax.js"></script>
+
     <title>Document</title>
 </head>
+<script>
+    // TODO: move to separate script file
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load profile
+        sendAJAX('GET', '/get-profile', null, function(err, res) {
+            console.log(res);
+            var app = new Vue({
+                el: '#profile-form',
+                data() {
+                    return {
+                        first_name: res.first_name,
+                        last_name: res.last_name,
+                        birthday: res.birthday,
+                        instagram_handle: res.instagram_handle,
+                        facebook_handle: res.facebook_handle,
+                        state: res.state,
+                        country: res.country,
+                    }
+                },
+                methods: {
+                    onSubmit(e){
+                        e.preventDefault();
+                        var formData = {
+                            first_name: this.first_name,
+                            last_name: this.last_name,
+                            birthday: this.birthday,
+                            instagram_handle: this.instagram_handle,
+                            facebook_handle: this.facebook_handle,
+                            state: this.state,
+                            country: this.country,
+                        };
+                        sendAJAX('POST', '/edit-profile', JSON.stringify(formData), function(err, res) {
+                            // TODO: Notify user whether it fails or succeeds
+                        });
+                    }
+                }
+            })
+        })
+        
+    });
+</script>
 <body>
     <h1>Profile</h1>
-    <form action="/edit-profile" method="post">
+    <form @submit="onSubmit" id="profile-form">
         <section>
             <label for="first_name">first_name</label>
-            <input id="first_name" name="first_name" type="text" autocomplete="first_name" required autofocus>
+            <input id="first_name" name="first_name" v-bind:value="first_name" v-model="first_name" type="text" autocomplete="first_name" required autofocus>
         </section>
         <section>
             <label for="last_name">last_name</label>
-            <input id="last_name" name="last_name" type="text" autocomplete="last_name" required autofocus>
+            <input id="last_name" name="last_name" v-bind:value="last_name" v-model="last_name" type="text" autocomplete="last_name" required autofocus>
         </section>
         <section>
             <label for="birthday">birthday</label>
-            <input id="birthday" name="birthday" type="text" autocomplete="birthday" required autofocus>
+            <input id="birthday" name="birthday" v-bind:value="birthday" v-model="birthday" type="text" autocomplete="birthday" required autofocus>
         </section>
         <section>
             <label for="instagram_handle">instagram_handle</label>
-            <input id="instagram_handle" name="instagram_handle" type="text" autocomplete="instagram_handle" required autofocus>
+            <input id="instagram_handle" name="instagram_handle" v-bind:value="instagram_handle" v-model="instagram_handle" type="text" autocomplete="instagram_handle" required autofocus>
         </section>
         <section>
             <label for="facebook_handle">facebook_handle</label>
-            <input id="facebook_handle" name="facebook_handle" type="text" autocomplete="facebook_handle" required autofocus>
+            <input id="facebook_handle" name="facebook_handle" v-bind:value="facebook_handle" v-model="facebook_handle" type="text" autocomplete="facebook_handle" required autofocus>
         </section>
         <section>
             <label for="state">state</label>
-            <input id="state" name="state" type="text" autocomplete="state" required autofocus>
+            <input id="state" name="state" v-bind:value="state" v-model="state" type="text" autocomplete="state" required autofocus>
         </section>
         <section>
             <label for="country">country</label>
-            <input id="country" name="country" type="text" autocomplete="country" required autofocus>
+            <input id="country" name="country" v-bind:value="country" v-model="country" type="text" autocomplete="country" required autofocus>
         </section>
-        <button type="submit">Update my profile</button>
+        <button type="submit" id="submit-button">Update my profile</button>
     </form>
 </body>
 </html>
