@@ -14,6 +14,7 @@ var authRouter = require('./routes/auth');
 var profileRouter = require('./routes/profile');
 var eventRouter = require('./routes/event');
 var availabilityRouter = require('./routes/availability');
+var searchRouter = require('./routes/search');
 
 // module2 for storing Session in MySQL Database
 var sessionStore = new mysqlStore(db.options);
@@ -57,6 +58,8 @@ app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', eventRouter);
 app.use('/', availabilityRouter);
+app.use('/', searchRouter);
+
 
 
 module.exports = app;
