@@ -1,7 +1,5 @@
 var express = require('express');
-var passport = require('passport');
 var db = require('../utils/db');
-var path = require('path');
 const { userIsLoggedIn } = require('../utils/auth');
 
 var router = express.Router();
