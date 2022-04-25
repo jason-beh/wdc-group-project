@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return {
           first_name: res.first_name,
           last_name: res.last_name,
-          birthday: !res.birthday ? res.birthday.substring(0, 10) : "",
+          birthday: res.birthday !== null ? res.birthday.substring(0, 10) : "",
           instagram_handle: res.instagram_handle,
           facebook_handle: res.facebook_handle,
           state: res.state,
