@@ -1,8 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Poppins";
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+}
+
+.banner1 {
+  background-color: #0d184f !important;
+  color: white !important;
+  border-color: white;
+}
+.div1 {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 16px;
+}
+
+.form1 {
+  padding: 0px 16px 0 16px;
+  background-color: white;
+  width: 50%;
+  height: 800px;
+}
+.inputs {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.inputBox {
+  border-color: #0d184f;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.button1 {
+  padding: 10px;
+  color: white;
+  background-color: #0d184f;
+  border-radius: 8px;
+  border: none;
+  margin: 30px auto 0 auto;
+}
+.button1:hover {
+  color: #0d184f;
+  background-color: #f3c61f;
+  transition: 0.5s;
+}
+.profileContainer {
+  display: flex;
+}
+.profIMG {
+  width: 50%;
+  object-fit: fill;
+}
+
+@media only screen and (max-width: 600px) {
+  .profileContainer {
+    flex-direction: column;
+  }
+  .form1 {
+    width: 100%;
+  }
+  .profIMG {
+    width: 100%;
+  }
 }
