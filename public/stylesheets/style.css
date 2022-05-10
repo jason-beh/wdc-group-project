@@ -1,28 +1,46 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&family=Poppins:wght@300&display=swap");
 body {
-  font-family: "Poppins";
+  font-family: "Barlow", sans-serif;
+  background-color: #f9f9f9;
 }
 
 a {
   color: #00b7ff;
 }
 
+.profileHeader {
+  font-weight: bold;
+  padding-left: 4%;
+  margin-top: 2%;
+}
+.mainCointainer {
+  display: flex;
+  flex-direction: row;
+}
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 0 4% 0 4%;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.profileName {
+  display: flex;
+  justify-content: space-between;
+}
+
+.names {
+  width: 45%;
+}
 .banner1 {
   background-color: #0d184f !important;
   color: white !important;
   border-color: white;
 }
-.div1 {
-  height: 80px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px 0 16px;
-}
 
 .form1 {
-  padding: 0px 16px 0 16px;
-  background-color: white;
-  width: 50%;
   height: 800px;
 }
 .inputs {
@@ -31,18 +49,23 @@ a {
   flex-direction: column;
 }
 .inputBox {
-  border-color: #0d184f;
+  border: 1px solid #aaa;
   border-radius: 8px;
   width: 100%;
+  padding: 5px 0px 5px 15px;
+  box-sizing: border-box;
+  font-weight: 600;
 }
 
 .button1 {
+  width: 100%;
   padding: 10px;
   color: white;
   background-color: #0d184f;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   margin: 30px auto 0 auto;
+  align-items: center;
 }
 .button1:hover {
   color: #0d184f;
@@ -52,9 +75,13 @@ a {
 .profileContainer {
   display: flex;
 }
-.profIMG {
-  width: 50%;
-  object-fit: fill;
+.profilePic {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto 0 auto;
+  padding-top: 20px;
+  box-sizing: border-box;
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 600px) {
