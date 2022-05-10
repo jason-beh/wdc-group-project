@@ -66,6 +66,21 @@ a {
   border: none;
   margin: 30px auto 0 auto;
   align-items: center;
+  box-sizing: border-box;
+  height: 50px;
+}
+
+.button2 {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #aaaaaa;
+  margin: 0 auto 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 50px;
 }
 .button1:hover {
   color: #0d184f;
@@ -94,4 +109,51 @@ a {
   .profIMG {
     width: 100%;
   }
+}
+
+/* Login */
+
+.loginMainContainer {
+  display: flex;
+}
+.loginContainer {
+  width: 50%;
+  padding: 3% 5% 0 5%;
+  box-sizing: border-box;
+  font-weight: bold;
+  margin-top: -2%;
+}
+.loginContainer h1 {
+  font-weight: bold;
+  margin-top: 2%;
+  margin-bottom: 8%;
+}
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}
+.orImage {
+  width: 100%;
+  margin-top: 8%;
+}
+
+.nAccount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+}
+
+.nAccount p {
+  margin: 0;
+}
+
+.links {
+  text-decoration: none;
+  color: black;
+}
+
+.links:hover {
+  text-decoration: underline;
+  text-decoration-color: black;
 }
