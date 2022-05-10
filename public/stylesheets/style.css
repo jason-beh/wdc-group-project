@@ -3,9 +3,11 @@
   1. Utilities
   2. Navigation
   3. Footer
+  4. Profile
+  5. Login
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300,700&display=swap");
 
 /* 1. Utilities */
 
@@ -125,6 +127,8 @@ a {
   font-weight: 600;
 }
 
+/* 4. Profile */
+
 .div1 {
   height: 80px;
   display: flex;
@@ -133,8 +137,7 @@ a {
 }
 .profileHeader {
   font-weight: bold;
-  padding-left: 4%;
-  margin-top: 2%;
+  margin-top: 40px;
 }
 .mainCointainer {
   display: flex;
@@ -144,7 +147,7 @@ a {
   display: flex;
   flex-direction: column;
   width: 50%;
-  padding: 0 4% 0 4%;
+  /* padding: 0 4% 0 4%; */
   box-sizing: border-box;
   font-weight: bold;
 }
@@ -164,7 +167,7 @@ a {
 }
 
 .form1 {
-  height: 800px;
+  margin-bottom: 20%;
 }
 .inputs {
   margin-top: 20px;
@@ -234,7 +237,7 @@ a {
   }
 }
 
-/* Login */
+/* 5. Login */
 
 .loginMainContainer {
   display: flex;
