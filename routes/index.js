@@ -28,4 +28,8 @@ router.get('/', function (req, res, next) {
   res.sendFile(pathToHtml('index.html'));
 });
 
+router.get('/nav', function (req, res, next) {
+  res.sendFile(pathToHtml('nav.html'));
+});
+
 module.exports = router;
