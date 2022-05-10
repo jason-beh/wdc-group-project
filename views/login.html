@@ -1,23 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <h1>Login</h1>
-    <form action="/login" method="post">
-        <section>
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" autocomplete="email" required autofocus>
+  </head>
+  <body>
+      <div class = "loginMainContainer"><div class="loginContainer">
+      <img src="/images/blueLogo.png" alt="App logo" />
+      <h1>Login</h1>
+      <button class="button2">
+        <img src="/images/googleLogo.png" alt="logo of google" />Sign In With
+        Google
+      </button>
+      <img src="/images/orImg.png" alt="orLayout" class="orImage" />
+      <form action="/login" method="post" class="loginForm">
+        <section class="inputs">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            autofocus
+            class="inputBox"
+          />
         </section>
-        <section>
-            <label for="current-password">Password</label>
-            <input id="current-password" name="password" type="password" autocomplete="current-password" required>
+        <section class="inputs">
+          <label for="current-password">Password</label>
+          <input
+            id="current-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            class="inputBox"
+          />
         </section>
-        <button type="submit">Login</button>
-    </form>
-</body>
+        <a href="_blank" class="links" style="text-align: end; margin-top: 3%"
+          >Forgot password</a
+        >
+        <button type="submit" class="button1">Login</button>
+        <div class="nAccount">
+          <p>Don't have an account?</p>
+          &nbsp
+          <a href="/signup" class="links">Sign Up</a>
+        </div>
+      </form>
+    </div>
+    <img src="/images/loginImage.png" alt="Community" style ="width: 50%; object-fit: cover; min-height: 100vh;"></div>
+    
+    </body>
+  </body>
 </html>
