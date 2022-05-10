@@ -2,6 +2,7 @@
   Table of Contents:
   1. Utilities
   2. Navigation
+  3. Footer
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
@@ -10,6 +11,7 @@
 
 body {
   font-family: "Poppins";
+  background-color: #f9f9f9;
 }
 
 a {
@@ -109,6 +111,18 @@ a {
   .navbar-expand-lg .navbar-collapse {
       display: none !important;
   }
+}
+
+/* 3. Footer */
+.footer {
+  background: white;
+  padding: 10px 0px;
+}
+
+.footer p {
+  margin-bottom: 0px;
+  color: #aaa;
+  font-weight: 600;
 }
 
 .div1 {
