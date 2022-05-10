@@ -23,6 +23,7 @@ CREATE TABLE User_Profile (
     country VARCHAR(255),
     postcode VARCHAR(255),
     profile_picture VARCHAR(255),
+    PRIMARY KEY(email),
     FOREIGN KEY (email) REFERENCES Authentication(email)
 );
 
@@ -34,7 +35,9 @@ CREATE TABLE Events (
     start_date TIMESTAMP,
     end_date TIMESTAMP,
     custom_link VARCHAR(255) NOT NULL,
-    address_line VARCHAR(255) NOT NULL,
+    street_number VARCHAR(255) NOT NULL,
+    street_name VARCHAR(255) NOT NULL,
+    suburb VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
     country VARCHAR(255) NOT NULL,
     postcode VARCHAR(255) NOT NULL,
