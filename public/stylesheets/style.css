@@ -1,4 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
+/*
+  Table of Contents:
+  1. Utilities
+  2. Navigation
+  3. Footer
+  4. Profile
+  5. Login
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300,700&display=swap");
+
+/* 1. Utilities */
+
 body {
   font-family: "Barlow", sans-serif;
   background-color: #f9f9f9;
@@ -8,10 +20,124 @@ a {
   color: #00b7ff;
 }
 
+
+@media screen and (max-width: 992px) {
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .desktop-hide {
+    display: block !important;
+  }
+}
+
+/* 2. Navigation */
+.navbar-image {
+  height: 60px;
+}
+
+.navbar {
+  background-color: #0d184f;
+}
+
+.navbar-nav-desktop {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-searchbar {
+  border-radius: 10px;
+  padding-left: 20px;
+  border: 1px solid #aaa;
+  border-right: none;
+}
+
+.navbar-searchbar:focus {
+  box-shadow: none;
+}
+
+.navbar-searchbar::placeholder {
+  color: #aaa;
+}
+
+.navbar-searchbar-icon {
+  display: flex;
+  align-items: center;
+  color: #aaa;
+  background-color: white;
+  padding: .375rem .75rem;
+  border: 1px solid #aaa;
+  border-left: none;
+  font-size: 20px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.navbar-toggler:focus {
+  outline: none;
+}
+
+.navbar-searchbar-icon:focus {
+  outline: none;
+}
+
+.navbar-searchbar-form {
+  width: 100%;
+}
+
+.navbar-searchbar-form-desktop {
+  width: unset;
+}
+
+.navbar-dark .nav-item .nav-link {
+  color: white;
+}
+
+.nav-item .nav-link:hover {
+  opacity: 0.8;
+  transition: 0.3s;
+}
+
+@media screen and (min-width: 992px) {
+  .navbar-expand-lg .navbar-collapse {
+      display: none !important;
+  }
+}
+
+/* 3. Footer */
+.footer {
+  background: white;
+  padding: 10px 0px;
+}
+
+.footer p {
+  margin-bottom: 0px;
+  color: #aaa;
+  font-weight: 600;
+}
+
+/* 4. Profile */
+
+.div1 {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 16px;
+}
 .profileHeader {
   font-weight: bold;
-  padding-left: 4%;
-  margin-top: 2%;
+  margin-top: 40px;
 }
 .mainCointainer {
   display: flex;
@@ -21,7 +147,7 @@ a {
   display: flex;
   flex-direction: column;
   width: 50%;
-  padding: 0 4% 0 4%;
+  /* padding: 0 4% 0 4%; */
   box-sizing: border-box;
   font-weight: bold;
 }
@@ -41,7 +167,7 @@ a {
 }
 
 .form1 {
-  height: 800px;
+  margin-bottom: 20%;
 }
 .inputs {
   margin-top: 20px;
@@ -111,7 +237,7 @@ a {
   }
 }
 
-/* Login */
+/* 5. Login */
 
 .loginMainContainer {
   display: flex;

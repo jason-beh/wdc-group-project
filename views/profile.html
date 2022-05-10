@@ -34,170 +34,197 @@
   </head>
 
   <body>
-    <nav class="banner1 navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand banner1" href="#">Navbar</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="banner1 navbar-toggler-icon"></span>
-      </button>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container navbar-container">
+        <a class="navbar-brand" href="/">
+          <img src="/images/logo-white.svg" class="navbar-image" alt="" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="banner1 nav-link" href="#"
-              >Home <span class="sr-only">(current)</span></a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link banner1" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle banner1"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input
-            class="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button
-            class="banner1 btn btn-outline-success my-2 my-sm-0"
-            type="submit"
+        <div class="mobile-hide navbar-nav-container">
+          <ul class="navbar-nav navbar-nav-desktop mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/events">
+                Browse Events
+                <span class="sr-only">Browse Events</span>
+              </a>
+            </li>
+          </ul>
+          <form
+            class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
           >
-            Search
-          </button>
-        </form>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control navbar-searchbar"
+                placeholder="Search Events..."
+                aria-label="Search Events..."
+                aria-describedby="button-addon2"
+              />
+              <button class="navbar-searchbar-icon">
+                <ion-icon name="search-outline"></ion-icon>
+              </button>
+            </div>
+          </form>
+          <ul class="navbar-nav navbar-nav-desktop ml-3">
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/events"
+                >Browse Events <span class="sr-only">Browse Events</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <form class="form navbar-searchbar-form w-100 my-2 my-lg-0">
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control navbar-searchbar"
+                    placeholder="Search Events..."
+                    aria-label="Search Events..."
+                    aria-describedby="button-addon2"
+                  />
+                  <button class="navbar-searchbar-icon">
+                    <ion-icon name="search-outline"></ion-icon>
+                  </button>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
-    <h1 class="profileHeader">Profile</h1>
-    <div class="mainCointainer">
-      <div class="profileContainer">
-        <form @submit="onSubmit" id="profile-form" class="form1">
-          <div class="profileName">
-            <section class="inputs names">
-              <label for="first_name">First Name</label>
-              <input
-                class="inputBox"
-                id="first_name"
-                name="first_name"
-                value="first_name"
-                v-model="first_name"
-                type="text"
-                required
-              />
-            </section>
-            <section class="inputs names">
-              <label for="last_name">Last Name</label>
-              <input
-                class="inputBox"
-                id="last_name"
-                name="last_name"
-                value="last_name"
-                v-model="last_name"
-                type="text"
-                required
-              />
-            </section>
-          </div>
+    <div class="container">
+      <h1 class="profileHeader">Profile</h1>
+      <div class="mainCointainer">
+        <div class="profileContainer">
+          <form @submit="onSubmit" id="profile-form" class="form1">
+            <div class="profileName">
+              <section class="inputs names">
+                <label for="first_name">First Name</label>
+                <input
+                  class="inputBox"
+                  id="first_name"
+                  name="first_name"
+                  value="first_name"
+                  v-model="first_name"
+                  type="text"
+                  required
+                />
+              </section>
+              <section class="inputs names">
+                <label for="last_name">Last Name</label>
+                <input
+                  class="inputBox"
+                  id="last_name"
+                  name="last_name"
+                  value="last_name"
+                  v-model="last_name"
+                  type="text"
+                  required
+                />
+              </section>
+            </div>
 
-          <section class="inputs">
-            <label for="birthday">Birthday</label>
-            <input
-              class="inputBox"
-              id="birthday"
-              name="birthday"
-              value="birthday"
-              v-model="birthday"
-              type="date"
-              required
-            />
-          </section>
-          <section class="inputs">
-            <label for="instagram_handle">Instagram Handle</label>
-            <input
-              class="inputBox"
-              id="instagram_handle"
-              name="instagram_handle"
-              value="instagram_handle"
-              v-model="instagram_handle"
-              type="text"
-              required
-            />
-          </section>
-          <section class="inputs">
-            <label for="facebook_handle">Facebook Handle</label>
-            <input
-              class="inputBox"
-              id="facebook_handle"
-              name="facebook_handle"
-              value="facebook_handle"
-              v-model="facebook_handle"
-              type="text"
-              required
-            />
-          </section>
-          <section class="inputs">
-            <label for="state">State</label>
-            <input
-              class="inputBox"
-              id="state"
-              name="state"
-              value="state"
-              v-model="state"
-              type="text"
-              required
-            />
-          </section>
-          <section class="inputs">
-            <label for="country">Country</label>
-            <input
-              class="inputBox"
-              id="country"
-              name="country"
-              value="country"
-              v-model="country"
-              type="text"
-              required
-            />
-          </section>
-          <button type="submit" id="submit-button" class="inputs button1">
-            Update my profile
-          </button>
-        </form>
-      </div>
-      <div class="profilePic">
-        <label for="profilePic">Profile Picture</label
-        ><img
-          src="/images/exampleProfile.png"
-          style="border-radius: 50%"
-          alt="dummy profile pic"
-        />
+            <section class="inputs">
+              <label for="birthday">Birthday</label>
+              <input
+                class="inputBox"
+                id="birthday"
+                name="birthday"
+                value="birthday"
+                v-model="birthday"
+                type="date"
+                required
+              />
+            </section>
+            <section class="inputs">
+              <label for="instagram_handle">Instagram Handle</label>
+              <input
+                class="inputBox"
+                id="instagram_handle"
+                name="instagram_handle"
+                value="instagram_handle"
+                v-model="instagram_handle"
+                type="text"
+                required
+              />
+            </section>
+            <section class="inputs">
+              <label for="facebook_handle">Facebook Handle</label>
+              <input
+                class="inputBox"
+                id="facebook_handle"
+                name="facebook_handle"
+                value="facebook_handle"
+                v-model="facebook_handle"
+                type="text"
+                required
+              />
+            </section>
+            <section class="inputs">
+              <label for="state">State</label>
+              <input
+                class="inputBox"
+                id="state"
+                name="state"
+                value="state"
+                v-model="state"
+                type="text"
+                required
+              />
+            </section>
+            <section class="inputs">
+              <label for="country">Country</label>
+              <input
+                class="inputBox"
+                id="country"
+                name="country"
+                value="country"
+                v-model="country"
+                type="text"
+                required
+              />
+            </section>
+            <button type="submit" id="submit-button" class="inputs button1">
+              Update my profile
+            </button>
+          </form>
+        </div>
+        <div class="profilePic">
+          <label for="profilePic">Profile Picture</label
+          ><img
+            src="/images/exampleProfile.png"
+            style="border-radius: 50%"
+            alt="dummy profile pic"
+          />
+        </div>
       </div>
     </div>
+
+    <footer class="footer navbar-expand-lg">
+      <div class="container">
+        <p>© Socialah 2022</p>
+      </div>
+    </footer>
   </body>
 </html>
