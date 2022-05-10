@@ -5,12 +5,12 @@
   3. Footer
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
 
 /* 1. Utilities */
 
 body {
-  font-family: "Poppins";
+  font-family: "Barlow", sans-serif;
   background-color: #f9f9f9;
 }
 
@@ -131,11 +131,39 @@ a {
   align-items: center;
   padding: 0 16px 0 16px;
 }
+.profileHeader {
+  font-weight: bold;
+  padding-left: 4%;
+  margin-top: 2%;
+}
+.mainCointainer {
+  display: flex;
+  flex-direction: row;
+}
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 0 4% 0 4%;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.profileName {
+  display: flex;
+  justify-content: space-between;
+}
+
+.names {
+  width: 45%;
+}
+.banner1 {
+  background-color: #0d184f !important;
+  color: white !important;
+  border-color: white;
+}
 
 .form1 {
-  padding: 0px 16px 0 16px;
-  background-color: white;
-  width: 50%;
   height: 800px;
 }
 .inputs {
@@ -144,18 +172,38 @@ a {
   flex-direction: column;
 }
 .inputBox {
-  border-color: #0d184f;
+  border: 1px solid #aaa;
   border-radius: 8px;
   width: 100%;
+  padding: 5px 0px 5px 15px;
+  box-sizing: border-box;
+  font-weight: 600;
 }
 
 .button1 {
+  width: 100%;
   padding: 10px;
   color: white;
   background-color: #0d184f;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   margin: 30px auto 0 auto;
+  align-items: center;
+  box-sizing: border-box;
+  height: 50px;
+}
+
+.button2 {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #aaaaaa;
+  margin: 0 auto 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 50px;
 }
 .button1:hover {
   color: #0d184f;
@@ -165,9 +213,13 @@ a {
 .profileContainer {
   display: flex;
 }
-.profIMG {
-  width: 50%;
-  object-fit: fill;
+.profilePic {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto 0 auto;
+  padding-top: 20px;
+  box-sizing: border-box;
+  font-weight: bold;
 }
 
 @media only screen and (max-width: 600px) {
@@ -180,4 +232,51 @@ a {
   .profIMG {
     width: 100%;
   }
+}
+
+/* Login */
+
+.loginMainContainer {
+  display: flex;
+}
+.loginContainer {
+  width: 50%;
+  padding: 3% 5% 0 5%;
+  box-sizing: border-box;
+  font-weight: bold;
+  margin-top: -2%;
+}
+.loginContainer h1 {
+  font-weight: bold;
+  margin-top: 2%;
+  margin-bottom: 8%;
+}
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}
+.orImage {
+  width: 100%;
+  margin-top: 8%;
+}
+
+.nAccount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+}
+
+.nAccount p {
+  margin: 0;
+}
+
+.links {
+  text-decoration: none;
+  color: black;
+}
+
+.links:hover {
+  text-decoration: underline;
+  text-decoration-color: black;
 }
