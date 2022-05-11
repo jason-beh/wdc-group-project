@@ -7,7 +7,7 @@ var router = express.Router();
 
 router.get("/view-events", function (req, res, next) {
   // Ensure the admin is logged in
-  if (!userIsAdmin(req.user)) {
+  if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access");
   }
   db.connectionPool.getConnection(function (err, connection) {
@@ -27,7 +27,7 @@ router.get("/view-events", function (req, res, next) {
 
 router.get("/view-users", function (req, res, next) {
   // Ensure the admin is logged in
-  if (!userIsAdmin(req.user)) {
+  if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access");
   }
   db.connectionPool.getConnection(function (err, connection) {
@@ -46,7 +46,7 @@ router.get("/view-users", function (req, res, next) {
 });
 
 router.post("/create-admin", function (req, res, next) {
-  if (!userIsAdmin(req.user)) {
+  if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access");
   }
 
