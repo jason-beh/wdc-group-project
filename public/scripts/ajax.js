@@ -6,14 +6,14 @@ function sendAJAX(method, url, formData, cb) {
       if (xmlHttp.status === 200) {
         cb(null, xmlHttp.responseText);
       } else {
-        cb(new Error("An error occurred"), xmlHttp.response);
+        cb(new Error(xmlHttp.responseText), xmlHttp.response);
       }
     }
   };
 
   xmlHttp.open(method, url, true);
-  if(method !== "GET") {
-    xmlHttp.setRequestHeader( 'Content-Type', 'application/json' );
+  if (method !== "GET") {
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
     xmlHttp.send(formData);
   } else {
     xmlHttp.send();
