@@ -45,7 +45,7 @@ router.get("/view-users", function (req, res, next) {
   });
 });
 
-router.post("/create-admins", function (req, res, next) {
+router.post("/create-admin", function (req, res, next) {
   if (!userIsAdmin(req.user)) {
     return res.status(401).send("Unauthorized Access");
   }
