@@ -116,6 +116,13 @@ a {
 }
 
 /* Dropdown */
+.navbar-profile-picture {
+  height: 50px;
+  border-radius: 50%;
+  width: 50px;
+  object-fit: cover;
+}
+
 .dropdown-item {
   font-weight: 400;
 }
