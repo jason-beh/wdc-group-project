@@ -31,6 +31,7 @@ CREATE TABLE Events (
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     created_by VARCHAR(255),
+    proposed_date DATE,
     start_date TIMESTAMP,
     end_date TIMESTAMP,
     custom_link VARCHAR(255) NOT NULL,
