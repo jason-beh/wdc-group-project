@@ -166,7 +166,7 @@ a {
   font-weight: bold;
   margin-top: 40px;
 }
-.mainCointainer {
+.mainContainer {
   display: flex;
   flex-direction: row;
 }
@@ -323,7 +323,7 @@ a {
   width: 100%;
   font-weight: bold;
   box-sizing: border-box;
-  padding: 0 4% 0 4%;
+  margin-bottom: 20%;
 }
 
 .createEventDiv {

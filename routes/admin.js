@@ -88,7 +88,7 @@ router.post("/create-admin", function (req, res, next) {
             query = "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
             connection.query(
               query,
-              [req.body.email, "/images/defaultUserProfile.png"],
+              [req.body.email, "/user-profiles/defaultUserProfile.png"],
               function (err) {
                 connection.release();
                 if (err) {
