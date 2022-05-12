@@ -4,9 +4,13 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     console.log(err);
   }
 
-  var res = JSON.parse(res);
-
-  console.log(res);
+  if (res !== "") {
+    res = JSON.parse(res);
+  } else {
+    res = {
+      profile_picture: null,
+    };
+  }
 
   var app = new Vue({
     el: "#navbar",

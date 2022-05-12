@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     var res = JSON.parse(res);
+
     var app = new Vue({
       el: "#profile-form",
       data() {
