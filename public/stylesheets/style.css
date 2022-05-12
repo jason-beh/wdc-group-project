@@ -260,7 +260,7 @@ a {
 }
 .orImage {
   width: 100%;
-  margin-top: 8%;
+  margin: 4% 0 4% 0;
 }
 
 .authMessage {
@@ -291,3 +291,30 @@ a {
 }
 
 /*6. Create an Event */
+.form2 {
+  display: flex;
+  width: 100%;
+  font-weight: bold;
+  box-sizing: border-box;
+  padding: 0 4% 0 4%;
+}
+
+.createEventDiv {
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.timeBox {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.timeBox p {
+  margin-bottom: 0;
+  box-sizing: border-box;
+  padding-right: 5px;
+}
+
+/*7. Edit an Event */
