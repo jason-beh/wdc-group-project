@@ -115,6 +115,11 @@ a {
   }
 }
 
+/* Dropdown */
+.dropdown-item {
+  font-weight: 400;
+}
+
 /* 3. Footer */
 .footer {
   background: white;

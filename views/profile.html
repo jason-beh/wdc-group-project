@@ -29,12 +29,13 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="scripts/ajax.js"></script>
+    <script src="/scripts/nav.js"></script>
     <script src="/scripts/profile.js"></script>
     <title>Document</title>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark" id="navbar">
       <div class="container navbar-container">
         <a class="navbar-brand" href="/">
           <img src="/images/logo-white.svg" class="navbar-image" alt="" />
@@ -77,8 +78,27 @@
             </div>
           </form>
           <ul class="navbar-nav navbar-nav-desktop ml-3">
-            <li class="nav-item">
+            <li v-if="profile_picture != ''" class="nav-item">
               <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li v-if="profile_picture == ''" class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <img v-bind:src="profile_picture" alt="profile picture" />
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/my-events">My Events</a>
+                <a class="dropdown-item" href="/profile">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
             </li>
           </ul>
         </div>
@@ -90,8 +110,27 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
-            <li class="nav-item">
+            <li v-if="profile_picture != ''" class="nav-item">
               <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li v-if="profile_picture == ''" class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Dropdown
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/my-events">My Events</a>
+                <a class="dropdown-item" href="/profile">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
             </li>
             <li class="nav-item">
               <form class="form navbar-searchbar-form w-100 my-2 my-lg-0">
