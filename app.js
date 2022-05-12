@@ -20,6 +20,7 @@ var adminRouter = require('./routes/admin');
 // module2 for storing Session in MySQL Database
 var sessionStore = new mysqlStore(db.options);
 
+
 var app = express();
 
 app.use(logger('dev'));
@@ -51,6 +52,24 @@ app.use(function (req, _, next) {
   req.pool = db.connectionPool;
   next();
 });
+
+
+function fileFilter (req, file, cb) {    
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png/;
+
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+
+  if(mimetype && extname){
+      return cb(null,true);
+  } else {
+      cb('Error: Images Only!');
+  }
+}
+
 
 app.use('/', indexRouter);
 app.use('/', authRouter);
