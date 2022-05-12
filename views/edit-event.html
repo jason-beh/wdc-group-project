@@ -1,51 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="scripts/ajax.js"></script>
+    <script src="/scripts/edit-event.js"></script>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-    <h1>Edit an event</h1>
-    <form action="/edit-event" method="post">
-        <section>
-            <label for="title">title</label>
-            <input id="title" name="title" type="text" autocomplete="title" required autofocus>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container navbar-container">
+          <a class="navbar-brand" href="/">
+            <img src="/images/logo-white.svg" class="navbar-image" alt="" />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="mobile-hide navbar-nav-container">
+            <ul class="navbar-nav navbar-nav-desktop mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/events">
+                  Browse Events
+                  <span class="sr-only">Browse Events</span>
+                </a>
+              </li>
+            </ul>
+            <form
+              class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
+            >
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control navbar-searchbar"
+                  placeholder="Search Events..."
+                  aria-label="Search Events..."
+                  aria-describedby="button-addon2"
+                />
+                <button class="navbar-searchbar-icon">
+                  <ion-icon name="search-outline"></ion-icon>
+                </button>
+              </div>
+            </form>
+            <ul class="navbar-nav navbar-nav-desktop ml-3">
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>
+            </ul>
+          </div>
+  
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="/events"
+                  >Browse Events <span class="sr-only">Browse Events</span></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>
+              <li class="nav-item">
+                <form class="form navbar-searchbar-form w-100 my-2 my-lg-0">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control navbar-searchbar"
+                      placeholder="Search Events..."
+                      aria-label="Search Events..."
+                      aria-describedby="button-addon2"
+                    />
+                    <button class="navbar-searchbar-icon">
+                      <ion-icon name="search-outline"></ion-icon>
+                    </button>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <h1 style = "padding-left: 4%; margin-top: 2%;">Edit Event</h1>
+    <form @submit="onSubmit" id="edit-form" class = "form2">     
+      <div class = "createEventDiv" style= "padding-right: 6%;">     
+        <section class = "inputs">
+          <label for="title">Title</label>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            v-model = "title"
+            value="title"
+            autocomplete="title"
+            required
+            autofocus
+            class = "inputBox"
+          />
         </section>
-        <section>
-            <label for="description">description</label>
-            <input id="description" name="description" type="text" autocomplete="description" required autofocus>
+        <section class = "inputs">
+          <label for="description">Description</label>
+          <input
+            id="description"
+            name="description"
+            type="text"
+            autocomplete="description"
+            required
+            autofocus
+            value="description"
+            v-model = "description"
+            class = "inputBox"
+            style="min-height: 100px;"
+          />
         </section>
+        <section class = "inputs">
+          <label for="proposal_date">Proposed Date</label>
+          <input
+            id="proposal_date"
+            name="proposal_date"
+            type="text"
+            value = "proposal_date"
+            v-model = "proposal_date"
+            autocomplete="proposal_date"
+            required
+            autofocus
+            class = "inputBox"
+          />
+        </section class = "inputs">
         <section>
-            <label for="proposal-date">proposal-date</label>
-            <input id="proposal-date" name="proposal-date" type="text" autocomplete="proposal-date" required autofocus>
+          <label for="address_line">Address</label>
+          <input
+            id="address_line"
+            name="address_line"
+            type="text"
+            value = "address_line"
+            v-model = "address_line"
+            autocomplete="address_line"
+            required
+            autofocus
+            class = "inputBox"
+          />
         </section>
-        <section>
-            <label for="start-date">start-date</label>
-            <input id="start-date" name="start-date" type="text" autocomplete="start-date" required autofocus>
+        <section class = "inputs">
+          <label for="state">State</label>
+          <input
+            id="state"
+            name="state"
+            type="text"
+            v-model = "state"
+            value = "state"
+            autocomplete="state"
+            required
+            autofocus
+            class = "inputBox"
+          />
         </section>
-        <section>
-            <label for="end-date">end-date</label>
-            <input id="end-date" name="end-date" type="text" autocomplete="end-date" required autofocus>
+        <div style = "display: flex; justify-content: space-between;"><section class = "inputs" style = "width: 45%;">
+          <label for="country">Country</label>
+          <input
+            id="country"
+            name="country"
+            type="text"
+            v-model = "country"
+            value = "country"
+            autocomplete="country"
+            required
+            autofocus
+            class = "inputBox"
+          />
         </section>
-        <section>
-            <label for="address-line">address-line</label>
-            <input id="address-line" name="address-line" type="text" autocomplete="address-line" required autofocus>
+        <section class = "inputs" style = "width: 45%;">
+          <label for="postcode">Postcode</label>
+          <input
+            id="postcode"
+            name="postcode"
+            type="text"
+            v-model = "postcode"
+            autocomplete="postcode"
+            value = "postcode"
+            required
+            autofocus
+            class = "inputBox"
+          />
+        </section></div>
+        
+
+        <button type="submit" class = "button1">Edit an event</button>
+      </div>
+      <div class = "createEventDiv" style= "padding: 0 10% 0 10%;">
+        <section class = "inputs">
+          <label for="image">Cover Photo</label>
+          <input id="image" name="image" type="file" required autofocus v-model = "image" value = "image"/>
         </section>
-        <section>
-            <label for="state">state</label>
-            <input id="state" name="state" type="text" autocomplete="state" required autofocus>
+        <section class = "inputs" style="margin-top: 150px">
+          <label for="duration">Event Duration</label>
+          <input
+            id="duration"
+            name="duration"
+            type="number"
+            autocomplete="number"
+            v-model = "duration"
+            value = "duration"
+            required
+            autofocus
+            class = "inputBox"
+            style="margin-bottom: 20px;"
+          />
         </section>
-        <section>
-            <label for="country">country</label>
-            <input id="country" name="country" type="text" autocomplete="country" required autofocus>
-        </section>
-        <section>
-            <label for="postcode">postcode</label>
-            <input id="postcode" name="postcode" type="text" autocomplete="postcode" required autofocus>
-        </section>
-        <button type="submit">Edit an event</button>
+        <ul id="times" style = "display: flex; flex-direction: column; padding-inline-start: 0;" >
+            <p v-for="(time, index) in proposed_times" :key="index">
+                Proposed time&nbsp:&nbsp{{time}}
+            </p></ul>
+        <button onclick="addTimeSelect()" class="button1" id="addTimeButton" style ="margin-top: 0;">
+          Add a proposed start time
+        </button>
+      </div>
     </form>
+    <footer class="footer navbar-expand-lg">
+        <div class="container">
+          <p>© Socialah 2022</p>
+        </div>
+      </footer>
 </body>
 </html>

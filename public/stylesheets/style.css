@@ -8,7 +8,7 @@
   6. Sign Up
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap');
 
 /* 1. Utilities */
 
@@ -115,6 +115,33 @@ a {
   }
 }
 
+/* Dropdown */
+.navbar-profile-picture {
+  height: 40px;
+  border-radius: 50%;
+  width: 40px;
+  object-fit: cover;
+}
+
+.dropdown-item {
+  font-weight: 400;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.navbar-dropdown-icon {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 20px;
+}
+
 /* 3. Footer */
 .footer {
   background: white;
@@ -180,7 +207,7 @@ a {
   width: 100%;
   padding: 5px 0px 5px 15px;
   box-sizing: border-box;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .button1 {
@@ -260,7 +287,13 @@ a {
 }
 .orImage {
   width: 100%;
-  margin-top: 8%;
+  margin: 4% 0 4% 0;
+}
+
+.authMessage {
+  color: red;
+  font-weight: 500;
+  margin-bottom: 0;
 }
 
 .nAccount {
@@ -285,3 +318,30 @@ a {
 }
 
 /*6. Create an Event */
+.form2 {
+  display: flex;
+  width: 100%;
+  font-weight: bold;
+  box-sizing: border-box;
+  padding: 0 4% 0 4%;
+}
+
+.createEventDiv {
+  width: 100%;
+  box-sizing: border-box;
+  font-weight: bold;
+}
+
+.timeBox {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.timeBox p {
+  margin-bottom: 0;
+  box-sizing: border-box;
+  padding-right: 5px;
+}
+
+/*7. Edit an Event */

@@ -1,4 +1,3 @@
-// TODO: move to separate script file
 document.addEventListener("DOMContentLoaded", function () {
   // Load profile
   sendAJAX("GET", "/get-profile", null, function (err, res) {
@@ -33,14 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
             state: this.state,
             country: this.country,
           };
-          sendAJAX(
-            "POST",
-            "/edit-profile",
-            JSON.stringify(formData),
-            function (err, res) {
-              // TODO: Notify user whether it fails or succeeds
-            }
-          );
+          sendAJAX("POST", "/edit-profile", JSON.stringify(formData), function (err, res) {
+            // TODO: Notify user whether it fails or succeeds
+          });
         },
       },
     });
