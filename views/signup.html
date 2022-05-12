@@ -22,6 +22,9 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/scripts/ajax.js"></script>
+    <script src="/scripts/signup.js"></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -33,13 +36,15 @@
       <div class="loginContainer">
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Sign up</h1>
-        <form action="/signup" method="post">
+        <p class="authMessage"></p>
+        <form action="/signup" @submit="onSubmit" method="post" id="signup-form">
           <section class="inputs">
             <label for="email">Email</label>
             <input
               id="email"
               name="email"
               type="email"
+              v-model="email"
               autocomplete="email"
               required
               class="inputBox"
@@ -51,6 +56,7 @@
               id="new-password"
               name="password"
               type="password"
+              v-model="password"
               autocomplete="new-password"
               required
               class="inputBox"
@@ -62,6 +68,7 @@
               id="confirm-password"
               name="confirm-password"
               type="password"
+              v-model="confirm_password"
               autocomplete="confirm-password"
               required
               class="inputBox"
@@ -75,12 +82,9 @@
             style="margin: 20px 0px 20px 0"
           />
           <button class="button2">
-            <img src="/images/googleLogo.png" alt="logo of google" />Sign In
-            With Google
+            <img src="/images/googleLogo.png" alt="logo of google" />Sign In With Google
           </button>
-          <p class="nAccount">
-            Have an account?&nbsp<a href="/login" class="links">Login</a>
-          </p>
+          <p class="nAccount">Have an account?&nbsp<a href="/login" class="links">Login</a></p>
           <p></p>
         </form>
       </div>
