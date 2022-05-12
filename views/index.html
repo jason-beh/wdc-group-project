@@ -31,8 +31,12 @@
       type="module"
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
     ></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/scripts/eventslist.js"></script>
     <script src="scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
     <title>Document</title>
@@ -100,9 +104,15 @@
                   class="navbar-profile-picture"
                   alt="profile picture"
                 />
-                <ion-icon class="navbar-dropdown-icon" name="chevron-down-outline"></ion-icon>
+                <ion-icon
+                  class="navbar-dropdown-icon"
+                  name="chevron-down-outline"
+                ></ion-icon>
               </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              <div
+                class="dropdown-menu dropdown-menu-right"
+                aria-labelledby="navbarDropdown"
+              >
                 <a class="dropdown-item" href="/my-events">My Events</a>
                 <a class="dropdown-item" href="/profile">Profile</a>
                 <div class="dropdown-divider"></div>
@@ -151,8 +161,39 @@
         </div>
       </div>
     </nav>
+    <div class="eventListBanner">
+      <div class="container" style="line-height: 110%">
+        <p>Social Events<br />You Can’t Miss</p>
+      </div>
+    </div>
 
-    <h1>Events List</h1>
+    <div class="container">
+      <div id="eventsList">
+        <div
+          v-for="(event, index) in events"
+          :key="index"
+          class="eventContainer"
+        >
+          <img
+            v-bind:src="event.event_picture"
+            alt="Event Picture"
+            style="
+              border-radius: 10px 10px 0 0;
+              max-height: 150px;
+              object-fit: cover;
+            "
+          />
+          <div class="eventDetails">
+            <p style="color: #d9b11f">{{event.proposed_date}}</p>
+            <p style="font-size: 1.4em; font-weight: 600">{{event.title}}</p>
+            <p style="font-size: 0.86em; margin-top: 6%">
+              Created by : {{event.created_by}}
+            </p>
+            <p style="margin-top: 6%">{{event.street_name}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="footer navbar-expand-lg">
       <div class="container">

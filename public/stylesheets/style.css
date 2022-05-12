@@ -8,7 +8,7 @@
   6. Sign Up
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap");
 
 /* 1. Utilities */
 
@@ -344,4 +344,47 @@ a {
   padding-right: 5px;
 }
 
-/*7. Edit an Event */
+/*7. Events List*/
+
+.eventListBanner {
+  height: 250px;
+  width: 100%;
+  background: linear-gradient(
+      89.73deg,
+      #4b4b4b 39.06%,
+      rgba(95, 92, 92, 0) 99.74%
+    ),
+    url("/images/eventsListImage.png");
+  background-size: cover;
+  font-size: 54px;
+  color: #ffffff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.eventContainer {
+  display: flex;
+  flex-direction: column;
+  width: 22%;
+  box-sizing: border-box;
+  margin-bottom: 4%;
+}
+
+#eventsList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 4%;
+}
+
+.eventDetails {
+  font-weight: 500;
+  padding: 4%;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.eventDetails p {
+  margin: 0;
+}
