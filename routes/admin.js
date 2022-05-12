@@ -85,13 +85,17 @@ router.post("/create-admin", function (req, res, next) {
             }
 
             // Create user profile for the admin
-            query = "INSERT into User_Profile (email) VALUES (?)";
-            connection.query(query, [req.body.email], function (err) {
-              connection.release();
-              if (err) {
-                return res.status(500).send("An interval server error occurred.");
+            query = "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
+            connection.query(
+              query,
+              [req.body.email, "/images/defaultUserProfile.png"],
+              function (err) {
+                connection.release();
+                if (err) {
+                  return res.status(500).send("An interval server error occurred.");
+                }
               }
-            });
+            );
 
             return res.status(200).end();
           });

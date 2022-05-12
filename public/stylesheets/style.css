@@ -115,6 +115,33 @@ a {
   }
 }
 
+/* Dropdown */
+.navbar-profile-picture {
+  height: 40px;
+  border-radius: 50%;
+  width: 40px;
+  object-fit: cover;
+}
+
+.dropdown-item {
+  font-weight: 400;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.navbar-dropdown-icon {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 20px;
+}
+
 /* 3. Footer */
 .footer {
   background: white;

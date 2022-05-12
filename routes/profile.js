@@ -10,7 +10,7 @@ var router = express.Router();
 
 router.post("/edit-profile", function (req, res, next) {
   // Ensure the user is logged in
-  if (!req.user) {
+  if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
   // Get all data from request body
@@ -34,7 +34,7 @@ router.post("/edit-profile", function (req, res, next) {
         facebook_handle,
         state,
         country,
-        req.user.email,
+        req.session.user.email,
       ],
       function (err, rows, fields) {
         connection.release();
@@ -48,7 +48,7 @@ router.post("/edit-profile", function (req, res, next) {
 });
 
 router.get("/get-profile", function (req, res, next) {
-  if (!req.user) {
+  if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access !!");
   }
   db.connectionPool.getConnection(function (err, connection) {
@@ -57,7 +57,7 @@ router.get("/get-profile", function (req, res, next) {
     }
     // Get data
     var query = "select * from User_Profile where email = ?";
-    connection.query(query, [req.user.email], function (err, rows, fields) {
+    connection.query(query, [req.session.user.email], function (err, rows, fields) {
       connection.release();
       if (err) {
         return next(err);

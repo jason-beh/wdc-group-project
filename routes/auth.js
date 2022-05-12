@@ -126,8 +126,8 @@ router.post("/signup", function (req, res, next) {
             };
 
             // Create user profile
-            query = "INSERT into User_Profile (email) VALUES (?)";
-            connection.query(query, [req.body.email], function (err) {
+            query = "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
+            connection.query(query, [email, "/images/defaultUserProfile.png"], function (err) {
               connection.release();
               if (err) {
                 return res.status(500).send("An interval server error occurred.");
@@ -150,7 +150,11 @@ router.get("/logout", function (req, res, next) {
 });
 
 router.get("/get-session", function (req, res, next) {
-  res.send(req.session.user);
+  if (req.session.user) {
+    return res.send(req.session.user);
+  }
+
+  return res.send(null);
 });
 
 // Rendering Pages
