@@ -67,6 +67,5 @@ CREATE TABLE Availability (
     email VARCHAR(255),
     proposed_event_time_id INT,
     PRIMARY KEY (email, proposed_event_time_id),
-    FOREIGN KEY (email) REFERENCES Authentication(email),
     FOREIGN KEY (proposed_event_time_id) REFERENCES Proposed_Event_Time(proposed_event_time_id)
 );
