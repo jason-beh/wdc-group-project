@@ -6,9 +6,12 @@ document.addEventListener("DOMContentLoaded", function () {
       console.log(err);
     }
 
-    var res = JSON.parse(res);
+    res = JSON.parse(res);
+
+    console.log(res);
+
     var app = new Vue({
-      el: "#profile-form",
+      el: "#wrapper",
       data() {
         return {
           first_name: res.first_name,
@@ -18,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
           facebook_handle: res.facebook_handle,
           state: res.state,
           country: res.country,
+          profile_picture: res.profile_picture,
         };
       },
       methods: {
@@ -35,6 +39,25 @@ document.addEventListener("DOMContentLoaded", function () {
           sendAJAX("POST", "/edit-profile", JSON.stringify(formData), function (err, res) {
             // TODO: Notify user whether it fails or succeeds
           });
+        },
+        changeProfilePicture(e) {
+          e.preventDefault();
+          let file = e.target[0].files[0];
+          console.log(file);
+          var formData = new FormData();
+          formData.append("file", file);
+
+          sendFileAJAX("POST", "/change-profile-image", formData, (err, res) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(res);
+              this.profile_picture = res;
+            }
+          });
+        },
+        onUploadFile() {
+          this.changeProfilePicture();
         },
       },
     });

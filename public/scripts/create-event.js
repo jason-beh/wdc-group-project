@@ -1,10 +1,12 @@
 function addTimeSelect(e) {
+  e.preventDefault();
   var newTimeSection = document.createElement("div");
   var timeList = document.getElementById("times");
   var newTime = document.createElement("input");
   newTime.type = "time";
   newTime.setAttribute("id", "1");
-  newTime.addEventListener("change", function (e) {
+  newTime.addEventListener("change", function (event) {
+    event.preventDefault();
     proposed_times.push(e.target.value);
     console.log(e.target.value);
   });
@@ -38,24 +40,19 @@ document.addEventListener("DOMContentLoaded", function () {
       onSubmit(e) {
         e.preventDefault();
         var formData = {
-          title: res.title,
-          description: res.description,
-          proposal_date: res.proposal_date,
-          address_line: res.address_line,
-          postcode: res.postcode,
-          state: res.state,
-          country: res.country,
-          duration: res.duration,
-          proposed_times: res.proposed_times,
+          title: "",
+          description: "",
+          proposal_date: "",
+          address_line: "",
+          postcode: "",
+          state: "",
+          country: "",
+          duration: 0,
+          proposed_times: "",
         };
-        sendAJAX(
-          "POST",
-          "/create-event",
-          JSON.stringify(formData),
-          function (err, res) {
-            // TODO: Notify user whether it fails or succeeds
-          }
-        );
+        sendAJAX("POST", "/create-event", JSON.stringify(formData), function (err, res) {
+          // TODO: Notify user whether it fails or succeeds
+        });
       },
     },
   });

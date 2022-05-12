@@ -59,16 +59,14 @@ router.post("/login", function (req, res, next) {
             connection.query(query, [user.email], function (err, rows, fields) {
               connection.release();
               if (err) {
-                return res
-                  .status(500)
-                  .send("An interval server error occurred.");
+                return res.status(500).send("An interval server error occurred.");
               }
 
               // Add profile image to the session if we are able to find it
               if (rows && rows[0]["profile_picture"] !== null) {
                 userSession["profile_picture"] = rows[0]["profile_picture"];
               } else {
-                userSession["profile_picture"] = "/images/defaultUserProfile.png";
+                userSession["profile_picture"] = "/user-profiles/defaultUserProfile.png";
               }
 
               // Save userSession to user's session
@@ -124,21 +122,18 @@ router.post("/signup", function (req, res, next) {
             req.session.user = {
               email: email,
               isAdmin: 0, // When a user signs up, they will not be an admin by default
-              profile_picture: "/images/defaultUserProfile.png",
+              profile_picture: "/user-profiles/defaultUserProfile.png",
             };
 
             // Create user profile
-            query =
-              "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
+            query = "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
             connection.query(
               query,
-              [email, "/images/defaultUserProfile.png"],
+              [email, "/user-profiles/defaultUserProfile.png"],
               function (err) {
                 connection.release();
                 if (err) {
-                  return res
-                    .status(500)
-                    .send("An interval server error occurred.");
+                  return res.status(500).send("An interval server error occurred.");
                 }
               }
             );
