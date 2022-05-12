@@ -35,8 +35,6 @@ function sendFileAJAX(method, url, formData, cb) {
 
   xmlHttp.open(method, url, true);
   if (method !== "GET") {
-    console.log(formData);
-    console.log(formData.get("file"));
     xmlHttp.send(formData);
   } else {
     xmlHttp.send();

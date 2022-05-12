@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
         changeProfilePicture(e) {
           e.preventDefault();
           let file = e.target[0].files[0];
-          console.log(file);
           var formData = new FormData();
           formData.append("file", file);
 
@@ -51,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (err) {
               console.log(err);
             } else {
-              console.log(res);
               this.profile_picture = res;
             }
           });
