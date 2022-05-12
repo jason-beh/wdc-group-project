@@ -43,7 +43,7 @@ router.post('/change-profile-image', function(req, res, next) {
             // if previousPath exists
             if (previousPath !== "") {
                 try {
-                    fs.unlinkSync(previousPath);
+                    fs.unlinkSync("public/" + previousPath);
                   } catch(err) {
                     console.error(err);
                   }
@@ -53,7 +53,7 @@ router.post('/change-profile-image', function(req, res, next) {
     req.files.forEach(function(file) {
         uploaded_images.push(file.filename);
         // Sends path name back to database
-        var path = "/user-profiles" + "/" + file.filename;
+        var path = "user-profiles" + "/" + file.filename;
         db.connectionPool.getConnection(function(err, connection) {
             if (err) { return res.status(500).send("An interval server error occurred."); }
             var query = "update User_Profile set profile_picture = ? where email = ?;";
