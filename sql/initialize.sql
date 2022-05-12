@@ -21,7 +21,6 @@ CREATE TABLE User_Profile (
     facebook_handle VARCHAR(255),
     state VARCHAR(255),
     country VARCHAR(255),
-    postcode VARCHAR(255),
     profile_picture VARCHAR(255),
     PRIMARY KEY(email),
     FOREIGN KEY (email) REFERENCES Authentication(email)

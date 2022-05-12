@@ -2,141 +2,170 @@
 //  User Authentication Component
 // ==========================================================================================
 /* 
-    Date: 2022-04-18
-    The implementation of user authentication component utilizes passport.js library.
-    Reference: https://www.passportjs.org/packages/passport-local/
-    Functionalities: Sign up / Login / Verify password / Log out
+    Date: 2022-05-12
+    The implementation of user authentication component.
+    Functionalities: Sign up / Login / Log out
 */
 
-var express = require('express');
-var passport = require('passport');
-var LocalStrategy = require('passport-local');
-var db = require('../utils/db');
-var argon2 = require('argon2');
-var path = require('path');
-const { userIsLoggedIn } = require('../utils/auth');
-const { pathToHtml } = require('../utils/routes');
+var express = require("express");
+const { userIsLoggedIn } = require("../utils/auth");
+const { pathToHtml } = require("../utils/routes");
+var db = require("../utils/db");
+var argon2 = require("argon2");
 
 var router = express.Router();
 
-// TODO: users must logout first before logging in or signing up again
+router.post("/login", function (req, res, next) {
+  let { email, password } = req.body;
 
-// Login
-passport.use(new LocalStrategy({
-    usernameField: 'email',
-    passwordField: 'password'
-}, function verify(email, password, cb) {
-    // Connect to the database
-    db.connectionPool.getConnection(function (err, connection) {
-        if (err) { return cb(err); }
-        // Query the database
-        var query = "SELECT * FROM Authentication WHERE email = ?";
-        connection.query(query, [email], function (err, rows, fields) {
-            connection.release();
-            if (err) { return cb(err); }
-            if (!rows || rows.length == 0) { return cb(null, false, { message: 'Incorrect email or password.' }); }
-            // Verify the hashed password
-            var user = rows[0];
-            // Table types: email---varchar(255) | password---varchar(255)
-            argon2.verify(user["password"], password).then(function () {
-                return cb(null, user);
-            }).catch(function (err) {
-                return cb(null, false, { message: 'Incorrect email or password.' });
+  // If we lack any of these data, we return err
+  if (!email || !password) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
+    }
+    // Query the database
+    var query = "SELECT * FROM Authentication WHERE email = ?";
+    connection.query(query, [email], function (err, rows, fields) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
+      }
+
+      // If the email does not exist in any account, we return 401
+      if (!rows || rows.length == 0) {
+        return res.status(401).send("Incorrect email or password.");
+      }
+
+      // Proceed to verify the hashed password
+      var user = rows[0];
+      argon2
+        .verify(user["password"], password)
+        .then(function (success) {
+          // If the password is incorrect, we return 401
+          if (!success) {
+            return res.status(401).send("Incorrect email or password.");
+          } else {
+            // Create userSession object
+            let userSession = {
+              email: user.email,
+              isAdmin: user.isAdmin,
+            };
+
+            // Get profile picture if available
+            var query = "select * from User_Profile where email = ?";
+            connection.query(query, [user.email], function (err, rows, fields) {
+              connection.release();
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+
+              // Add profile image to the session if we are able to find it
+              if (rows && rows[0]["profile_picture"] !== null) {
+                userSession["profile_picture"] = rows[0]["profile_picture"];
+              } else {
+                userSession["profile_picture"] = "";
+              }
+
+              // Save userSession to user's session
+              req.session.user = userSession;
+
+              return res.status(200).end();
             });
+          }
+        })
+        .catch(function (err) {
+          return res.status(500).send("An interval server error occurred.");
         });
     });
-}));
-
-
-// create session
-passport.serializeUser(function (user, cb) {
-    process.nextTick(function () {
-        cb(null, { email: user.email, isAdmin: user.isAdmin });
-    });
+  });
 });
 
+router.post("/signup", function (req, res, next) {
+  let { email, password } = req.body;
 
-// read from session
-passport.deserializeUser(function (user, cb) {
-    process.nextTick(function () {
-        return cb(null, user);
-    });
-});
+  // If we lack any of these data, we return err
+  if (!email || !password) {
+    return res.status(400).send("Insufficient Data");
+  }
 
-
-router.post('/login', function(req,res,next) {
-    if(userIsLoggedIn(req.user)) {
-        return res.redirect('/');
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
     }
-    next();
-}, passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-}));
+    // Query the database
+    var query = "SELECT * FROM Authentication WHERE email = ?";
+    connection.query(query, [email], function (err, rows, fields) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
+      }
 
+      // If the email already exist, we return 401
+      if (rows && rows.length == 1) {
+        return res.status(401).send("The account already exists");
+      }
 
-router.post('/signup', function (req, res, next) {
-    if (userIsLoggedIn(req.user)) {
-        return res.redirect('/');
-    }
+      // Proceed to hash the password
+      argon2
+        .hash(password)
+        .then(function (hashedPassword) {
+          // Insert new user into database
+          query = "INSERT INTO Authentication (email, password) VALUES (?, ?)";
+          connection.query(query, [email, hashedPassword], function (err) {
+            if (err) {
+              return res.status(500).send("An interval server error occurred.");
+            }
 
-    // hashing the password    
-    argon2.hash(req.body.password).then(function (hashedPassword) {
-        db.connectionPool.getConnection(function (err, connection) {
-            if (err) { return next(err); }
-            // Check if user exists
-            var query = "SELECT * FROM Authentication WHERE email = ?";
-            connection.query(query, [req.body.email], function (err, rows, fields) {
-                if (err) { return next(err); }
-                if (rows && rows.length == 1) { return next("The user already exists! ERROR!!!"); }
-            });
-            // Query the database
-            query = "INSERT INTO Authentication (email, password) VALUES (?, ?)";
-            connection.query(query, [req.body.email, hashedPassword], function (err) {
-                if (err) { return next(err); }
-                var user = {
-                    email: req.body.email
-                };
-                req.login(user, function (err) {
-                    if (err) { return next(err); }
-                    res.redirect('/');
-                });
-            });
+            // Create user session
+            req.session.user = {
+              email: email,
+              isAdmin: 0, // When a user signs up, they will not be an admin by default
+              profile_picture: "",
+            };
+
             // Create user profile
-            query = "insert into User_Profile (email) values (?)";
+            query = "INSERT into User_Profile (email) VALUES (?)";
             connection.query(query, [req.body.email], function (err) {
-                connection.release();
-                if (err) { return next(err); }
+              connection.release();
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
             });
+
+            return res.status(200).end();
+          });
+        })
+        .catch(function (err) {
+          return res.status(500).send("An interval server error occurred.");
         });
-    }).catch(function (err) {
-        return next(err);
     });
+  });
 });
 
-// TODO: change to POST later
-router.get('/logout', function (req, res, next) {
-    req.logout();
-    res.redirect('/');
+router.get("/logout", function (req, res, next) {
+  delete req.session.user;
+  res.redirect("/login");
 });
 
-router.get('/check-user', function (req, res, next) {
-    res.send(req.user);
+router.get("/get-session", function (req, res, next) {
+  res.send(req.session.user);
 });
 
 // Rendering Pages
-router.get('/login', function(req, res, next) {
-    if (userIsLoggedIn(req.user)) {
-        res.redirect('/');
-    }
-    res.sendFile(pathToHtml('login.html'));
+router.get("/login", function (req, res, next) {
+  if (userIsLoggedIn(req.session.user)) {
+    res.redirect("/");
+  }
+  res.sendFile(pathToHtml("login.html"));
 });
 
-router.get('/signup', function(req, res, next) {
-    if (userIsLoggedIn(req.user)) {
-        return res.redirect('/');
-    }
-    res.sendFile(pathToHtml('signup.html'));
+router.get("/signup", function (req, res, next) {
+  if (userIsLoggedIn(req.session.user)) {
+    return res.redirect("/");
+  }
+  res.sendFile(pathToHtml("signup.html"));
 });
 
 module.exports = router;

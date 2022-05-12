@@ -23,6 +23,9 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/scripts/ajax.js"></script>
+    <script src="/scripts/login.js"></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -32,8 +35,14 @@
   <body>
       <div class = "loginMainContainer"><div class="loginContainer">
       <img src="/images/blueLogo.png" alt="App logo" />
-      <h1 style = "margin-bottom: 15px;">Login</h1>
-      <form action="/login" method="post" class="loginForm">
+      <h1>Login</h1>
+      <button class="button2">
+        <img src="/images/googleLogo.png" alt="logo of google" />Sign In With
+        Google
+      </button>
+      <img src="/images/orImg.png" alt="orLayout" class="orImage" />
+      <p class="authMessage"></p>
+      <form action="/login" method="post" @submit="onSubmit" id="login-form" class="loginForm">
         <section class="inputs">
           <label for="email">Email</label>
           <input
@@ -41,6 +50,7 @@
             name="email"
             type="email"
             autocomplete="email"
+            v-model="email"
             required
             autofocus
             class="inputBox"
@@ -52,6 +62,7 @@
             id="current-password"
             name="password"
             type="password"
+            v-model="password"
             autocomplete="current-password"
             required
             class="inputBox"
