@@ -117,131 +117,136 @@
         </div>
       </div>
     </nav>
-    <h1 style = "padding-left: 4%; margin-top: 2%;">Create Event</h1>
-    <form @submit="onSubmit" id="create-form" class = "form2">
+    <div class="container">
+      <h1 class="profileHeader">Create Event</h1>
+      <div class="mainContainer">
+        <form @submit="onSubmit" id="create-form" class = "form2">
         
-      <div class = "createEventDiv" style= "padding-right: 6%;">
-        
-        <section class = "inputs">
-          <label for="title">Title</label>
-          <input
-            id="title"
-            name="title"
-            type="text"
-            v-model = "title"
-            autocomplete="title"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <section class = "inputs">
-          <label for="description">Description</label>
-          <input
-            id="description"
-            name="description"
-            type="text"
-            autocomplete="description"
-            required
-            autofocus
-            v-model = "description"
-            class = "inputBox"
-            style="min-height: 100px;"
-          />
-        </section>
-        <section class = "inputs">
-          <label for="proposal_date">Proposed Date</label>
-          <input
-            id="proposal_date"
-            name="proposal_date"
-            type="text"
-            v-model = "proposal_date"
-            autocomplete="proposal_date"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section class = "inputs">
-        <section>
-          <label for="address_line">Address</label>
-          <input
-            id="address_line"
-            name="address_line"
-            type="text"
-            v-model = "address_line"
-            autocomplete="address_line"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <section class = "inputs">
-          <label for="state">State</label>
-          <input
-            id="state"
-            name="state"
-            type="text"
-            v-model = "state"
-            autocomplete="state"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <div style = "display: flex; justify-content: space-between;"><section class = "inputs" style = "width: 45%;">
-          <label for="country">Country</label>
-          <input
-            id="country"
-            name="country"
-            type="text"
-            v-model = "country"
-            autocomplete="country"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <section class = "inputs" style = "width: 45%;">
-          <label for="postcode">Postcode</label>
-          <input
-            id="postcode"
-            name="postcode"
-            type="text"
-            v-model = "postcode"
-            autocomplete="postcode"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section></div>
-        
-
-        <button type="submit" class = "button1">Create an event</button>
-      </div>
-      <div class = "createEventDiv" style= "padding: 0 10% 0 10%;">
-        <section class = "inputs">
-          <label for="image">Cover Photo</label>
-          <input id="image" name="image" type="file" required autofocus v-model = "image" />
-        </section>
-        <section class = "inputs" style="margin-top: 150px">
-          <label for="duration">Event Duration</label>
-          <input
-            id="duration"
-            name="duration"
-            type="number"
-            autocomplete="number"
-            v-model = "duration"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <ul id="times" style = "display: flex; flex-direction: column; padding-inline-start: 0;"></ul>
-        <button onclick="addTimeSelect()" class="button1" id="addTimeButton" style ="margin-top: 20px;">
-          Add a proposed start time
-        </button>
-      </div>
-    </form>
+          <div class = "createEventDiv" style= "padding-right: 6%;">
+            
+            <section class = "inputs">
+              <label for="title">Title</label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                v-model = "title"
+                autocomplete="title"
+                required
+                autofocus
+                class = "inputBox"
+              />
+            </section>
+            <section class = "inputs">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                type="text"
+                autocomplete="description"
+                rows="10"
+                required
+                autofocus
+                v-model = "description"
+                class = "inputBox"
+                style="min-height: 100px;"
+              ></textarea>
+            </section>
+            <section class = "inputs">
+              <label for="proposal_date">Proposed Date</label>
+              <input
+                id="proposal_date"
+                name="proposal_date"
+                type="text"
+                v-model = "proposal_date"
+                autocomplete="proposal_date"
+                required
+                autofocus
+                class = "inputBox"
+              />
+            </section class = "inputs">
+            <section class = "inputs">
+              <label for="address_line">Address</label>
+              <input
+                id="address_line"
+                name="address_line"
+                type="text"
+                v-model = "address_line"
+                autocomplete="address_line"
+                required
+                autofocus
+                class = "inputBox"
+              />
+            </section>
+            <section class = "inputs">
+              <label for="state">State</label>
+              <input
+                id="state"
+                name="state"
+                type="text"
+                v-model = "state"
+                autocomplete="state"
+                required
+                autofocus
+                class = "inputBox"
+              />
+            </section>
+            <div style = "display: flex; justify-content: space-between;"><section class = "inputs" style = "width: 45%;">
+              <label for="country">Country</label>
+              <input
+                id="country"
+                name="country"
+                type="text"
+                v-model = "country"
+                autocomplete="country"
+                required
+                autofocus
+                class = "inputBox"
+              />
+            </section>
+            <section class = "inputs" style = "width: 45%;">
+              <label for="postcode">Postcode</label>
+              <input
+                id="postcode"
+                name="postcode"
+                type="text"
+                v-model = "postcode"
+                autocomplete="postcode"
+                required
+                autofocus
+                class = "inputBox"
+              />
+            </section></div>
+            
+    
+            <button type="submit" class = "button1">Create an event</button>
+          </div>
+          <div class = "createEventDiv" style= "padding: 0 10% 0 10%;">
+            <section class = "inputs">
+              <label for="image">Cover Photo</label>
+              <!-- <input id="image" name="image" type="file" required autofocus v-model = "image" /> -->
+            </section>
+            <section class = "inputs" style="margin-top: 150px">
+              <label for="duration">Event Duration</label>
+              <input
+                id="duration"
+                name="duration"
+                type="number"
+                autocomplete="number"
+                v-model = "duration"
+                required
+                autofocus
+                class = "inputBox"
+              />
+            </section>
+            <ul id="times" style = "display: flex; flex-direction: column; padding-inline-start: 0;"></ul>
+            <button onclick="addTimeSelect()" class="button1" id="addTimeButton" style ="margin-top: 20px;">
+              Add a proposed start time
+            </button>
+          </div>
+        </form>
+      </div> 
+    </div>
     <footer class="footer navbar-expand-lg">
       <div class="container">
         <p>© Socialah 2022</p>
