@@ -19,7 +19,7 @@ A social event planning system that allows you to create event and ask friends t
 
 ```sql
 CREATE DATABASE social;
-USE DATABASE social;
+USE social;
 ```
 
 4. Run the sql files in the following order:
