@@ -40,3 +40,15 @@ npm install
 ```bash
 npm start
 ```
+
+## Troubleshooting
+
+1. I encountered a 500 error of `Internal Server Error` in Visual Studio code for CS50 during signup, how do I fix it?
+   The error is most likely due to MySQL Auth Mode error. Consider running these commands to solve the issue:
+
+```sql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+flush privileges;
+```
+
+StackOverflow reference link to the solution: https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server
