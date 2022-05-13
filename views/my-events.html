@@ -1,16 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
-      type="text/css"
-    />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -18,7 +12,6 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="/stylesheets/style.css" />
-
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -39,10 +32,16 @@
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
     ></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/scripts/eventslist.js"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/create-event.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <title>Document</title>
   </head>
 
   <body>
@@ -156,124 +155,12 @@
         </div>
       </div>
     </nav>
-    <div class="container">
-      <h1 class="profileHeader">Create Event</h1>
-      <p>This page is currently under development.</p>
-      <div class="mainContainer">
-        <form @submit="onSubmit" id="create-form" class="form2">
-          <div class="createEventDiv" style="padding-right: 6%">
-            <div class="inputs">
-              <label for="title">Title</label>
-              <input
-                id="title"
-                name="title"
-                type="text"
-                v-model="title"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                rows="10"
-                required
-                v-model="description"
-                class="inputBox"
-                style="min-height: 100px"
-              ></textarea>
-            </div>
-            <div class="inputs">
-              <label for="proposal_date">Proposed Date</label>
-              <input
-                id="proposal_date"
-                name="proposal_date"
-                type="text"
-                v-model="proposal_date"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="address_line">Address</label>
-              <input
-                id="address_line"
-                name="address_line"
-                type="text"
-                v-model="address_line"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="state">State</label>
-              <input
-                id="state"
-                name="state"
-                type="text"
-                v-model="state"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div style="display: flex; justify-content: space-between">
-              <div class="inputs" style="width: 45%">
-                <label for="country">Country</label>
-                <input
-                  id="country"
-                  name="country"
-                  type="text"
-                  v-model="country"
-                  required
-                  class="inputBox"
-                />
-              </div>
-              <div class="inputs" style="width: 45%">
-                <label for="postcode">Postcode</label>
-                <input
-                  id="postcode"
-                  name="postcode"
-                  type="text"
-                  v-model="postcode"
-                  required
-                  class="inputBox"
-                />
-              </div>
-            </div>
 
-            <button type="submit" class="button1">Create an event</button>
-          </div>
-          <div class="createEventDiv" style="padding: 0 10% 0 10%">
-            <div class="inputs">
-              <label>Cover Photo</label>
-              <!-- <input id="image" name="image" type="file" required  v-model = "image" /> -->
-            </div>
-            <div class="inputs" style="margin-top: 150px">
-              <label for="duration">Event Duration</label>
-              <input
-                id="duration"
-                name="duration"
-                type="number"
-                v-model="duration"
-                required
-                class="inputBox"
-              />
-            </div>
-            <ul id="times" style="display: flex; flex-direction: column"></ul>
-            <button
-              onclick="addTimeSelect()"
-              class="button1"
-              id="addTimeButton"
-              style="margin-top: 20px"
-            >
-              Add a proposed start time
-            </button>
-          </div>
-        </form>
-      </div>
+    <div class="container">
+      <h1 class="profileHeader">My Events</h1>
+      <p>This page is currently under development.</p>
     </div>
+
     <footer class="footer navbar-expand-lg">
       <div class="container">
         <p>&#169; Socialah 2022</p>
