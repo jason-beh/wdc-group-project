@@ -75,7 +75,6 @@
                   class="form-control navbar-searchbar"
                   placeholder="Search Events..."
                   aria-label="Search Events..."
-                  aria-describedby="button-addon2"
                 />
                 <button class="navbar-searchbar-icon">
                   <ion-icon name="search-outline"></ion-icon>
@@ -134,7 +133,6 @@
                       class="form-control navbar-searchbar"
                       placeholder="Search Events..."
                       aria-label="Search Events..."
-                      aria-describedby="button-addon2"
                     />
                     <button class="navbar-searchbar-icon">
                       <ion-icon name="search-outline"></ion-icon>
@@ -152,7 +150,7 @@
           <div class="profileContainer">
             <form @submit="onSubmit" id="profile-form" class="form1">
               <div class="profileName">
-                <section class="inputs names">
+                <div class="inputs names">
                   <label for="first_name">First Name</label>
                   <input
                     class="inputBox"
@@ -163,8 +161,8 @@
                     type="text"
                     required
                   />
-                </section>
-                <section class="inputs names">
+                </div>
+                <div class="inputs names">
                   <label for="last_name">Last Name</label>
                   <input
                     class="inputBox"
@@ -175,22 +173,21 @@
                     type="text"
                     required
                   />
-                </section>
+                </div>
               </div>
 
-              <section class="inputs">
+              <div class="inputs">
                 <label for="birthday">Birthday</label>
                 <input
                   class="inputBox"
                   id="birthday"
                   name="birthday"
-                  value="birthday"
                   v-model="birthday"
                   type="date"
                   required
                 />
-              </section>
-              <section class="inputs">
+              </div>
+              <div class="inputs">
                 <label for="instagram_handle">Instagram Handle</label>
                 <input
                   class="inputBox"
@@ -201,8 +198,8 @@
                   type="text"
                   required
                 />
-              </section>
-              <section class="inputs">
+              </div>
+              <div class="inputs">
                 <label for="facebook_handle">Facebook Handle</label>
                 <input
                   class="inputBox"
@@ -213,8 +210,8 @@
                   type="text"
                   required
                 />
-              </section>
-              <section class="inputs">
+              </div>
+              <div class="inputs">
                 <label for="state">State</label>
                 <input
                   class="inputBox"
@@ -225,8 +222,8 @@
                   type="text"
                   required
                 />
-              </section>
-              <section class="inputs">
+              </div>
+              <div class="inputs">
                 <label for="country">Country</label>
                 <input
                   class="inputBox"
@@ -237,7 +234,7 @@
                   type="text"
                   required
                 />
-              </section>
+              </div>
               <button type="submit" id="submit-button" class="inputs button1">
                 Update my profile
               </button>
@@ -266,7 +263,7 @@
               enctype="multipart/form-data"
             >
               <input type="file" name="file" class="profile-image-file" />
-              <button type="submit" id="submit-button" class="inputs button1">Update Image</button>
+              <button type="submit" class="inputs button1">Update Image</button>
             </form>
           </div>
         </div>
@@ -274,7 +271,7 @@
 
       <footer class="footer navbar-expand-lg">
         <div class="container">
-          <p>© Socialah 2022</p>
+          <p>&#169; Socialah 2022</p>
         </div>
       </footer>
     </div>
