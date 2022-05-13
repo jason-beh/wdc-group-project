@@ -83,10 +83,7 @@
               </div>
             </form>
             <ul class="navbar-nav navbar-nav-desktop ml-3">
-              <li
-                v-if="profile_picture != '/user-profiles/defaultUserProfile.png'"
-                class="nav-item dropdown"
-              >
+              <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#"
@@ -249,6 +246,7 @@
           <div class="profilePic">
             <label for="profilePic">Profile Picture</label>
             <img
+              v-if="profile_picture != '/user-profiles/defaultUserProfile.png'"
               v-bind:src="profile_picture"
               style="
                 border-radius: 50%;

@@ -12,6 +12,8 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     };
   }
 
+  console.log(res);
+
   var app = new Vue({
     el: "#navbar",
     data() {
