@@ -160,9 +160,11 @@
       <h1 class="profileHeader">Create Event</h1>
       <p>This page is currently under development.</p>
       <div class="mainContainer">
-        <form @submit="onSubmit" id="create-form" class="form2">
-          <div class="createEventDiv" style="padding-right: 6%">
-            <div class="inputs">
+        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form"  class = "form2">
+        
+          <div class = "createEventDiv" style= "padding-right: 6%;">
+            
+            <div class = "inputs">
               <label for="title">Title</label>
               <input
                 id="title"
@@ -186,23 +188,45 @@
               ></textarea>
             </div>
             <div class="inputs">
-              <label for="proposal_date">Proposed Date</label>
+              <label for="proposed_date">Proposed Date</label>
               <input
-                id="proposal_date"
-                name="proposal_date"
-                type="text"
-                v-model="proposal_date"
+                id="proposed_date"
+                name="proposed_date"
+                type="date"
+                v-model = "proposed_date"
                 required
                 class="inputBox"
               />
             </div>
             <div class="inputs">
-              <label for="address_line">Address</label>
+              <label for="street_number">Street Number</label>
               <input
-                id="address_line"
-                name="address_line"
+                id="street_number"
+                name="street_number"
                 type="text"
-                v-model="address_line"
+                v-model="street_number"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div class="inputs">
+              <label for="street_name">Street Name</label>
+              <input
+                id="street_name"
+                name="street_name"
+                type="text"
+                v-model="street_name"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div class="inputs">
+              <label for="suburb">Suburb</label>
+              <input
+                id="suburb"
+                name="suburb"
+                type="text"
+                v-model="suburb"
                 required
                 class="inputBox"
               />
@@ -245,13 +269,13 @@
 
             <button type="submit" class="button1">Create an event</button>
           </div>
-          <div class="createEventDiv" style="padding: 0 10% 0 10%">
-            <div class="inputs">
-              <label>Cover Photo</label>
-              <!-- <input id="image" name="image" type="file" required  v-model = "image" /> -->
+          <div class = "createEventDiv" style= "padding: 0 10% 0 10%;">
+            <div class = "inputs">
+              <label for="image">Cover Photo</label>
+              <input id="image" name="file" type="file" required autofocus />
             </div>
-            <div class="inputs" style="margin-top: 150px">
-              <label for="duration">Event Duration</label>
+            <div class = "inputs">
+              <label for="duration">Event Duration (Hours) </label>
               <input
                 id="duration"
                 name="duration"
@@ -261,13 +285,8 @@
                 class="inputBox"
               />
             </div>
-            <ul id="times" style="display: flex; flex-direction: column"></ul>
-            <button
-              onclick="addTimeSelect()"
-              class="button1"
-              id="addTimeButton"
-              style="margin-top: 20px"
-            >
+            <ul id="times" style = "display: flex; flex-direction: column; padding-inline-start: 0;"></ul>
+            <button @click="addTimeSelect" class="button1" style ="margin-top: 20px;">
               Add a proposed start time
             </button>
           </div>
