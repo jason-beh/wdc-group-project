@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         country: "",
         postcode: "",
         duration: 0,
-        proposed_times: [],
+        proposed_times: {},
       };
     },
     methods: {
@@ -32,10 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("country", this.country);
         formData.append("postcode", this.postcode);
         formData.append("duration", this.duration);
-        formData.append("proposed_times", this.proposed_times);
-
-        console.log(e);
-        console.log(e.target);
+        formData.append("proposed_times", Object.values(this.proposed_times));
 
         let file = e.target[10].files[0];
         formData.append("file", file);
@@ -46,22 +43,42 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       addTimeSelect(e) {
         e.preventDefault();
-        var newTimeSection = document.createElement("div");
+
+        var id = Date.now();
         var timeList = document.getElementById("times");
+
+        var newTimeSection = document.createElement("div");
+        newTimeSection.setAttribute("class", "timeBox");
 
         var newTime = document.createElement("input");
         newTime.type = "time";
-        newTime.setAttribute("id", this.proposed_times.length++);
+        newTime.required = true;
+        newTime.setAttribute("data-id", id);
         newTime.addEventListener("change", (event) => {
           event.preventDefault();
-          this.proposed_times[event.target.id] = event.target.value;
+          let id = event.target.dataset.id;
+          this.proposed_times[id] = event.target.value;
         });
 
         var text = document.createElement("p");
-        text.innerText = "Proposed Event Time : ";
+        text.innerText = "Proposed Event Time: ";
+
+        var icon = document.createElement('ion-icon');
+        icon.setAttribute('name', 'close-outline');
+        icon.setAttribute("data-id", id);
+        icon.addEventListener('click', (event) => {
+          event.preventDefault();
+          let id = event.target.dataset.id;
+
+          delete this.proposed_times[id];
+
+          newTimeSection.remove();
+        });
+
         newTimeSection.appendChild(text);
         newTimeSection.appendChild(newTime);
-        newTimeSection.setAttribute("class", "timeBox");
+        newTimeSection.appendChild(icon);
+
         timeList.appendChild(newTimeSection);
       },
     },
