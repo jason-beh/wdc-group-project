@@ -165,7 +165,7 @@
             style="border-radius: 10px 10px 0 0; max-height: 150px; object-fit: cover"
           />
           <div class="eventDetails">
-            <p style="color: #d9b11f">{{event.proposed_date}}</p>
+            <p style="color: #d9b11f">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
             <p style="font-size: 1.4em; font-weight: 600">{{event.title}}</p>
             <p style="font-size: 0.86em; margin-top: 6%">Created by : {{event.created_by}}</p>
             <p style="margin-top: 6%">{{event.street_name}}</p>
