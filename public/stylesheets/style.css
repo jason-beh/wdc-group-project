@@ -21,6 +21,10 @@ a {
   color: #00b7ff;
 }
 
+.display-none {
+  display: none;
+}
+
 @media screen and (max-width: 992px) {
   .mobile-hide {
     display: none !important;
