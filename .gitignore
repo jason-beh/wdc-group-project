@@ -1,7 +1,7 @@
 /node_modules
 
-/public/images/events
+/public/images/events/*
 
-/public/user-profiles
+/public/user-profiles/*
 
 .DS_STORE
