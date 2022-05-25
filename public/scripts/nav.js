@@ -23,3 +23,19 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     },
   });
 });
+
+function signOut() {
+  // Delete session in backend
+  sendAJAX("GET", "/logout", null, function (err, res) {
+    if (err) {
+      // do something
+      console.log(err);
+    }
+
+    // Log user out from google
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      window.location.href = "/login";
+    });
+  });
+}
