@@ -35,6 +35,22 @@ var upload = multer({
   },
 });
 
+router.get("/get-events", function(req, res,next) {
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return next(err);
+    }
+    var query = "SELECT * FROM Events";
+    connection.query(query, [], function (err, rows, fields) {
+      connection.release();
+      if (err) {
+        return next(err);
+      }
+      return res.send(rows);
+    });
+  });
+});
+
 router.post("/create-event", upload.array("file", 1));
 router.post("/create-event", function (req, res, next) {
   // Ensure an user is logged in
@@ -61,7 +77,7 @@ router.post("/create-event", function (req, res, next) {
       proposed_times,
     } = req.body;
 
-    var event_picture = `/user-profiles/${req.files[0].filename}`;
+    var event_picture = `/images/events/${req.files[0].filename}`;
 
     var query =
       "INSERT INTO Events (title, description, created_by, proposed_date, street_number, street_name, suburb, state, country, postcode, event_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
