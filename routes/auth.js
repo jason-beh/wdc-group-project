@@ -204,11 +204,11 @@ router.post("/oauth", async function (req, res, next) {
   });
 });
 
-router.get("/send-verification-email", function(req, res, next) {
-  let { email } = req.query;
+router.get("/send-email", function(req, res, next) {
+  let { email, action } = req.query;
 
   // If we lack any of these data, we return err
-  if (!email) {
+  if (!email || !action) {
     return res.status(400).send("Insufficient Data");
   }
 
@@ -234,8 +234,16 @@ router.get("/send-verification-email", function(req, res, next) {
           to: email, // list of receivers (who receives)
           subject: 'Hello ', // Subject line
           text: 'Hello world ', // plaintext body
-          html: `<a href="http://localhost:3000/verify?email=${email}&token=${token}">Verify your account!</a>` // html body
         };
+
+        // Populate based on action
+        if(action == "reset-password") {
+          mailOptions['html'] = `<a href="http://localhost:3000/reset-password?email=${email}&token=${token}">Reset your password!</a>`;
+        } else if(action == "verify-account") {
+          mailOptions['html'] = `<a href="http://localhost:3000/verify?email=${email}&token=${token}">Verify your account!</a>`;
+        } else {
+          return res.status(500).send("An interval server error occurred.");
+        }
 
         // send mail with defined transport object
         transporter.sendMail(mailOptions, function(error, info){
@@ -286,7 +294,7 @@ router.post("/signup", function (req, res, next) {
               return res.status(500).send("An interval server error occurred.");
             }
 
-            return res.redirect(`/send-verification-email?email=${email}`);
+            return res.redirect(`/send-email?email=${email}&action=verify-account`);
           });
         })
         .catch(function (err) {
@@ -357,6 +365,67 @@ router.get("/verify", function (req, res, next) {
   });
 });
 
+router.post("/forget-password", function(req, res, next) {
+  let { email } = req.body;
+
+  // If we lack any of these data, we return err
+  if (!email) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  return res.redirect(`/send-email?email=${email}&action=reset-password`);
+});
+
+router.post("/reset-password", function(req, res, next) {
+  let { email, token, password } = req.body;
+
+  // If we lack any of these data, we return err
+  if (!email || !token || !password) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  // Check if the email and token exist
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
+    }
+    // Query the database
+    var query = "select * from Account_Verification where token = ? and email = ?;";
+    connection.query(query, [token, email], function (err, rows, fields) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
+      }
+      if (rows.length === 0) {
+        return res.status(403).send("Invalid token or email");
+      }
+      // Delete the token
+      query = "delete from Account_Verification where token = ? and email = ?;";
+      connection.query(query, [token, email], function(err, rows, fields) {
+        if (err) {
+          return res.status(500).send("An interval server error occurred.");
+        }
+        // Hash and update password 
+        argon2
+        .hash(password)
+        .then(function (hashedPassword) {
+          // Insert new user into database
+          query = "UPDATE Authentication set password = ? where email = ?";
+          connection.query(query, [hashedPassword, email], function (err) {
+            connection.release();
+            if (err) {
+              return res.status(500).send("An interval server error occurred.");
+            }
+            return res.status(200).end();
+          });
+        })
+        .catch(function (err) {
+          return res.status(500).send("An interval server error occurred.");
+        });
+      });
+    });
+  });
+});
+
 router.get("/logout", function (req, res, next) {
   delete req.session.user;
   res.redirect("/login");
@@ -383,6 +452,14 @@ router.get("/signup", function (req, res, next) {
     return res.redirect("/");
   }
   res.sendFile(pathToHtml("signup.html"));
+});
+
+router.get("/forget-password", function (req, res, next) {
+  res.sendFile(pathToHtml("forget-password.html"));
+});
+
+router.get("/reset-password", function (req, res, next) {
+  res.sendFile(pathToHtml("reset-password.html"));
 });
 
 module.exports = router;
