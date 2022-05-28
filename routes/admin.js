@@ -121,12 +121,14 @@ router.post("/delete-user", function (req, res, next) {
   }
 
   db.connectionPool.getConnection(function (err, connection) {
+
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
     var query = "delete from Authentication where email = ?;";
     connection.query(query, [email], function (err, rows, fields) {
+      connection.release();
       if (err) {
         console.log(err);
         return res.status(500).send("An interval server error occurred.");
