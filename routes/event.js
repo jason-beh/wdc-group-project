@@ -259,7 +259,6 @@ router.get("/events/:event_id", function (req, res, next) {
         }
         connection.release();
         info["date"] = rows;
-        console.log(info);
         res.json(info);
       });
     });
