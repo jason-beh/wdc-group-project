@@ -60,7 +60,7 @@ router.post("/create-event", function (req, res, next) {
   // Get all data from request body
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
-      console.log(err);
+      return res.status(500).send("An interval server error occurred.");
     }
     // Deference
     var {
@@ -98,7 +98,6 @@ router.post("/create-event", function (req, res, next) {
       ],
       function (err, rows, fields) {
         if (err) {
-          console.log(err);
           return res.status(500).send("An interval server error occurred.");
         }
 
@@ -107,7 +106,7 @@ router.post("/create-event", function (req, res, next) {
 
         proposed_times = proposed_times.split(',');
         
-        for(let proposed_time of proposed_times) {
+        for (let proposed_time of proposed_times) {
           let start_date = createDate(proposed_date, proposed_time);
           let end_date = addHours(start_date, duration);
 
@@ -115,7 +114,6 @@ router.post("/create-event", function (req, res, next) {
           query = "INSERT INTO Proposed_Event_Time (event_id, start_date, end_date) VALUES (?, ?, ?)";
           connection.query(query, [event_id, start_date, end_date], function (err, rows, field) {
             if (err) {
-              console.log(err);
               return res.status(500).send("An interval server error occurred.");
             }
 
@@ -236,6 +234,34 @@ router.get("/my-events/attended", function (req, res, next) {
         return next(err);
       }
       return res.send(rows);
+    });
+  });
+});
+
+router.get("/events/:event_id", function (req, res, next) {
+  let {event_id} = req.params;
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
+    }
+    // Query the database
+    var query = "SELECT * FROM Events WHERE event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
+      }
+      var info = rows;
+      // Query another database
+      query = "select * from Proposed_Event_Time where event_id = ?;";
+      connection.query(query, [event_id], function (err, rows, fields) {
+        if (err) {
+          return res.status(500).send("An interval server error occurred.");
+        }
+        connection.release();
+        info["date"] = rows;
+        console.log(info);
+        res.json(info);
+      });
     });
   });
 });
