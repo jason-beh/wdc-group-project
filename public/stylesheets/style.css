@@ -265,7 +265,6 @@ a {
 }
 
 /* 5. Login */
-
 .loginMainContainer {
   display: flex;
 }
@@ -287,7 +286,7 @@ a {
 }
 .orImage {
   width: 100%;
-  margin: 4% 0 4% 0;
+  margin: 6.5% 0 4% 0;
 }
 
 .authMessage {
@@ -315,6 +314,23 @@ a {
 .links:hover {
   text-decoration: underline;
   text-decoration-color: black;
+}
+
+@media only screen and (max-width: 768px) {
+  .loginMainContainer {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #loginIMG {
+    display: none;
+  }
+  .loginContainer {
+    width: 100%;
+  }
+  .loginContainer a {
+    text-align: center !important;
+  }
 }
 
 /*6. Create an Event */
