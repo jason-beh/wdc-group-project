@@ -45,6 +45,8 @@ CREATE TABLE Events (
     description TEXT NOT NULL,
     created_by VARCHAR(255),
     proposed_date date,
+    start_date TIMESTAMP,
+    end_date TIMESTAMP,
     street_number VARCHAR(255) NOT NULL,
     street_name VARCHAR(255) NOT NULL,
     suburb VARCHAR(255) NOT NULL,
