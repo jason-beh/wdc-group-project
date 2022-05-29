@@ -20,7 +20,6 @@ var adminRouter = require('./routes/admin');
 // module2 for storing Session in MySQL Database
 var sessionStore = new mysqlStore(db.options);
 
-
 var app = express();
 
 app.use(logger('dev'));
