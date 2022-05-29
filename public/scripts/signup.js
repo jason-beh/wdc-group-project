@@ -24,12 +24,13 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           sendAJAX("POST", "/signup", JSON.stringify(formData), (err, res) => {
             if (err != null) {
-              document.getElementsByClassName("authMessage")[0].innerText = err.message;
+              document.getElementsByClassName("authMessage")[0].innerText =
+                err.message;
               this.password = "";
               this.confirm_password = "";
             } else {
-              // Redirect
-              window.location.href = "/";
+              var clientEmail = res;
+              window.location.href = `/verify-account?email=${clientEmail}`;
             }
           });
         }

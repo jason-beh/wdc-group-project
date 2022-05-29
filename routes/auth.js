@@ -11,29 +11,30 @@ var express = require("express");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 // OAuth Library
-const {OAuth2Client} = require('google-auth-library');
-const CLIENT_ID = "1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com";
+const { OAuth2Client } = require("google-auth-library");
+const CLIENT_ID =
+  "1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
 var db = require("../utils/db");
 var argon2 = require("argon2");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 
 var router = express.Router();
 
-var nodemailer = require('nodemailer');
+var nodemailer = require("nodemailer");
 
 // Create the transporter with the required configuration for Outlook
 var transporter = nodemailer.createTransport({
-    host: "smtp-mail.outlook.com", // hostname
-    secureConnection: false, // TLS requires secureConnection to be false
-    port: 587, // port for secure SMTP
-    tls: {
-       ciphers:'SSLv3'
-    },
-    auth: {
-        user: 'socialah@outlook.com',
-        pass: 'wdc2022sem1'
-    }
+  host: "smtp-mail.outlook.com", // hostname
+  secureConnection: false, // TLS requires secureConnection to be false
+  port: 587, // port for secure SMTP
+  tls: {
+    ciphers: "SSLv3",
+  },
+  auth: {
+    user: "socialah@outlook.com",
+    pass: "wdc2022sem1",
+  },
 });
 
 router.post("/login", function (req, res, next) {
@@ -62,12 +63,12 @@ router.post("/login", function (req, res, next) {
 
       // If the user used Google to signup, we return 401
       var user = rows[0];
-      if(user.isGoogleSignUp == true) {
+      if (user.isGoogleSignUp == true) {
         return res.status(401).send("Please use Google to login.");
       }
 
       // If the user is not verified, we return 401
-      if(user.isVerified == false) {
+      if (user.isVerified == false) {
         return res.status(401).send("Please verify your email.");
       }
 
@@ -90,14 +91,17 @@ router.post("/login", function (req, res, next) {
             connection.query(query, [user.email], function (err, rows, fields) {
               connection.release();
               if (err) {
-                return res.status(500).send("An interval server error occurred.");
+                return res
+                  .status(500)
+                  .send("An interval server error occurred.");
               }
 
               // Add profile image to the session if we are able to find it
               if (rows && rows[0]["profile_picture"] !== null) {
                 userSession["profile_picture"] = rows[0]["profile_picture"];
               } else {
-                userSession["profile_picture"] = "/user-profiles/defaultUserProfile.png";
+                userSession["profile_picture"] =
+                  "/user-profiles/defaultUserProfile.png";
               }
 
               // Save userSession to user's session
@@ -122,11 +126,11 @@ router.post("/oauth", async function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
   const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: CLIENT_ID,  
+    idToken: token,
+    audience: CLIENT_ID,
   });
   const payload = ticket.getPayload();
-  const {picture, email, given_name, family_name} = payload;
+  const { picture, email, given_name, family_name } = payload;
 
   // Check if the user is existed
   db.connectionPool.getConnection(function (err, connection) {
@@ -139,13 +143,13 @@ router.post("/oauth", async function (req, res, next) {
       if (err) {
         return res.status(500).send("An interval server error occured.");
       }
-      
+
       // If the email has already existed
       if (rows.length === 1) {
         var user = rows[0];
         let userSession = {
           email: user.email,
-          isAdmin: user.isAdmin
+          isAdmin: user.isAdmin,
         };
 
         // Get profile picture if available
@@ -160,17 +164,19 @@ router.post("/oauth", async function (req, res, next) {
           if (rows && rows[0]["profile_picture"] !== null) {
             userSession["profile_picture"] = rows[0]["profile_picture"];
           } else {
-            userSession["profile_picture"] = "/user-profiles/defaultUserProfile.png";
+            userSession["profile_picture"] =
+              "/user-profiles/defaultUserProfile.png";
           }
 
           // Save userSession to user's session
           req.session.user = userSession;
 
           return res.status(200).end();
-        })
+        });
       } else {
         // Insert new user into database
-        query = "INSERT INTO Authentication (email, isGoogleSignUp, isVerified) VALUES (?, ?, ?)";
+        query =
+          "INSERT INTO Authentication (email, isGoogleSignUp, isVerified) VALUES (?, ?, ?)";
         connection.query(query, [email, true, true], function (err) {
           if (err) {
             return res.status(500).send("An interval server error occurred.");
@@ -184,14 +190,17 @@ router.post("/oauth", async function (req, res, next) {
           };
 
           // Create user profile
-          query = "INSERT into User_Profile (email, first_name, last_name, profile_picture) VALUES (?, ?, ?, ?)";
+          query =
+            "INSERT into User_Profile (email, first_name, last_name, profile_picture) VALUES (?, ?, ?, ?)";
           connection.query(
             query,
             [email, given_name, family_name, picture],
             function (err) {
               connection.release();
               if (err) {
-                return res.status(500).send("An interval server error occurred.");
+                return res
+                  .status(500)
+                  .send("An interval server error occurred.");
               }
             }
           );
@@ -203,7 +212,7 @@ router.post("/oauth", async function (req, res, next) {
   });
 });
 
-router.get("/send-email", function(req, res, next) {
+router.get("/send-email", function (req, res, next) {
   let { email, action } = req.query;
 
   // If we lack any of these data, we return err
@@ -217,46 +226,49 @@ router.get("/send-email", function(req, res, next) {
     }
     // Delete if a token has been generated for an email
     var query = "delete from Account_Verification where email = ?;";
-    connection.query(query, [email], function(err) {
+    connection.query(query, [email], function (err) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
       var token = uuidv4(); // Create a token
       query = "insert into Account_Verification (email, token) values (?, ?);";
-      connection.query(query, [email, token], function(err) {
+      connection.query(query, [email, token], function (err) {
         if (err) {
           return res.status(500).send("An interval server error occurred.");
         }
         // setup e-mail data, even with unicode symbols
         var mailOptions = {
-          from: 'socialah@outlook.com', // sender address (who sends)
+          from: "socialah@outlook.com", // sender address (who sends)
           to: email, // list of receivers (who receives)
-          subject: 'Hello ', // Subject line
-          text: 'Hello world ', // plaintext body
+          subject: "Hello ", // Subject line
+          text: "Hello world ", // plaintext body
         };
 
         // Populate based on action
-        if(action == "reset-password") {
-          mailOptions['html'] = `<a href="http://localhost:3000/reset-password?email=${email}&token=${token}">Reset your password!</a>`;
-        } else if(action == "verify-account") {
-          mailOptions['html'] = `<a href="http://localhost:3000/verify?email=${email}&token=${token}">Verify your account!</a>`;
+        if (action == "reset-password") {
+          mailOptions[
+            "html"
+          ] = `<a href="http://localhost:3000/reset-password?email=${email}&token=${token}">Reset your password!</a>`;
+        } else if (action == "verify-account") {
+          mailOptions[
+            "html"
+          ] = `<a href="http://localhost:3000/verify?email=${email}&token=${token}">Verify your account!</a>`;
         } else {
           return res.status(500).send("An interval server error occurred.");
         }
 
         // send mail with defined transport object
-        transporter.sendMail(mailOptions, function(error, info){
-          if(error){
-              return console.log(error);
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            return console.log(error);
           }
-          
-          return res.status(200).end();
 
+          return res.send(email);
         });
       });
     });
   });
-})
+});
 
 router.post("/signup", function (req, res, next) {
   let { email, password } = req.body;
@@ -293,7 +305,9 @@ router.post("/signup", function (req, res, next) {
               return res.status(500).send("An interval server error occurred.");
             }
 
-            return res.redirect(`/send-email?email=${email}&action=verify-account`);
+            return res.redirect(
+              `/send-email?email=${email}&action=verify-account`
+            );
           });
         })
         .catch(function (err) {
@@ -317,7 +331,8 @@ router.get("/verify", function (req, res, next) {
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
-    var query = "select * from Account_Verification where token = ? and email = ?;";
+    var query =
+      "select * from Account_Verification where token = ? and email = ?;";
     connection.query(query, [token, email], function (err, rows, fields) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
@@ -327,12 +342,13 @@ router.get("/verify", function (req, res, next) {
       }
       // Delete the token
       query = "delete from Account_Verification where token = ? and email = ?;";
-      connection.query(query, [token, email], function(err, rows, fields) {
+      connection.query(query, [token, email], function (err, rows, fields) {
         if (err) {
           return res.status(500).send("An interval server error occurred.");
         }
         // Create the user profile
-        query = "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
+        query =
+          "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
         connection.query(
           query,
           [email, "/user-profiles/defaultUserProfile.png"],
@@ -343,9 +359,11 @@ router.get("/verify", function (req, res, next) {
             }
             // Modify isVerified attribute
             query = "update Authentication set isVerified = 1 where email = ?;";
-            connection.query(query, [email], function(err, rows, fields) {
+            connection.query(query, [email], function (err, rows, fields) {
               if (err) {
-                return res.status(500).send("An interval server error occurred.");
+                return res
+                  .status(500)
+                  .send("An interval server error occurred.");
               }
 
               // Log the user in
@@ -355,16 +373,16 @@ router.get("/verify", function (req, res, next) {
                 profile_picture: "/user-profiles/defaultUserProfile.png",
               };
 
-              return res.redirect('/');
+              return res.redirect("/");
             });
           }
-        );   
+        );
       });
     });
   });
 });
 
-router.post("/forget-password", function(req, res, next) {
+router.post("/forget-password", function (req, res, next) {
   let { email } = req.body;
 
   // If we lack any of these data, we return err
@@ -375,7 +393,7 @@ router.post("/forget-password", function(req, res, next) {
   return res.redirect(`/send-email?email=${email}&action=reset-password`);
 });
 
-router.post("/reset-password", function(req, res, next) {
+router.post("/reset-password", function (req, res, next) {
   let { email, token, password } = req.body;
 
   // If we lack any of these data, we return err
@@ -389,7 +407,8 @@ router.post("/reset-password", function(req, res, next) {
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
-    var query = "select * from Account_Verification where token = ? and email = ?;";
+    var query =
+      "select * from Account_Verification where token = ? and email = ?;";
     connection.query(query, [token, email], function (err, rows, fields) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
@@ -399,27 +418,29 @@ router.post("/reset-password", function(req, res, next) {
       }
       // Delete the token
       query = "delete from Account_Verification where token = ? and email = ?;";
-      connection.query(query, [token, email], function(err, rows, fields) {
+      connection.query(query, [token, email], function (err, rows, fields) {
         if (err) {
           return res.status(500).send("An interval server error occurred.");
         }
-        // Hash and update password 
+        // Hash and update password
         argon2
-        .hash(password)
-        .then(function (hashedPassword) {
-          // Insert new user into database
-          query = "UPDATE Authentication set password = ? where email = ?";
-          connection.query(query, [hashedPassword, email], function (err) {
-            connection.release();
-            if (err) {
-              return res.status(500).send("An interval server error occurred.");
-            }
-            return res.status(200).end();
+          .hash(password)
+          .then(function (hashedPassword) {
+            // Insert new user into database
+            query = "UPDATE Authentication set password = ? where email = ?";
+            connection.query(query, [hashedPassword, email], function (err) {
+              connection.release();
+              if (err) {
+                return res
+                  .status(500)
+                  .send("An interval server error occurred.");
+              }
+              return res.status(200).end();
+            });
+          })
+          .catch(function (err) {
+            return res.status(500).send("An interval server error occurred.");
           });
-        })
-        .catch(function (err) {
-          return res.status(500).send("An interval server error occurred.");
-        });
       });
     });
   });
@@ -451,6 +472,10 @@ router.get("/signup", function (req, res, next) {
     return res.redirect("/");
   }
   res.sendFile(pathToHtml("signup.html"));
+});
+
+router.get("/verify-account", function (req, res, next) {
+  res.sendFile(pathToHtml("verify-account.html"));
 });
 
 router.get("/forget-password", function (req, res, next) {

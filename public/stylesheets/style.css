@@ -15,6 +15,7 @@
 body {
   font-family: "Barlow", sans-serif;
   background-color: #f9f9f9;
+  margin-bottom: 100px;
 }
 
 a {
@@ -150,6 +151,9 @@ a {
 .footer {
   background: white;
   padding: 10px 0px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 .footer p {
@@ -247,6 +251,15 @@ a {
 .profileContainer {
   display: flex;
 }
+.profileIMG {
+  border-radius: 50%;
+  width: 100%;
+  max-width: 150px;
+  margin-bottom: 10px;
+  height: 100%;
+  max-height: 150px;
+  object-fit: cover;
+}
 .profilePic {
   display: flex;
   flex-direction: column;
@@ -256,15 +269,23 @@ a {
   font-weight: bold;
 }
 
-@media only screen and (max-width: 600px) {
-  .profileContainer {
+@media only screen and (max-width: 992px) {
+  .mainContainer {
     flex-direction: column;
+  }
+  .profileContainer {
+    width: 100% !important;
+    margin-bottom: -80px;
+  }
+  .profilePic {
+    width: 100% !important;
   }
   .form1 {
     width: 100%;
   }
-  .profIMG {
-    width: 100%;
+  .profileIMG {
+    height: 60px;
+    width: 60px;
   }
 }
 
@@ -299,6 +320,16 @@ a {
   margin-bottom: 0;
 }
 
+.googleButton .abcRioButton {
+  width: 100% !important;
+  border-radius: 10px;
+  border: 1px solid #aaaaaa;
+  box-shadow: none;
+}
+.googleButton .abcRioButton .abcRioButtonContents {
+  margin-left: 0px;
+  margin-right: 34px;
+}
 .nAccount {
   display: flex;
   justify-content: center;
@@ -320,13 +351,16 @@ a {
   text-decoration-color: black;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 992px) {
   .loginMainContainer {
     flex-direction: column;
     justify-content: center;
   }
 
   #loginIMG {
+    display: none;
+  }
+  #signUpIMG {
     display: none;
   }
   .loginContainer {
@@ -387,13 +421,13 @@ a {
   flex-direction: column;
   width: 22%;
   box-sizing: border-box;
-  margin-bottom: 4%;
+  margin: 0 1.5% 4% 1.5%;
 }
 
 #eventsList {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+
   margin-top: 4%;
 }
 
@@ -407,4 +441,41 @@ a {
 
 .eventDetails p {
   margin: 0;
+}
+
+@media only screen and (max-width: 992px) {
+  #eventsList {
+    flex-direction: column !important;
+  }
+  .eventContainer {
+    margin: 0 3% 6% 3%;
+    width: 100%;
+  }
+}
+
+/* 8. Verify Account */
+.verifyAccount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 14%;
+}
+
+.verifyAccount h1,
+.verifyAccount h2,
+.verifyAccount h3 {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 992px) {
+  .verifyAccount h1 {
+    font-size: 24px;
+  }
+  .verifyAccount h2 {
+    font-size: 18px;
+  }
+
+  .verifyAccount h3 {
+    font-size: 16px;
+  }
 }
