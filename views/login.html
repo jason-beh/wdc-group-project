@@ -24,64 +24,83 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/login.js"></script>
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
     <title>Document</title>
   </head>
   <body>
-      <div class = "loginMainContainer"><div class="loginContainer">
-      <img src="/images/blueLogo.png" alt="App logo" />
-      <h1>Login</h1>
-      <button class="button2">
-        <img src="/images/googleLogo.png" alt="logo of google" />Sign In With
-        Google
-      </button>
-      <img src="/images/orImg.png" alt="orLayout" class="orImage" />
-      <p class="authMessage"></p>
-      <form action="/login" method="post" @submit="onSubmit" id="login-form" class="loginForm">
-        <section class="inputs">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autocomplete="email"
-            v-model="email"
-            required
-            autofocus
-            class="inputBox"
-          />
-        </section>
-        <section class="inputs">
-          <label for="current-password">Password</label>
-          <input
-            id="current-password"
-            name="password"
-            type="password"
-            v-model="password"
-            autocomplete="current-password"
-            required
-            class="inputBox"
-          />
-        </section>
-        <button type="submit" class="button1" style="margin-top: 40px;">Login</button>
-        <a href="_blank" class="links" style="text-align: end; margin-top: 3%"
-          >Forgot password</a
+    <div class="loginMainContainer">
+      <div class="loginContainer">
+        <img src="/images/blueLogo.png" alt="App logo" />
+        <h1>Login</h1>
+        <button class="button2">
+          <img src="/images/googleLogo.png" alt="logo of google" />Sign In With
+          Google
+        </button>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <img src="/images/orImg.png" alt="orLayout" class="orImage" />
+        <p class="authMessage"></p>
+        <form
+          action="/login"
+          method="post"
+          @submit="onSubmit"
+          id="login-form"
+          class="loginForm"
         >
-      
-        <div class="nAccount">
-          <p>Don't have an account?</p>
-          &nbsp
-          <a href="/signup" class="links">Sign Up</a>
-        </div>
-      </form>
+          <div class="inputs">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              v-model="email"
+              required
+              autofocus
+              class="inputBox"
+            />
+          </div>
+          <div class="inputs">
+            <label for="current-password">Password</label>
+            <input
+              id="current-password"
+              name="password"
+              type="password"
+              v-model="password"
+              autocomplete="current-password"
+              required
+              class="inputBox"
+            />
+          </div>
+          <button type="submit" class="button1" style="margin-top: 40px">
+            Login
+          </button>
+          <a href="_blank" class="links" style="text-align: end; margin-top: 3%"
+            >Forgot password</a
+          >
+
+          <div class="nAccount">
+            <p>Don't have an account?</p>
+            &nbsp
+            <a href="/signup" class="links">Sign Up</a>
+          </div>
+        </form>
+      </div>
+      <img
+        src="/images/loginImage.png"
+        alt="Community"
+        style="width: 50%; object-fit: cover; min-height: 100vh"
+      />
     </div>
-    <img src="/images/loginImage.png" alt="Community" id = "loginIMG" style ="width: 50%; object-fit: cover; min-height: 100vh;"></div>
-    
-    </body>
   </body>
 </html>

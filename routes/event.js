@@ -5,9 +5,53 @@ var objects = require("../utils/objects");
 var path = require("path");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
+const { createDate, addHours } = require("../utils/datetime");
 
 var router = express.Router();
 
+// add multer library
+var multer = require("multer");
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/images/events");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "." + file.originalname.split(".").pop());
+  },
+});
+var upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg"
+    ) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
+    }
+  },
+});
+
+router.get("/get-events", function(req, res,next) {
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return next(err);
+    }
+    var query = "SELECT * FROM Events";
+    connection.query(query, [], function (err, rows, fields) {
+      connection.release();
+      if (err) {
+        return next(err);
+      }
+      return res.send(rows);
+    });
+  });
+});
+
+router.post("/create-event", upload.array("file", 1));
 router.post("/create-event", function (req, res, next) {
   // Ensure an user is logged in
   if (!userIsLoggedIn(req.session.user)) {
@@ -16,42 +60,70 @@ router.post("/create-event", function (req, res, next) {
   // Get all data from request body
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
-      return next(err);
+      console.log(err);
     }
     // Deference
     var {
       title,
       description,
-      proposal_date,
-      start_date,
-      end_date,
-      address_line,
+      proposed_date,
+      street_number,
+      street_name,
+      suburb,
       state,
       country,
       postcode,
+      duration,
+      proposed_times,
     } = req.body;
+
+    var event_picture = `/images/events/${req.files[0].filename}`;
+
     var query =
-      "INSERT INTO Events (title, description, created_by, proposal_date, start_date, end_date, custom_link, address_line, state, country, postcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO Events (title, description, created_by, proposed_date, street_number, street_name, suburb, state, country, postcode, event_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     connection.query(
       query,
       [
         title,
         description,
-        req.user.email,
-        proposal_date,
-        start_date,
-        end_date,
-        req.url,
-        address_line,
+        req.session.user.email,
+        proposed_date,
+        street_number,
+        street_name,
+        suburb,
         state,
         country,
         postcode,
+        event_picture,
       ],
       function (err, rows, fields) {
-        connection.release();
         if (err) {
-          return next(err);
+          console.log(err);
+          return res.status(500).send("An interval server error occurred.");
         }
+
+        // Get event id after inserting to database to populate proposed times
+        let event_id  = rows.insertId;
+
+        proposed_times = proposed_times.split(',');
+        
+        for(let proposed_time of proposed_times) {
+          let start_date = createDate(proposed_date, proposed_time);
+          let end_date = addHours(start_date, duration);
+
+          // Insert proposed event time into database
+          query = "INSERT INTO Proposed_Event_Time (event_id, start_date, end_date) VALUES (?, ?, ?)";
+          connection.query(query, [event_id, start_date, end_date], function (err, rows, field) {
+            if (err) {
+              console.log(err);
+              return res.status(500).send("An interval server error occurred.");
+            }
+
+          });
+        }
+
+        connection.release();
+
         return res.send("Success in creating an event");
       }
     );

@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
+    <meta name="google-signin-client_id" content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com">
+    <meta name="google-signin-plugin_name" content="APP">
+    <title>Document</title>
+
     <link
       rel="stylesheet"
       href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
@@ -12,6 +19,8 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -27,18 +36,20 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
-    <script src="scripts/ajax.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://apis.google.com/js/platform.js"></script>
+    <script src="/scripts/ajax.js"></script>
+    <script src="/scripts/nav.js"></script>
     <script src="/scripts/create-event.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark" id="navbar">
       <div class="container navbar-container">
         <a class="navbar-brand" href="/">
           <img src="/images/logo-white.svg" class="navbar-image" alt="" />
@@ -73,7 +84,6 @@
                 class="form-control navbar-searchbar"
                 placeholder="Search Events..."
                 aria-label="Search Events..."
-                aria-describedby="button-addon2"
               />
               <button class="navbar-searchbar-icon">
                 <ion-icon name="search-outline"></ion-icon>
@@ -81,8 +91,32 @@
             </div>
           </form>
           <ul class="navbar-nav navbar-nav-desktop ml-3">
-            <li class="nav-item">
+            <li v-if="profile_picture == null" class="nav-item">
               <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li v-else="profile_picture != null" class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <img
+                  v-bind:src="profile_picture"
+                  class="navbar-profile-picture"
+                  alt="profile picture"
+                />
+                <ion-icon class="navbar-dropdown-icon" name="chevron-down-outline"></ion-icon>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/my-events">My Events</a>
+                <a class="dropdown-item" href="/profile">Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
             </li>
           </ul>
         </div>
@@ -94,8 +128,17 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
-            <li class="nav-item">
+            <li v-if="profile_picture == null" class="nav-item">
               <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li v-if="profile_picture != null" class="nav-item">
+              <a class="nav-link" href="/my-events">My Events</a>
+            </li>
+            <li v-if="profile_picture != null" class="nav-item">
+              <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li v-if="profile_picture != null" class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
             </li>
             <li class="nav-item">
               <form class="form navbar-searchbar-form w-100 my-2 my-lg-0">
@@ -105,7 +148,6 @@
                     class="form-control navbar-searchbar"
                     placeholder="Search Events..."
                     aria-label="Search Events..."
-                    aria-describedby="button-addon2"
                   />
                   <button class="navbar-searchbar-icon">
                     <ion-icon name="search-outline"></ion-icon>
@@ -117,134 +159,147 @@
         </div>
       </div>
     </nav>
-    <h1 style = "padding-left: 4%; margin-top: 2%;">Create Event</h1>
-    <form @submit="onSubmit" id="create-form" class = "form2">
+    <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
+    <div class="container">
+      <h1 class="profileHeader">Create Event</h1>
+      <p>This page is currently under development.</p>
+      <div class="mainContainer">
+        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form"  class = "form2">
         
-      <div class = "createEventDiv" style= "padding-right: 6%;">
-        
-        <section class = "inputs">
-          <label for="title">Title</label>
-          <input
-            id="title"
-            name="title"
-            type="text"
-            v-model = "title"
-            autocomplete="title"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <section class = "inputs">
-          <label for="description">Description</label>
-          <input
-            id="description"
-            name="description"
-            type="text"
-            autocomplete="description"
-            required
-            autofocus
-            v-model = "description"
-            class = "inputBox"
-            style="min-height: 100px;"
-          />
-        </section>
-        <section class = "inputs">
-          <label for="proposal_date">Proposed Date</label>
-          <input
-            id="proposal_date"
-            name="proposal_date"
-            type="text"
-            v-model = "proposal_date"
-            autocomplete="proposal_date"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section class = "inputs">
-        <section>
-          <label for="address_line">Address</label>
-          <input
-            id="address_line"
-            name="address_line"
-            type="text"
-            v-model = "address_line"
-            autocomplete="address_line"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <section class = "inputs">
-          <label for="state">State</label>
-          <input
-            id="state"
-            name="state"
-            type="text"
-            v-model = "state"
-            autocomplete="state"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <div style = "display: flex; justify-content: space-between;"><section class = "inputs" style = "width: 45%;">
-          <label for="country">Country</label>
-          <input
-            id="country"
-            name="country"
-            type="text"
-            v-model = "country"
-            autocomplete="country"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <section class = "inputs" style = "width: 45%;">
-          <label for="postcode">Postcode</label>
-          <input
-            id="postcode"
-            name="postcode"
-            type="text"
-            v-model = "postcode"
-            autocomplete="postcode"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section></div>
-        
+          <div class = "createEventDiv" style= "padding-right: 6%;">
+            
+            <div class = "inputs">
+              <label for="title">Title</label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                v-model="title"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div class="inputs">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                rows="10"
+                required
+                v-model="description"
+                class="inputBox"
+                style="min-height: 100px"
+              ></textarea>
+            </div>
+            <div class="inputs">
+              <label for="proposed_date">Proposed Date</label>
+              <input
+                id="proposed_date"
+                name="proposed_date"
+                type="date"
+                v-model = "proposed_date"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div class="inputs">
+              <label for="street_number">Street Number</label>
+              <input
+                id="street_number"
+                name="street_number"
+                type="text"
+                v-model="street_number"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div class="inputs">
+              <label for="street_name">Street Name</label>
+              <input
+                id="street_name"
+                name="street_name"
+                type="text"
+                v-model="street_name"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div class="inputs">
+              <label for="suburb">Suburb</label>
+              <input
+                id="suburb"
+                name="suburb"
+                type="text"
+                v-model="suburb"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div class="inputs">
+              <label for="state">State</label>
+              <input
+                id="state"
+                name="state"
+                type="text"
+                v-model="state"
+                required
+                class="inputBox"
+              />
+            </div>
+            <div style="display: flex; justify-content: space-between">
+              <div class="inputs" style="width: 45%">
+                <label for="country">Country</label>
+                <input
+                  id="country"
+                  name="country"
+                  type="text"
+                  v-model="country"
+                  required
+                  class="inputBox"
+                />
+              </div>
+              <div class="inputs" style="width: 45%">
+                <label for="postcode">Postcode</label>
+                <input
+                  id="postcode"
+                  name="postcode"
+                  type="text"
+                  v-model="postcode"
+                  required
+                  class="inputBox"
+                />
+              </div>
+            </div>
 
-        <button type="submit" class = "button1">Create an event</button>
+            <button type="submit" class="button1">Create an event</button>
+          </div>
+          <div class = "createEventDiv" style= "padding: 0 10% 0 10%;">
+            <div class = "inputs">
+              <label for="image">Cover Photo</label>
+              <input id="image" name="file" type="file" required autofocus />
+            </div>
+            <div class = "inputs">
+              <label for="duration">Event Duration (Hours) </label>
+              <input
+                id="duration"
+                name="duration"
+                type="number"
+                v-model="duration"
+                required
+                class="inputBox"
+              />
+            </div>
+            <ul id="times" style = "display: flex; flex-direction: column; padding-inline-start: 0;"></ul>
+            <button @click="addTimeSelect" class="button1" style ="margin-top: 20px;">
+              Add a proposed start time
+            </button>
+          </div>
+        </form>
       </div>
-      <div class = "createEventDiv" style= "padding: 0 10% 0 10%;">
-        <section class = "inputs">
-          <label for="image">Cover Photo</label>
-          <input id="image" name="image" type="file" required autofocus v-model = "image" />
-        </section>
-        <section class = "inputs" style="margin-top: 150px">
-          <label for="duration">Event Duration</label>
-          <input
-            id="duration"
-            name="duration"
-            type="number"
-            autocomplete="number"
-            v-model = "duration"
-            required
-            autofocus
-            class = "inputBox"
-          />
-        </section>
-        <ul id="times" style = "display: flex; flex-direction: column; padding-inline-start: 0;"></ul>
-        <button onclick="addTimeSelect()" class="button1" id="addTimeButton" style ="margin-top: 20px;">
-          Add a proposed start time
-        </button>
-      </div>
-    </form>
+    </div>
     <footer class="footer navbar-expand-lg">
       <div class="container">
-        <p>© Socialah 2022</p>
+        <p>&#169; Socialah 2022</p>
       </div>
     </footer>
   </body>
