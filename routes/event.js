@@ -265,6 +265,21 @@ router.get("/events/:event_id", function (req, res, next) {
   });
 });
 
+router.post("/finalise-event-time", function (req, res, next) {
+  // Ensure an user is logged in
+  if (!userIsLoggedIn(req.session.user)) {
+    return res.status(401).send("Unauthorized Access!!");
+  }
+  // Make sure the user is the event creator
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return next(err);
+    }
+    var { email, event_id, proposed_event_time_id } = req.body;
+    
+  });
+});
+
 // Rendering Pages
 router.get("/create-event", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
