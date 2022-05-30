@@ -40,14 +40,9 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script src="https://accounts.google.com/gsi/client"></script>
-
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/specify-availability.js"></script>
-
+    <script src="/scripts/search.js"></script>
     <title>Document</title>
   </head>
 
@@ -175,51 +170,20 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
 
     <div class="container" id="app">
-      <h1 class="profileHeader">Specify Availability</h1>
-
-      <div class="profileContainer">
-        <form @submit="onSubmit" id="profile-form" class="form1">
-          <div class="inputs">
-            <label for="email">Email</label>
-            <input
-              class="inputBox"
-              id="email-input"
-              id="email"
-              name="email"
-              v-model="email"
-              type="email"
-              required
-            />
+      <h1 class="profileHeader">Search Results for "{{query}}"</h1>
+      <div v-if="events.length > 0" class="event-horizontal-container">
+        <div class="event-horizontal" v-for="event in events">
+          <img class="event-horizontal-image" v-bind:src="event.event_picture" alt="event image" />
+          <div class="event-horizontal-content">
+            <p class="event-horizontal-date">
+              {{new Date(`${event.proposed_date}`).toDateString()}}
+            </p>
+            <h3 class="event-horizontal-title">{{event.title}}</h3>
+            <p class="event-horizontal-street-name">{{event.street_name}}</p>
           </div>
-          <div class="inputs" id="proposed_times">
-            <label for="instagram_handle">Choose timeslots</label>
-            <div
-              v-for="(proposed_date, index) in event.proposed_date"
-              :key="index"
-              v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container inputBox selected' : 'checkmark-container inputBox'"
-            >
-              <input
-                type="checkbox"
-                @click="onClick"
-                v-bind:checked="proposed_date.proposed_event_time_id in selected_proposed_time_id"
-                v-bind:data-id="proposed_date.proposed_event_time_id"
-              />
-              <div class="checkmark-inner">
-                <span class="checkmark-icon"></span>
-                {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
-                Date(proposed_date.end_date).toLocaleTimeString()}`}}
-              </div>
-            </div>
-          </div>
-          <button type="submit" id="submit-button" class="inputs button1">Submit</button>
-        </form>
+        </div>
       </div>
-
-      <h1 class="profileHeader">Calendar Data</h1>
-      <!--Add buttons to initiate auth sequence and sign out-->
-      <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
-
-      <pre id="content" style="white-space: pre-wrap"></pre>
+      <p v-if="events.length === 0">No events found.</p>
     </div>
 
     <footer class="footer navbar-expand-lg">
