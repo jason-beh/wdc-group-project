@@ -250,7 +250,7 @@ router.get("/events/:event_id", function (req, res, next) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
-      var info = rows;
+      var info = rows[0];
       // Query another database
       query = "select * from Proposed_Event_Time where event_id = ?;";
       connection.query(query, [event_id], function (err, rows, fields) {
@@ -259,7 +259,7 @@ router.get("/events/:event_id", function (req, res, next) {
         }
         connection.release();
         info["date"] = rows;
-        res.json(info);
+        return res.json(info);
       });
     });
   });
