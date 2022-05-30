@@ -4,9 +4,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
-    <meta name="google-signin-client_id" content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com">
-    <meta name="google-signin-plugin_name" content="APP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
 
     <link
       rel="stylesheet"
@@ -44,7 +47,6 @@
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
     <script src="/scripts/specify-availability.js"></script>
-
 
     <title>Document</title>
   </head>
@@ -162,15 +164,52 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
 
-    <div class="container">
+    <div class="container" id="app">
       <h1 class="profileHeader">Specify Availability</h1>
-      <pre id="event_content" style="white-space: pre-wrap;"></pre>
+
+      <div class="profileContainer">
+        <form @submit="onSubmit" id="profile-form" class="form1">
+          <div class="inputs">
+            <label for="email">Email</label>
+            <input
+              class="inputBox"
+              id="email-input"
+              id="email"
+              name="email"
+              v-model="email"
+              type="email"
+              required
+            />
+          </div>
+          <div class="inputs" id="proposed_times">
+            <label for="instagram_handle">Choose timeslots</label>
+            <div
+              v-for="(proposed_date, index) in event.proposed_date"
+              :key="index"
+              v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container inputBox selected' : 'checkmark-container inputBox'"
+            >
+              <input
+                type="checkbox"
+                @click="onClick"
+                v-bind:checked="proposed_date.proposed_event_time_id in selected_proposed_time_id"
+                v-bind:data-id="proposed_date.proposed_event_time_id"
+              />
+              <div class="checkmark-inner">
+                <span class="checkmark-icon"></span>
+                {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
+                Date(proposed_date.end_date).toLocaleTimeString()}`}}
+              </div>
+            </div>
+          </div>
+          <button type="submit" id="submit-button" class="inputs button1">Submit</button>
+        </form>
+      </div>
 
       <h1 class="profileHeader">Calendar Data</h1>
       <!--Add buttons to initiate auth sequence and sign out-->
-      <button id="authorize_button">Authorize</button>
+      <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
 
-      <pre id="content" style="white-space: pre-wrap;"></pre>
+      <pre id="content" style="white-space: pre-wrap"></pre>
     </div>
 
     <footer class="footer navbar-expand-lg">
