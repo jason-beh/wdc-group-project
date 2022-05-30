@@ -20,7 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
     methods: {
       onSubmit(e) {
         e.preventDefault();
-
+        if (Object.values(this.proposed_times).length == 0) {
+          alert("Please add at least one proposed start time !");
+          return;
+        }
         var formData = new FormData();
         formData.append("title", this.title);
         formData.append("description", this.description);
@@ -63,10 +66,10 @@ document.addEventListener("DOMContentLoaded", function () {
         var text = document.createElement("p");
         text.innerText = "Proposed Event Time: ";
 
-        var icon = document.createElement('ion-icon');
-        icon.setAttribute('name', 'close-outline');
+        var icon = document.createElement("ion-icon");
+        icon.setAttribute("name", "close-outline");
         icon.setAttribute("data-id", id);
-        icon.addEventListener('click', (event) => {
+        icon.addEventListener("click", (event) => {
           event.preventDefault();
           let id = event.target.dataset.id;
 

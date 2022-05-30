@@ -6,7 +6,9 @@
   4. Profile
   5. Login
   6. Sign Up
-  7. Specify Availability
+  7. Events List
+  8. Verify Account
+  9. Specify Availability
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap");
@@ -16,6 +18,7 @@
 body {
   font-family: "Barlow", sans-serif;
   background-color: #f9f9f9;
+  margin-bottom: 100px;
 }
 
 a {
@@ -155,6 +158,9 @@ input:disabled {
 .footer {
   background: white;
   padding: 10px 0px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 .footer p {
@@ -252,6 +258,15 @@ input:disabled {
 .profileContainer {
   display: flex;
 }
+.profileIMG {
+  border-radius: 50%;
+  width: 100%;
+  max-width: 150px;
+  margin-bottom: 10px;
+  height: 100%;
+  max-height: 150px;
+  object-fit: cover;
+}
 .profilePic {
   display: flex;
   flex-direction: column;
@@ -261,20 +276,27 @@ input:disabled {
   font-weight: bold;
 }
 
-@media only screen and (max-width: 600px) {
-  .profileContainer {
+@media only screen and (max-width: 992px) {
+  .mainContainer {
     flex-direction: column;
+  }
+  .profileContainer {
+    width: 100% !important;
+    margin-bottom: -80px;
+  }
+  .profilePic {
+    width: 100% !important;
   }
   .form1 {
     width: 100%;
   }
-  .profIMG {
-    width: 100%;
+  .profileIMG {
+    height: 60px;
+    width: 60px;
   }
 }
 
 /* 5. Login */
-
 .loginMainContainer {
   display: flex;
 }
@@ -296,7 +318,7 @@ input:disabled {
 }
 .orImage {
   width: 100%;
-  margin: 4% 0 4% 0;
+  margin: 6.5% 0 4% 0;
 }
 
 .authMessage {
@@ -305,6 +327,16 @@ input:disabled {
   margin-bottom: 0;
 }
 
+.googleButton .abcRioButton {
+  width: 100% !important;
+  border-radius: 10px;
+  border: 1px solid #aaaaaa;
+  box-shadow: none;
+}
+.googleButton .abcRioButton .abcRioButtonContents {
+  margin-left: 0px;
+  margin-right: 34px;
+}
 .nAccount {
   display: flex;
   justify-content: center;
@@ -324,6 +356,26 @@ input:disabled {
 .links:hover {
   text-decoration: underline;
   text-decoration-color: black;
+}
+
+@media only screen and (max-width: 992px) {
+  .loginMainContainer {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #loginIMG {
+    display: none;
+  }
+  #signUpIMG {
+    display: none;
+  }
+  .loginContainer {
+    width: 100%;
+  }
+  .loginContainer a {
+    text-align: center !important;
+  }
 }
 
 /*6. Create an Event */
@@ -376,13 +428,13 @@ input:disabled {
   flex-direction: column;
   width: 22%;
   box-sizing: border-box;
-  margin-bottom: 4%;
+  margin: 0 1.5% 4% 1.5%;
 }
 
 #eventsList {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+
   margin-top: 4%;
 }
 
@@ -398,7 +450,44 @@ input:disabled {
   margin: 0;
 }
 
-/* 7. Specify Availability */
+@media only screen and (max-width: 992px) {
+  #eventsList {
+    flex-direction: column !important;
+  }
+  .eventContainer {
+    margin: 0 3% 6% 3%;
+    width: 100%;
+  }
+}
+
+/* 8. Verify Account */
+.verifyAccount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 14%;
+}
+
+.verifyAccount h1,
+.verifyAccount h2,
+.verifyAccount h3 {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 992px) {
+  .verifyAccount h1 {
+    font-size: 24px;
+  }
+  .verifyAccount h2 {
+    font-size: 18px;
+  }
+
+  .verifyAccount h3 {
+    font-size: 16px;
+  }
+}
+
+/* 9. Specify Availability */
 .checkmark-container {
   display: block;
   position: relative;
