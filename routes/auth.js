@@ -12,8 +12,7 @@ const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 // OAuth Library
 const { OAuth2Client } = require("google-auth-library");
-const CLIENT_ID =
-  "1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com";
+const CLIENT_ID = "1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
 var db = require("../utils/db");
 var argon2 = require("argon2");
@@ -55,7 +54,7 @@ router.post("/login", function (req, res, next) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
-    
+
       // If the email does not exist in any account, we return 401
       if (!rows || rows.length == 0) {
         return res.status(401).send("Incorrect email or password.");
@@ -91,17 +90,14 @@ router.post("/login", function (req, res, next) {
             connection.query(query, [user.email], function (err, rows, fields) {
               connection.release();
               if (err) {
-                return res
-                  .status(500)
-                  .send("An interval server error occurred.");
+                return res.status(500).send("An interval server error occurred.");
               }
               console.log(rows[0]);
               // Add profile image to the session if we are able to find it
               if (rows && rows[0]["profile_picture"] !== null) {
                 userSession["profile_picture"] = rows[0]["profile_picture"];
               } else {
-                userSession["profile_picture"] =
-                  "/user-profiles/defaultUserProfile.png";
+                userSession["profile_picture"] = "/user-profiles/defaultUserProfile.png";
               }
 
               // Save userSession to user's session
@@ -164,8 +160,7 @@ router.post("/oauth", async function (req, res, next) {
           if (rows && rows[0]["profile_picture"] !== null) {
             userSession["profile_picture"] = rows[0]["profile_picture"];
           } else {
-            userSession["profile_picture"] =
-              "/user-profiles/defaultUserProfile.png";
+            userSession["profile_picture"] = "/user-profiles/defaultUserProfile.png";
           }
 
           // Save userSession to user's session
@@ -175,8 +170,7 @@ router.post("/oauth", async function (req, res, next) {
         });
       } else {
         // Insert new user into database
-        query =
-          "INSERT INTO Authentication (email, isGoogleSignUp, isVerified) VALUES (?, ?, ?)";
+        query = "INSERT INTO Authentication (email, isGoogleSignUp, isVerified) VALUES (?, ?, ?)";
         connection.query(query, [email, true, true], function (err) {
           if (err) {
             return res.status(500).send("An interval server error occurred.");
@@ -192,18 +186,12 @@ router.post("/oauth", async function (req, res, next) {
           // Create user profile
           query =
             "INSERT into User_Profile (email, first_name, last_name, profile_picture) VALUES (?, ?, ?, ?)";
-          connection.query(
-            query,
-            [email, given_name, family_name, picture],
-            function (err) {
-              connection.release();
-              if (err) {
-                return res
-                  .status(500)
-                  .send("An interval server error occurred.");
-              }
+          connection.query(query, [email, given_name, family_name, picture], function (err) {
+            connection.release();
+            if (err) {
+              return res.status(500).send("An interval server error occurred.");
             }
-          );
+          });
 
           return res.status(200).end();
         });
@@ -305,9 +293,7 @@ router.post("/signup", function (req, res, next) {
               return res.status(500).send("An interval server error occurred.");
             }
 
-            return res.redirect(
-              `/send-email?email=${email}&action=verify-account`
-            );
+            return res.redirect(`/send-email?email=${email}&action=verify-account`);
           });
         })
         .catch(function (err) {
@@ -331,8 +317,7 @@ router.get("/verify", function (req, res, next) {
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
-    var query =
-      "select * from Account_Verification where token = ? and email = ?;";
+    var query = "select * from Account_Verification where token = ? and email = ?;";
     connection.query(query, [token, email], function (err, rows, fields) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
@@ -347,36 +332,29 @@ router.get("/verify", function (req, res, next) {
           return res.status(500).send("An interval server error occurred.");
         }
         // Create the user profile
-        query =
-          "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
-        connection.query(
-          query,
-          [email, "/user-profiles/defaultUserProfile.png"],
-          function (err) {
-            connection.release();
+        query = "INSERT into User_Profile (email, profile_picture) VALUES (?, ?)";
+        connection.query(query, [email, "/user-profiles/defaultUserProfile.png"], function (err) {
+          connection.release();
+          if (err) {
+            return res.status(500).send("An interval server error occurred.");
+          }
+          // Modify isVerified attribute
+          query = "update Authentication set isVerified = 1 where email = ?;";
+          connection.query(query, [email], function (err, rows, fields) {
             if (err) {
               return res.status(500).send("An interval server error occurred.");
             }
-            // Modify isVerified attribute
-            query = "update Authentication set isVerified = 1 where email = ?;";
-            connection.query(query, [email], function (err, rows, fields) {
-              if (err) {
-                return res
-                  .status(500)
-                  .send("An interval server error occurred.");
-              }
 
-              // Log the user in
-              req.session.user = {
-                email: email,
-                isAdmin: 0, // When a user signs up, they will not be an admin by default
-                profile_picture: "/user-profiles/defaultUserProfile.png",
-              };
+            // Log the user in
+            req.session.user = {
+              email: email,
+              isAdmin: 0, // When a user signs up, they will not be an admin by default
+              profile_picture: "/user-profiles/defaultUserProfile.png",
+            };
 
-              return res.redirect("/");
-            });
-          }
-        );
+            return res.redirect("/");
+          });
+        });
       });
     });
   });
@@ -407,8 +385,7 @@ router.post("/reset-password", function (req, res, next) {
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
-    var query =
-      "select * from Account_Verification where token = ? and email = ?;";
+    var query = "select * from Account_Verification where token = ? and email = ?;";
     connection.query(query, [token, email], function (err, rows, fields) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
@@ -431,9 +408,7 @@ router.post("/reset-password", function (req, res, next) {
             connection.query(query, [hashedPassword, email], function (err) {
               connection.release();
               if (err) {
-                return res
-                  .status(500)
-                  .send("An interval server error occurred.");
+                return res.status(500).send("An interval server error occurred.");
               }
               return res.status(200).end();
             });
