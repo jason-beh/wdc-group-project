@@ -5,3 +5,5 @@
 /public/user-profiles/*
 
 .DS_STORE
+
+.env

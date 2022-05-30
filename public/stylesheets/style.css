@@ -6,6 +6,9 @@
   4. Profile
   5. Login
   6. Sign Up
+  7. Events List
+  8. Verify Account
+  9. Specify Availability
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap");
@@ -15,10 +18,15 @@
 body {
   font-family: "Barlow", sans-serif;
   background-color: #f9f9f9;
+  margin-bottom: 100px;
 }
 
 a {
   color: #00b7ff;
+}
+
+input:disabled {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .display-none {
@@ -150,6 +158,9 @@ a {
 .footer {
   background: white;
   padding: 10px 0px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 .footer p {
@@ -247,6 +258,15 @@ a {
 .profileContainer {
   display: flex;
 }
+.profileIMG {
+  border-radius: 50%;
+  width: 100%;
+  max-width: 150px;
+  margin-bottom: 10px;
+  height: 100%;
+  max-height: 150px;
+  object-fit: cover;
+}
 .profilePic {
   display: flex;
   flex-direction: column;
@@ -256,20 +276,27 @@ a {
   font-weight: bold;
 }
 
-@media only screen and (max-width: 600px) {
-  .profileContainer {
+@media only screen and (max-width: 992px) {
+  .mainContainer {
     flex-direction: column;
+  }
+  .profileContainer {
+    width: 100% !important;
+    margin-bottom: -80px;
+  }
+  .profilePic {
+    width: 100% !important;
   }
   .form1 {
     width: 100%;
   }
-  .profIMG {
-    width: 100%;
+  .profileIMG {
+    height: 60px;
+    width: 60px;
   }
 }
 
 /* 5. Login */
-
 .loginMainContainer {
   display: flex;
 }
@@ -291,7 +318,7 @@ a {
 }
 .orImage {
   width: 100%;
-  margin: 4% 0 4% 0;
+  margin: 6.5% 0 4% 0;
 }
 
 .authMessage {
@@ -300,6 +327,16 @@ a {
   margin-bottom: 0;
 }
 
+.googleButton .abcRioButton {
+  width: 100% !important;
+  border-radius: 10px;
+  border: 1px solid #aaaaaa;
+  box-shadow: none;
+}
+.googleButton .abcRioButton .abcRioButtonContents {
+  margin-left: 0px;
+  margin-right: 34px;
+}
 .nAccount {
   display: flex;
   justify-content: center;
@@ -319,6 +356,26 @@ a {
 .links:hover {
   text-decoration: underline;
   text-decoration-color: black;
+}
+
+@media only screen and (max-width: 992px) {
+  .loginMainContainer {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #loginIMG {
+    display: none;
+  }
+  #signUpIMG {
+    display: none;
+  }
+  .loginContainer {
+    width: 100%;
+  }
+  .loginContainer a {
+    text-align: center !important;
+  }
 }
 
 /*6. Create an Event */
@@ -371,13 +428,13 @@ a {
   flex-direction: column;
   width: 22%;
   box-sizing: border-box;
-  margin-bottom: 4%;
+  margin: 0 1.5% 4% 1.5%;
 }
 
 #eventsList {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+
   margin-top: 4%;
 }
 
@@ -391,4 +448,110 @@ a {
 
 .eventDetails p {
   margin: 0;
+}
+
+@media only screen and (max-width: 992px) {
+  #eventsList {
+    flex-direction: column !important;
+  }
+  .eventContainer {
+    margin: 0 3% 6% 3%;
+    width: 100%;
+  }
+}
+
+/* 8. Verify Account */
+.verifyAccount {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 14%;
+}
+
+.verifyAccount h1,
+.verifyAccount h2,
+.verifyAccount h3 {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 992px) {
+  .verifyAccount h1 {
+    font-size: 24px;
+  }
+  .verifyAccount h2 {
+    font-size: 18px;
+  }
+
+  .verifyAccount h3 {
+    font-size: 16px;
+  }
+}
+
+/* 9. Specify Availability */
+.checkmark-container {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+.checkmark-container.selected {
+  background: #0D184F;
+}
+
+.checkmark-container.selected .checkmark-inner {
+  color: white;
+}
+
+.checkmark-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  margin: 0;
+  left: 0;
+  z-index: 2;
+}
+
+/* Create a custom checkbox */
+.checkmark-icon {
+  height: 20px;
+  width: 20px;
+  display: block;
+  margin-right: 10px;
+  position: relative;
+}
+
+.checkmark-inner {
+  display: flex;
+  align-items: center;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark-icon:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkmark-container input:checked ~ .checkmark-inner .checkmark-icon:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkmark-container .checkmark-icon:after {
+  left: 7px;
+  top: 2px;
+  position: absolute;
+  width: 7px;
+  height: 13px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
 }

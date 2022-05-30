@@ -30,24 +30,29 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
-    <meta name="google-signin-client_id" content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com">
-    <meta name="google-signin-plugin_name" content="APP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
     <title>Document</title>
-    
   </head>
   <body>
     <div class="loginMainContainer">
       <div class="loginContainer">
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Login</h1>
-        <button class="button2">
-          <img src="/images/googleLogo.png" alt="logo of google" />Sign In With Google
-        </button>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <div class="g-signin2 googleButton" data-onsuccess="onSignIn"></div>
         <img src="/images/orImg.png" alt="orLayout" class="orImage" />
         <p class="authMessage"></p>
-        <form action="/login" method="post" @submit="onSubmit" id="login-form" class="loginForm">
+        <form
+          action="/login"
+          method="post"
+          @submit="onSubmit"
+          id="login-form"
+          class="loginForm"
+        >
           <div class="inputs">
             <label for="email">Email</label>
             <input
@@ -73,8 +78,12 @@
               class="inputBox"
             />
           </div>
-          <button type="submit" class="button1" style="margin-top: 40px">Login</button>
-          <a href="_blank" class="links" style="text-align: end; margin-top: 3%">Forgot password</a>
+          <button type="submit" class="button1" style="margin-top: 40px">
+            Login
+          </button>
+          <a href="_blank" class="links" style="text-align: end; margin-top: 3%"
+            >Forgot password</a
+          >
 
           <div class="nAccount">
             <p>Don't have an account?</p>
@@ -87,6 +96,7 @@
         src="/images/loginImage.png"
         alt="Community"
         style="width: 50%; object-fit: cover; min-height: 100vh"
+        id="loginIMG"
       />
     </div>
   </body>

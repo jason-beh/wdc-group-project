@@ -3,9 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
-    <meta name="google-signin-client_id" content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com">
-    <meta name="google-signin-plugin_name" content="APP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
     <title>Document</title>
 
     <link
@@ -43,7 +46,12 @@
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Sign up</h1>
         <p class="authMessage"></p>
-        <form action="/signup" @submit="onSubmit" method="post" id="signup-form">
+        <form
+          action="/signup"
+          @submit="onSubmit"
+          method="post"
+          id="signup-form"
+        >
           <div class="inputs">
             <label for="email">Email</label>
             <input
@@ -86,16 +94,17 @@
             class="orImage"
             style="margin: 20px 0px 20px 0"
           />
-          <button class="button2">
-            <img src="/images/googleLogo.png" alt="logo of google" />Sign In With Google
-          </button>
-          <p class="nAccount">Have an account?&nbsp<a href="/login" class="links">Login</a></p>
+          <div class="g-signin2 googleButton" data-onsuccess="onSignIn"></div>
+          <p class="nAccount">
+            Have an account?&nbsp<a href="/login" class="links">Login</a>
+          </p>
           <p></p>
         </form>
       </div>
       <img
         src="/images/signUpImg.png"
         alt="Community"
+        id="signUpIMG"
         style="width: 50%; object-fit: cover; max-height: 100vh"
       />
     </div>
