@@ -55,7 +55,7 @@ router.post("/login", function (req, res, next) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
-
+    
       // If the email does not exist in any account, we return 401
       if (!rows || rows.length == 0) {
         return res.status(401).send("Incorrect email or password.");
@@ -95,7 +95,7 @@ router.post("/login", function (req, res, next) {
                   .status(500)
                   .send("An interval server error occurred.");
               }
-
+              console.log(rows[0]);
               // Add profile image to the session if we are able to find it
               if (rows && rows[0]["profile_picture"] !== null) {
                 userSession["profile_picture"] = rows[0]["profile_picture"];

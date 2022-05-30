@@ -11,6 +11,7 @@ var router = express.Router();
 
 // add multer library
 var multer = require("multer");
+const { emit } = require("process");
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/images/events");
@@ -276,7 +277,26 @@ router.post("/finalise-event-time", function (req, res, next) {
       return next(err);
     }
     var { email, event_id, proposed_event_time_id } = req.body;
-    
+    var query = "select * from Events where created_by = ? and event_id = ?;";
+    connection.query(query, [email, event_id], function (err, rows, fields) {
+      if (!rows || rows.length == 0) {
+        return res.status(401).send("Not an event creator!");
+      }
+      query = "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
+      connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
+        if (err) {
+          return next(err);
+        }
+        query = "update Events set finalized_event_time_id = ? where event_id = ?;";
+        connection.query(query, [rows[0]["proposed_event_time_id"], rows[0]["event_id"]], function (err, rows, field) {
+          connection.release();
+          if (err) {
+            return next(err);
+          }
+          return res.send("Success in finalise an event!");
+        });
+      });
+    });
   });
 });
 
