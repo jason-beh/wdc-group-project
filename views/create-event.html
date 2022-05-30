@@ -3,9 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
-    <meta name="google-signin-client_id" content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com">
-    <meta name="google-signin-plugin_name" content="APP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
     <title>Document</title>
 
     <link
@@ -77,6 +80,8 @@
           </ul>
           <form
             class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
+            action="/search"
+            method="POST"
           >
             <div class="input-group">
               <input
@@ -84,6 +89,8 @@
                 class="form-control navbar-searchbar"
                 placeholder="Search Events..."
                 aria-label="Search Events..."
+                v-model="query"
+                name="query"
               />
               <button class="navbar-searchbar-icon">
                 <ion-icon name="search-outline"></ion-icon>
@@ -141,13 +148,19 @@
               <a class="nav-link" href="/logout">Logout</a>
             </li>
             <li class="nav-item">
-              <form class="form navbar-searchbar-form w-100 my-2 my-lg-0">
+              <form
+                class="form navbar-searchbar-form w-100 my-2 my-lg-0"
+                action="/search"
+                method="POST"
+              >
                 <div class="input-group">
                   <input
                     type="text"
                     class="form-control navbar-searchbar"
                     placeholder="Search Events..."
                     aria-label="Search Events..."
+                    v-model="query"
+                    name="query"
                   />
                   <button class="navbar-searchbar-icon">
                     <ion-icon name="search-outline"></ion-icon>
@@ -164,11 +177,9 @@
       <h1 class="profileHeader">Create Event</h1>
       <p>This page is currently under development.</p>
       <div class="mainContainer">
-        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form"  class = "form2">
-        
-          <div class = "createEventDiv" style= "padding-right: 6%;">
-            
-            <div class = "inputs">
+        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form2">
+          <div class="createEventDiv" style="padding-right: 6%">
+            <div class="inputs">
               <label for="title">Title</label>
               <input
                 id="title"
@@ -197,7 +208,7 @@
                 id="proposed_date"
                 name="proposed_date"
                 type="date"
-                v-model = "proposed_date"
+                v-model="proposed_date"
                 required
                 class="inputBox"
               />
@@ -273,12 +284,12 @@
 
             <button type="submit" class="button1">Create an event</button>
           </div>
-          <div class = "createEventDiv" style= "padding: 0 10% 0 10%;">
-            <div class = "inputs">
+          <div class="createEventDiv" style="padding: 0 10% 0 10%">
+            <div class="inputs">
               <label for="image">Cover Photo</label>
               <input id="image" name="file" type="file" required autofocus />
             </div>
-            <div class = "inputs">
+            <div class="inputs">
               <label for="duration">Event Duration (Hours) </label>
               <input
                 id="duration"
@@ -289,8 +300,11 @@
                 class="inputBox"
               />
             </div>
-            <ul id="times" style = "display: flex; flex-direction: column; padding-inline-start: 0;"></ul>
-            <button @click="addTimeSelect" class="button1" style ="margin-top: 20px;">
+            <ul
+              id="times"
+              style="display: flex; flex-direction: column; padding-inline-start: 0"
+            ></ul>
+            <button @click="addTimeSelect" class="button1" style="margin-top: 20px">
               Add a proposed start time
             </button>
           </div>
