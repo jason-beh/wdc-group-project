@@ -4,9 +4,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
-    <meta name="google-signin-client_id" content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com">
-    <meta name="google-signin-plugin_name" content="APP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
 
     <link
       rel="stylesheet"
@@ -45,7 +48,7 @@
     <button id="authorize_button" onclick="handleAuthClick()">Authorize</button>
     <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
 
-    <pre id="content" style="white-space: pre-wrap;"></pre>
+    <pre id="content" style="white-space: pre-wrap"></pre>
 
     <script type="text/javascript">
       /* exported gapiLoaded */
@@ -54,28 +57,28 @@
       /* exported handleSignoutClick */
 
       // TODO(developer): Set to client ID and API key from the Developer Console
-      const CLIENT_ID = '507332350115-9kj93omegbtgu5hipcueuvpak2g7hm6g.apps.googleusercontent.com';
-      const API_KEY = 'AIzaSyAy3YteMve4LqH2DITNYS83zPsLGn5IFv4';
+      const CLIENT_ID = "507332350115-9kj93omegbtgu5hipcueuvpak2g7hm6g.apps.googleusercontent.com";
+      const API_KEY = "AIzaSyAy3YteMve4LqH2DITNYS83zPsLGn5IFv4";
 
       // Discovery doc URL for APIs used by the quickstart
-      const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+      const DISCOVERY_DOC = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
 
       // Authorization scopes required by the API; multiple scopes can be
       // included, separated by spaces.
-      const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+      const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
       let tokenClient;
       let gapiInited = false;
       let gisInited = false;
 
-      document.getElementById('authorize_button').style.visibility = 'hidden';
-      document.getElementById('signout_button').style.visibility = 'hidden';
+      document.getElementById("authorize_button").style.visibility = "hidden";
+      document.getElementById("signout_button").style.visibility = "hidden";
 
       /**
        * Callback after api.js is loaded.
        */
       function gapiLoaded() {
-        gapi.load('client', intializeGapiClient);
+        gapi.load("client", intializeGapiClient);
       }
 
       /**
@@ -98,7 +101,7 @@
         tokenClient = google.accounts.oauth2.initTokenClient({
           client_id: CLIENT_ID,
           scope: SCOPES,
-          callback: '', // defined later
+          callback: "", // defined later
         });
         gisInited = true;
         maybeEnableButtons();
@@ -109,7 +112,7 @@
        */
       function maybeEnableButtons() {
         if (gapiInited && gisInited) {
-          document.getElementById('authorize_button').style.visibility = 'visible';
+          document.getElementById("authorize_button").style.visibility = "visible";
         }
       }
 
@@ -119,20 +122,20 @@
       function handleAuthClick() {
         tokenClient.callback = async (resp) => {
           if (resp.error !== undefined) {
-            throw (resp);
+            throw resp;
           }
-          document.getElementById('signout_button').style.visibility = 'visible';
-          document.getElementById('authorize_button').innerText = 'Refresh';
+          document.getElementById("signout_button").style.visibility = "visible";
+          document.getElementById("authorize_button").innerText = "Refresh";
           await listUpcomingEvents();
         };
 
         if (gapi.client.getToken() === null) {
           // Prompt the user to select a Google Account and ask for consent to share their data
           // when establishing a new session.
-          tokenClient.requestAccessToken({prompt: 'consent'});
+          tokenClient.requestAccessToken({ prompt: "consent" });
         } else {
           // Skip display of account chooser and consent dialog for an existing session.
-          tokenClient.requestAccessToken({prompt: ''});
+          tokenClient.requestAccessToken({ prompt: "" });
         }
       }
 
@@ -143,10 +146,10 @@
         const token = gapi.client.getToken();
         if (token !== null) {
           google.accounts.oauth2.revoke(token.access_token);
-          gapi.client.setToken('');
-          document.getElementById('content').innerText = '';
-          document.getElementById('authorize_button').innerText = 'Authorize';
-          document.getElementById('signout_button').style.visibility = 'hidden';
+          gapi.client.setToken("");
+          document.getElementById("content").innerText = "";
+          document.getElementById("authorize_button").innerText = "Authorize";
+          document.getElementById("signout_button").style.visibility = "hidden";
         }
       }
 
@@ -159,34 +162,34 @@
         let response;
         try {
           const request = {
-            'calendarId': 'primary',
-            'timeMin': (new Date()).toISOString(),
-            'showDeleted': false,
-            'singleEvents': true,
-            'maxResults': 10,
-            'orderBy': 'startTime',
+            calendarId: "primary",
+            timeMin: new Date().toISOString(),
+            showDeleted: false,
+            singleEvents: true,
+            maxResults: 10,
+            orderBy: "startTime",
           };
           response = await gapi.client.calendar.events.list(request);
         } catch (err) {
-          document.getElementById('content').innerText = err.message;
+          document.getElementById("content").innerText = err.message;
           return;
         }
 
         const events = response.result.items;
         if (!events || events.length == 0) {
-          document.getElementById('content').innerText = 'No events found.';
+          document.getElementById("content").innerText = "No events found.";
           return;
         }
         // Flatten to string to display
         const output = events.reduce(
-            (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
-            'Events:\n');
-        document.getElementById('content').innerText = output;
+          (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
+          "Events:\n"
+        );
+        document.getElementById("content").innerText = output;
       }
     </script>
     <script async defer src="https://apis.google.com/js/api.js"></script>
     <script async defer src="https://accounts.google.com/gsi/client"></script>
-
 
     <title>Document</title>
   </head>
@@ -220,6 +223,8 @@
           </ul>
           <form
             class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
+            action="/search"
+            method="POST"
           >
             <div class="input-group">
               <input
@@ -227,6 +232,8 @@
                 class="form-control navbar-searchbar"
                 placeholder="Search Events..."
                 aria-label="Search Events..."
+                v-model="query"
+                name="query"
               />
               <button class="navbar-searchbar-icon">
                 <ion-icon name="search-outline"></ion-icon>
@@ -284,13 +291,19 @@
               <a class="nav-link" href="/logout">Logout</a>
             </li>
             <li class="nav-item">
-              <form class="form navbar-searchbar-form w-100 my-2 my-lg-0">
+              <form
+                class="form navbar-searchbar-form w-100 my-2 my-lg-0"
+                action="/search"
+                method="POST"
+              >
                 <div class="input-group">
                   <input
                     type="text"
                     class="form-control navbar-searchbar"
                     placeholder="Search Events..."
                     aria-label="Search Events..."
+                    v-model="query"
+                    name="query"
                   />
                   <button class="navbar-searchbar-icon">
                     <ion-icon name="search-outline"></ion-icon>
