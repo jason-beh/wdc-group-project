@@ -1,6 +1,7 @@
 var express = require("express");
 var db = require("../utils/db");
 const { userIsLoggedIn } = require("../utils/auth");
+const { pathToHtml } = require("../utils/routes");
 
 var router = express.Router();
 
@@ -91,7 +92,9 @@ router.post("/edit-availability", function (req, res, next) {
   });
 });
 
-
-
+// Rendering Pages
+router.get("/specify-availability", function (req, res, next) {
+  res.sendFile(pathToHtml("specify-availability.html"));
+});
 
 module.exports = router;

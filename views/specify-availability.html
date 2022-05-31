@@ -40,9 +40,14 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/verify-account.js"></script>
+    <script src="/scripts/specify-availability.js"></script>
+
     <title>Document</title>
   </head>
 
@@ -169,14 +174,52 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
 
-    <div class="verifyAccount">
-      <h1>Congratulations on joining Socialah !</h1>
-      <h2>Before you get to join awesome events ...</h2>
-      <h2>Verify your account through email !</h2>
-      <h3>
-        Did not receive an email ?
-        <a href="#" onclick="resend()">Resend Email</a>
-      </h3>
+    <div class="container" id="app">
+      <h1 class="profileHeader">Specify Availability</h1>
+
+      <div class="profileContainer">
+        <form @submit="onSubmit" id="profile-form" class="form1">
+          <div class="inputs">
+            <label for="email">Email</label>
+            <input
+              class="inputBox"
+              id="email-input"
+              id="email"
+              name="email"
+              v-model="email"
+              type="email"
+              required
+            />
+          </div>
+          <div class="inputs" id="proposed_times">
+            <label for="instagram_handle">Choose timeslots</label>
+            <div
+              v-for="(proposed_date, index) in event.proposed_date"
+              :key="index"
+              v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container inputBox selected' : 'checkmark-container inputBox'"
+            >
+              <input
+                type="checkbox"
+                @click="onClick"
+                v-bind:checked="proposed_date.proposed_event_time_id in selected_proposed_time_id"
+                v-bind:data-id="proposed_date.proposed_event_time_id"
+              />
+              <div class="checkmark-inner">
+                <span class="checkmark-icon"></span>
+                {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
+                Date(proposed_date.end_date).toLocaleTimeString()}`}}
+              </div>
+            </div>
+          </div>
+          <button type="submit" id="submit-button" class="inputs button1">Submit</button>
+        </form>
+      </div>
+
+      <h1 class="profileHeader">Calendar Data</h1>
+      <!--Add buttons to initiate auth sequence and sign out-->
+      <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
+
+      <pre id="content" style="white-space: pre-wrap"></pre>
     </div>
 
     <footer class="footer navbar-expand-lg">

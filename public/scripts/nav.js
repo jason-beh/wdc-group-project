@@ -12,13 +12,16 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     };
   }
 
-  console.log(res);
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  var query = urlParams.get("q");
 
   var app = new Vue({
     el: "#navbar",
     data() {
       return {
         profile_picture: res.profile_picture,
+        query: query,
       };
     },
   });

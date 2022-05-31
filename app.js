@@ -16,6 +16,7 @@ var eventRouter = require('./routes/event');
 var availabilityRouter = require('./routes/availability');
 var searchRouter = require('./routes/search');
 var adminRouter = require('./routes/admin');
+var attendanceRouter = require('./routes/attendance');
 
 // module2 for storing Session in MySQL Database
 var sessionStore = new mysqlStore(db.options);
@@ -77,5 +78,6 @@ app.use('/', eventRouter);
 app.use('/', availabilityRouter);
 app.use('/', searchRouter);
 app.use('/', adminRouter);
+app.use('/', attendanceRouter);
 
 module.exports = app;
