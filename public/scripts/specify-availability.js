@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (event_id === null) {
     alert("invalid event id");
     window.location.href = "/";
+    return;
   }
 
   // Get event
@@ -148,8 +149,8 @@ document.addEventListener("DOMContentLoaded", function () {
     Sync Calendar Stuff
   */
 
-  const CLIENT_ID = "";
-  const API_KEY = "";
+  const CLIENT_ID = "507332350115-9kj93omegbtgu5hipcueuvpak2g7hm6g.apps.googleusercontent.com";
+  const API_KEY = "AIzaSyAy3YteMve4LqH2DITNYS83zPsLGn5IFv4";
   const DISCOVERY_DOC = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
   const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
