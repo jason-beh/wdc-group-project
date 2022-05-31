@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     res = JSON.parse(res);
 
-    console.log(res);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var query = urlParams.get("q");
 
     var app = new Vue({
       el: "#wrapper",
@@ -22,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
           state: res.state,
           country: res.country,
           profile_picture: res.profile_picture,
+          query: query,
         };
       },
       methods: {
