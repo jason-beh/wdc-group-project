@@ -479,3 +479,15 @@ a {
     font-size: 16px;
   }
 }
+
+/* 9. Admin View */
+
+.adminContainer {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.admin-table {
+  width: 100%;
+}
