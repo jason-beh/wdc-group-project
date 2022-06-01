@@ -9,6 +9,8 @@
   7. Events List
   8. Verify Account
   9. Specify Availability
+  10. Admin View
+  11. My Events
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap");
@@ -597,7 +599,34 @@ input:disabled {
   transform: rotate(45deg);
 }
 
-/* 10. My Events */
+/* 10. Admin View */
+
+.adminContainer {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-table {
+  width: 100%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.admin-table tr:nth-child(2n) {
+  background-color: #e8e8e8;
+}
+.admin-table th {
+  padding: 1.5% 0 1.5% 0;
+  text-align: center;
+}
+
+.admin-table td {
+  padding: 10px 0 10px 0;
+  text-align: center;
+}
+/* 11. My Events */
 .events-type-row {
   display: flex;
   align-items: center;
