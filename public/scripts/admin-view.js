@@ -30,8 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           console.log(res);
           for (user of res) {
-            user.birthday =
-              user.birthday !== null ? user.birthday.substring(0, 10) : "";
+            user.birthday = user.birthday !== null ? user.birthday.substring(0, 10) : "";
           }
           app.users = res;
         });
@@ -51,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
               console.log(err);
             } else {
               app.viewUsers();
+              alert("Succesfully deleted user !");
             }
             // TODO: Notify user whether it fails or succeeds
           }
@@ -70,8 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
             res = JSON.parse(res);
             app.first_name = res.first_name;
             app.last_name = res.last_name;
-            app.birthday =
-              res.birthday !== null ? res.birthday.substring(0, 10) : "";
+            app.birthday = res.birthday !== null ? res.birthday.substring(0, 10) : "";
             app.instagram_handle = res.instagram_handle;
             app.facebook_handle = res.facebook_handle;
             app.state = res.state;
@@ -92,20 +91,15 @@ document.addEventListener("DOMContentLoaded", function () {
           state: this.state,
           country: this.country,
         };
-        sendAJAX(
-          "POST",
-          "/admin-edit-profile",
-          JSON.stringify(formData),
-          function (err, res) {
-            if (err) {
-              console.log(err);
-            } else {
-              app.viewUsers();
-              alert("Successfully updated profile !");
-            }
-            // TODO: Notify user whether it fails or succeeds
+        sendAJAX("POST", "/admin-edit-profile", JSON.stringify(formData), function (err, res) {
+          if (err) {
+            console.log(err);
+          } else {
+            app.viewUsers();
+            alert("Successfully updated profile !");
           }
-        );
+          // TODO: Notify user whether it fails or succeeds
+        });
       },
       createSystemAdmin(e) {
         e.preventDefault();
@@ -113,22 +107,17 @@ document.addEventListener("DOMContentLoaded", function () {
           email: this.userEmail,
           password: this.userPassword,
         };
-        sendAJAX(
-          "POST",
-          "/create-admin",
-          JSON.stringify(formData),
-          function (err, res) {
-            if (err) {
-              console.log(err);
-            } else {
-              alert("Successfully created admin !");
-              app.userEmail = "";
-              app.userPassword = "";
-              app.viewUsers();
-            }
-            // TODO: Notify user whether it fails or succeeds
+        sendAJAX("POST", "/create-admin", JSON.stringify(formData), function (err, res) {
+          if (err) {
+            console.log(err);
+          } else {
+            alert("Successfully created admin !");
+            app.userEmail = "";
+            app.userPassword = "";
+            app.viewUsers();
           }
-        );
+          // TODO: Notify user whether it fails or succeeds
+        });
       },
       createSystemUser(e) {
         e.preventDefault();
@@ -136,22 +125,17 @@ document.addEventListener("DOMContentLoaded", function () {
           email: this.userEmail,
           password: this.userPassword,
         };
-        sendAJAX(
-          "POST",
-          "/create-user",
-          JSON.stringify(formData),
-          function (err, res) {
-            if (err) {
-              console.log(err);
-            } else {
-              alert("Successfully created user !");
-              app.userEmail = "";
-              app.userPassword = "";
-              app.viewUsers();
-            }
-            // TODO: Notify user whether it fails or succeeds
+        sendAJAX("POST", "/create-user", JSON.stringify(formData), function (err, res) {
+          if (err) {
+            console.log(err);
+          } else {
+            alert("Successfully created user !");
+            app.userEmail = "";
+            app.userPassword = "";
+            app.viewUsers();
           }
-        );
+          // TODO: Notify user whether it fails or succeeds
+        });
       },
     },
 

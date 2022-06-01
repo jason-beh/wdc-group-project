@@ -588,8 +588,24 @@ input:disabled {
   display: flex;
   margin-top: 20px;
   justify-content: space-between;
+  align-items: center;
 }
 
 .admin-table {
   width: 100%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.admin-table tr:nth-child(2n) {
+  background-color: #e8e8e8;
+}
+.admin-table th {
+  padding: 1.5% 0 1.5% 0;
+  text-align: center;
+}
+
+.admin-table td {
+  padding: 10px 0 10px 0;
+  text-align: center;
 }
