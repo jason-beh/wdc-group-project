@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (event_id === null) {
     alert("invalid event id");
     window.location.href = "/";
+    return;
   }
 
   // Get event

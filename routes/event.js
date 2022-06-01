@@ -228,7 +228,7 @@ router.get("/my-events/organized", function (req, res, next) {
       return next(err);
     }
     var query = "SELECT * FROM Events WHERE created_by = ?";
-    connection.query(query, [req.user.email], function (err, rows, fields) {
+    connection.query(query, [req.session.user.email], function (err, rows, fields) {
       connection.release();
       if (err) {
         return next(err);
@@ -248,8 +248,8 @@ router.get("/my-events/attended", function (req, res, next) {
       return next(err);
     }
     var query =
-      "select title, description, proposal_date, start_date, end_date, custom_link, address_line, state, country, postcode from Events inner join Attendance where Attendance.email = ? && Attendance.event_id = Events.event_id";
-    connection.query(query, [req.user.email], function (err, rows, fields) {
+      "SELECT * FROM Events INNER JOIN Attendance WHERE Attendance.email = ? and Attendance.event_id = Events.event_id";
+    connection.query(query, [req.session.user.email], function (err, rows, fields) {
       connection.release();
       if (err) {
         return next(err);
@@ -313,6 +313,7 @@ router.post("/finalise-event-time", function (req, res, next) {
           query,
           [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
           function (err, rows, field) {
+            connection.release();
             if (err) {
               return next(err);
             }
