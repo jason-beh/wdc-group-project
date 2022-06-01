@@ -9,9 +9,29 @@ const { createDate, addHours } = require("../utils/datetime");
 
 var router = express.Router();
 
+var nodemailer = require("nodemailer");
+
+// Create the transporter with the required configuration for Outlook
+var transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email", // hostname
+  secureConnection: false, // TLS requires secureConnection to be false
+  secure: false,
+  port: 587, // port for secure SMTP,
+  pool: true,
+  maxConnections: 5,
+  tls: {
+    ciphers: "SSLv3",
+  },
+  auth: {
+    user: "hy7tjayeu3f3ganq@ethereal.email",
+    pass: "kGSvXP3g4974KTHGgW",
+  },
+});
+
 // add multer library
 var multer = require("multer");
 const { emit } = require("process");
+const { log } = require("console");
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/images/events");
@@ -36,7 +56,7 @@ var upload = multer({
   },
 });
 
-router.get("/get-events", function(req, res,next) {
+router.get("/get-events", function (req, res, next) {
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
@@ -103,21 +123,21 @@ router.post("/create-event", function (req, res, next) {
         }
 
         // Get event id after inserting to database to populate proposed times
-        let event_id  = rows.insertId;
+        let event_id = rows.insertId;
 
-        proposed_times = proposed_times.split(',');
-        
+        proposed_times = proposed_times.split(",");
+
         for (let proposed_time of proposed_times) {
           let start_date = createDate(proposed_date, proposed_time);
           let end_date = addHours(start_date, duration);
 
           // Insert proposed event time into database
-          query = "INSERT INTO Proposed_Event_Time (event_id, start_date, end_date) VALUES (?, ?, ?)";
+          query =
+            "INSERT INTO Proposed_Event_Time (event_id, start_date, end_date) VALUES (?, ?, ?)";
           connection.query(query, [event_id, start_date, end_date], function (err, rows, field) {
             if (err) {
               return res.status(500).send("An interval server error occurred.");
             }
-
           });
         }
 
@@ -240,7 +260,7 @@ router.get("/my-events/attended", function (req, res, next) {
 });
 
 router.get("/events/:event_id", function (req, res, next) {
-  let {event_id} = req.params;
+  let { event_id } = req.params;
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -282,20 +302,72 @@ router.post("/finalise-event-time", function (req, res, next) {
       if (!rows || rows.length == 0) {
         return res.status(401).send("Not an event creator!");
       }
-      query = "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
+      query =
+        "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
       connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
         if (err) {
           return next(err);
         }
         query = "update Events set finalized_event_time_id = ? where event_id = ?;";
-        connection.query(query, [rows[0]["proposed_event_time_id"], rows[0]["event_id"]], function (err, rows, field) {
-          connection.release();
-          if (err) {
-            return next(err);
+        connection.query(
+          query,
+          [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
+          function (err, rows, field) {
+            if (err) {
+              return next(err);
+            }
+            return res.send("Success in finalise an event!");
           }
-          return res.send("Success in finalise an event!");
-        });
+        );
       });
+    });
+  });
+});
+
+router.post("/send-confirmation-email", function (req, res, next) {
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return next(err);
+    }
+    var { event_id } = req.body;
+    var query = "select * from Events where event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return next(err);
+      }
+      // Get the event details
+      var eventContent = rows[0];
+
+      query =
+        "select distinct email from Availability inner join Proposed_Event_Time on Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id where event_id = ?;";
+      connection.query(query, [event_id], function (err, rows, fields) {
+        connection.release();
+        if (err) {
+          return next(err);
+        }
+
+        console.log(rows.length);
+
+        for (var index = 0; index < rows.length; index++) {
+          // setup e-mail data, even with unicode symbols
+          var mailOptions = {
+            from: "socialah@outlook.com", // sender address (who sends)
+            to: rows[index]["email"],
+            subject: "Confirm my attendance!", // Subject line
+            text: "Hello world ", // plaintext body
+          };
+          mailOptions["html"] = `<h1>${eventContent["title"]}</h1>
+              <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
+          // send mail with defined transport object
+          transporter.sendMail(mailOptions, function (error, info) {
+
+            if (error) {
+              return console.log(error);
+            }
+          });
+        }
+      });
+      return res.send("Success in sending confirmation email!");
     });
   });
 });
