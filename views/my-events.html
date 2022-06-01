@@ -44,9 +44,9 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="/scripts/eventslist.js"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
+    <script src="/scripts/my-events.js"></script>
     <title>Document</title>
   </head>
 
@@ -172,9 +172,101 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-    <div class="container">
+    <div class="container" id="app">
       <h1 class="profileHeader">My Events</h1>
-      <p>This page is currently under development.</p>
+
+      <div
+        class="large-cta-container"
+        v-if="organizedEvents.length === 0 && attendedEvents.length === 0"
+      >
+        <h1>
+          We couldn’t find any events that you have <br />
+          attended or organized.
+        </h1>
+        <div class="cta-row">
+          <a href="/" class="button1">Browse Events</a>
+          <a href="/create-event" class="button2">Create an Event</a>
+        </div>
+      </div>
+
+      <div v-if="organizedEvents.length > 0 || attendedEvents.length > 0" class="mainContainer">
+        <div class="left-section">
+          <div class="events-type-row">
+            <button
+              v-bind:class="currentView == 'attendedEvents' ? 'button1' : 'button2'"
+              @click="switchView('attendedEvents')"
+            >
+              Attended Events
+            </button>
+            <button
+              v-bind:class="currentView == 'organizedEvents' ? 'button1' : 'button2'"
+              @click="switchView('organizedEvents')"
+            >
+              Organized Events
+            </button>
+          </div>
+          <!-- Attended Events -->
+          <div
+            v-if="attendedEvents.length > 0 && currentView === 'attendedEvents'"
+            class="event-horizontal-container"
+          >
+            <div class="event-horizontal" v-for="event in attendedEvents">
+              <img
+                class="event-horizontal-image"
+                v-bind:src="event.event_picture"
+                alt="event image"
+              />
+              <div class="event-horizontal-content">
+                <p class="event-horizontal-date">
+                  {{new Date(`${event.proposed_date}`).toDateString()}}
+                </p>
+                <h3 class="event-horizontal-title">{{event.title}}</h3>
+                <p class="event-horizontal-street-name">{{event.street_name}}</p>
+              </div>
+            </div>
+          </div>
+          <p
+            v-if="attendedEvents.length === 0 && currentView === 'attendedEvents'"
+            class="no-events-message"
+          >
+            No attended events found.
+          </p>
+          <!-- Organized Events -->
+          <div
+            v-if="organizedEvents.length > 0 && currentView === 'organizedEvents'"
+            class="event-horizontal-container"
+          >
+            <div class="event-horizontal" v-for="event in organizedEvents">
+              <img
+                class="event-horizontal-image"
+                v-bind:src="event.event_picture"
+                alt="event image"
+              />
+              <div class="event-horizontal-content">
+                <p class="event-horizontal-date">
+                  {{new Date(`${event.proposed_date}`).toDateString()}}
+                </p>
+                <h3 class="event-horizontal-title">{{event.title}}</h3>
+                <p class="event-horizontal-street-name">{{event.street_name}}</p>
+              </div>
+            </div>
+          </div>
+          <p
+            v-if="organizedEvents.length === 0 && currentView === 'organizedEvents'"
+            class="no-events-message"
+          >
+            No organized events found.
+          </p>
+        </div>
+
+        <div class="right-section">
+          <div class="create-event-cta-container">
+            <h3>Prefer To Create Your Own Event?</h3>
+            <p>Creating an event is as easy as ABC.</p>
+            <a href="/create-event" class="button2">Create Event</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <footer class="footer navbar-expand-lg">

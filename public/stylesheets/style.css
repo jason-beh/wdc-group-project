@@ -9,6 +9,8 @@
   7. Events List
   8. Verify Account
   9. Specify Availability
+  10. Admin View
+  11. My Events
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap");
@@ -23,6 +25,15 @@ body {
 
 a {
   color: #00b7ff;
+}
+
+a:hover {
+  color: unset;
+  text-decoration: none;
+}
+
+button:focus {
+  outline: none;
 }
 
 input:disabled {
@@ -250,11 +261,17 @@ input:disabled {
   box-sizing: border-box;
   height: 50px;
 }
-.button1:hover {
-  color: #0d184f;
-  background-color: #f3c61f;
-  transition: 0.5s;
+
+.button2:hover {
+  transition: 0.1s;
+  background-color: rgba(220, 220, 220, 0.8);
 }
+
+.button1:hover {
+  background-color: rgba(13, 24, 79, 0.85);
+  transition: 0.1s;
+}
+
 .profileContainer {
   display: flex;
 }
@@ -608,4 +625,120 @@ input:disabled {
 .admin-table td {
   padding: 10px 0 10px 0;
   text-align: center;
+}
+/* 11. My Events */
+.events-type-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 30px;
+}
+
+.events-type-row button {
+  width: 40%;
+  margin: 0;
+}
+
+.events-type-row button:first-child {
+  margin-right: 20px;
+}
+
+.cta-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.cta-row a {
+  margin-top: 0;
+  text-align: center;
+  width: 40%;
+}
+
+.cta-row .button1:hover {
+  color: white;
+}
+
+.cta-row .button2 {
+  margin-top: 0;
+  text-align: center;
+  color: #0d184f;
+}
+
+.cta-row button:first-child {
+  margin-right: 20px;
+}
+
+.left-section {
+  width: 60%;
+}
+
+.right-section {
+  width: 30%;
+  margin-left: 10%;
+}
+
+.no-events-message {
+  margin-top: 40px;
+}
+
+.large-cta-container {
+  margin-top: 100px;
+}
+
+.large-cta-container h1 {
+  text-align: center;
+}
+
+.create-event-cta-container {
+  padding: 50px 40px;
+  background: #0d184f;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  border-radius: 10px;
+}
+
+.create-event-cta-container a {
+  width: 100%;
+  background-color: white;
+  color: #0d184f;
+}
+
+.create-event-cta-container h3 {
+  font-weight: bold;
+}
+
+.create-event-cta-container p {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.create-event-cta-container a:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+@media only screen and (max-width: 992px) {
+  .left-section {
+    width: 100%;
+  }
+
+  .right-section {
+    margin-top: 100px;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .create-event-cta-container {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .no-events-message {
+    text-align: center;
+  }
+
+  .events-type-row {
+    justify-content: center;
+  }
 }
