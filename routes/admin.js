@@ -170,6 +170,7 @@ router.post("/create-user", function (req, res, next) {
     });
   });
 });
+
 router.post("/delete-user", function (req, res, next) {
   // Ensure the admin is logged in
   if (!userIsAdmin(req.session.user)) {
@@ -200,7 +201,7 @@ router.post("/delete-user", function (req, res, next) {
   });
 });
 
-router.post("/delete-event", function (req, res, next) {
+router.delete("/delete-event", function (req, res, next) {
   // Ensure the admin is logged in
   if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access");
@@ -230,7 +231,7 @@ router.post("/delete-event", function (req, res, next) {
   });
 });
 
-router.post("/admin-edit-event", function (req, res, next) {
+router.post("/edit-event", function (req, res, next) {
   // Ensure the user is logged in
   if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
@@ -283,7 +284,7 @@ router.post("/admin-edit-event", function (req, res, next) {
   });
 });
 
-router.post("/admin-edit-profile", function (req, res, next) {
+router.post("/edit-profile", function (req, res, next) {
   // Ensure the user is logged in
   if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
@@ -321,7 +322,7 @@ router.post("/admin-edit-profile", function (req, res, next) {
   });
 });
 
-router.post("/get-event-admin", function (req, res, next) {
+router.post("/get-event", function (req, res, next) {
   let { eventToSearch } = req.body;
   if (!eventToSearch) {
     return res.status(400).send("Insufficient Data");
@@ -348,7 +349,8 @@ router.post("/get-event-admin", function (req, res, next) {
     });
   });
 });
-router.post("/get-profile-admin", function (req, res, next) {
+
+router.post("/get-profile", function (req, res, next) {
   let { emailToSearch } = req.body;
   if (!emailToSearch) {
     return res.status(400).send("Insufficient Data");
@@ -375,10 +377,13 @@ router.post("/get-profile-admin", function (req, res, next) {
     });
   });
 });
-router.get("/admin-view", function (req, res, next) {
-  res.sendFile(pathToHtml("admin-view.html"));
+
+// Rendering Pages
+router.get("/users", function (req, res, next) {
+  res.sendFile(pathToHtml("admin-users.html"));
 });
-router.get("/admin-view-events", function (req, res, next) {
-  res.sendFile(pathToHtml("admin-view-events.html"));
+
+router.get("/events", function (req, res, next) {
+  res.sendFile(pathToHtml("admin-events.html"));
 });
 module.exports = router;
