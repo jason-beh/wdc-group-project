@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           sendAJAX(
             "POST",
-            "/edit-availability",
+            "/specify-availability",
             JSON.stringify(formData),
             function (err, availabilityRes) {
               if (err) {
