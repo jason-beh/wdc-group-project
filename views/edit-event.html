@@ -75,7 +75,8 @@
             </li>
           </ul>
           <form
-            class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"action="/search"
+            class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
+            action="/search"
             method="POST"
           >
             <div class="input-group">
@@ -84,8 +85,8 @@
                 class="form-control navbar-searchbar"
                 placeholder="Search Events..."
                 aria-label="Search Events..."
-                    v-model="query"
-name="query"
+                v-model="query"
+                name="query"
               />
               <button class="navbar-searchbar-icon">
                 <ion-icon name="search-outline"></ion-icon>
@@ -140,8 +141,9 @@ name="query"
               <a class="nav-link" href="/logout">Logout</a>
             </li>
             <li class="nav-item">
-              <form class="form navbar-searchbar-form w-100 my-2 my-lg-0"action="/search"
-            method="POST">
+              <form class="form navbar-searchbar-form w-100 my-2 my-lg-0"
+              action="/search"
+              method="POST">
                 <div class="input-group">
                   <input
                     type="text"
@@ -275,7 +277,7 @@ name="query"
         </div>
         <div id="times" style="display: flex; flex-direction: column">
           <p v-for="(time, index) in proposed_times" :key="index">
-            Proposed time&nbsp:&nbsp{{time}}
+            Proposed time&nbsp:&nbsp{{time}} </p>
           </div>
         </ul>
         <button onclick="addTimeSelect()" class="button1" id="addTimeButton" style="margin-top: 0">
