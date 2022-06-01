@@ -323,7 +323,7 @@ router.post("/admin-edit-profile", function (req, res, next) {
 
 router.post("/get-event-admin", function (req, res, next) {
   let { eventToSearch } = req.body;
-  if (!evenToSearch) {
+  if (!eventToSearch) {
     return res.status(400).send("Insufficient Data");
   }
   if (!userIsAdmin(req.session.user)) {
