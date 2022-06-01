@@ -9,7 +9,7 @@
       content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
     />
     <meta name="google-signin-plugin_name" content="APP" />
-    <title>Document</title>
+    <title>Socialah - Sign Up</title>
 
     <link
       rel="stylesheet"
@@ -17,7 +17,8 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
-
+    <link rel="shortcut icon" href="/images/custom-favicon.png" />
+    <link rel="shortcut icon" href="/images/custom-favicon.png" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
 
     <script
@@ -46,12 +47,7 @@
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Sign up</h1>
         <p class="authMessage"></p>
-        <form
-          action="/signup"
-          @submit="onSubmit"
-          method="post"
-          id="signup-form"
-        >
+        <form action="/signup" @submit="onSubmit" method="post" id="signup-form">
           <div class="inputs">
             <label for="email">Email</label>
             <input
@@ -95,9 +91,7 @@
             style="margin: 20px 0px 20px 0"
           />
           <div class="g-signin2 googleButton" data-onsuccess="onSignIn"></div>
-          <p class="nAccount">
-            Have an account?&nbsp<a href="/login" class="links">Login</a>
-          </p>
+          <p class="nAccount">Have an account?&nbsp<a href="/login" class="links">Login</a></p>
           <p></p>
         </form>
       </div>
