@@ -30,8 +30,6 @@ var transporter = nodemailer.createTransport({
 
 // add multer library
 var multer = require("multer");
-const { emit } = require("process");
-const { log } = require("console");
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/images/events");
