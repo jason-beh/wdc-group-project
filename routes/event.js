@@ -169,7 +169,7 @@ router.post("/edit-event", function (req, res, next) {
       event_id,
     } = req.body;
     var query =
-      "UPDATE Events set title = ?, description = ?, proposal_date = ?, start_date = ?, end_date = ?, address_line = ?, state = ?, country = ?, postcode = ? where event_id = ?";
+      "UPDATE Events set title = ?, description = ?, proposal_date = ?, start_date = ?, end_date = ?, address_line = ?, state = ?, country = ?, postcode = ? where event_id = ? and created_by = ?";
     connection.query(
       query,
       [
@@ -183,6 +183,7 @@ router.post("/edit-event", function (req, res, next) {
         country,
         postcode,
         event_id,
+        req.session.user.email
       ],
       function (err, rows, fields) {
         connection.release();
@@ -359,7 +360,6 @@ router.post("/send-confirmation-email", function (req, res, next) {
               <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
           // send mail with defined transport object
           transporter.sendMail(mailOptions, function (error, info) {
-
             if (error) {
               return console.log(error);
             }
