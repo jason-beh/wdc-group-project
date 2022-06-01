@@ -7,6 +7,7 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link rel="shortcut icon" href="/images/custom-favicon.png" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -36,7 +37,8 @@
       content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
     />
     <meta name="google-signin-plugin_name" content="APP" />
-    <title>Document</title>
+    <meta name="theme-color" content="#0D184F" />
+    <title>Socialah - Login</title>
   </head>
   <body>
     <div class="loginMainContainer">
@@ -46,13 +48,7 @@
         <div class="g-signin2 googleButton" data-onsuccess="onSignIn"></div>
         <img src="/images/orImg.png" alt="orLayout" class="orImage" />
         <p class="authMessage"></p>
-        <form
-          action="/login"
-          method="post"
-          @submit="onSubmit"
-          id="login-form"
-          class="loginForm"
-        >
+        <form action="/login" method="post" @submit="onSubmit" id="login-form" class="loginForm">
           <div class="inputs">
             <label for="email">Email</label>
             <input
@@ -78,12 +74,8 @@
               class="inputBox"
             />
           </div>
-          <button type="submit" class="button1" style="margin-top: 40px">
-            Login
-          </button>
-          <a href="_blank" class="links" style="text-align: end; margin-top: 3%"
-            >Forgot password</a
-          >
+          <button type="submit" class="button1" style="margin-top: 40px">Login</button>
+          <a href="_blank" class="links" style="text-align: end; margin-top: 3%">Forgot password</a>
 
           <div class="nAccount">
             <p>Don't have an account?</p>

@@ -363,6 +363,7 @@ input:disabled {
 
 .nAccount p {
   margin: 0;
+  font-weight: normal;
 }
 
 .links {
