@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(queryString);
   var query = urlParams.get("q");
 
-  // Load profile
   sendAJAX("GET", `/search?q=${query}`, null, function (err, res) {
     if (err) {
       // do something

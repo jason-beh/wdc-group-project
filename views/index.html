@@ -43,6 +43,7 @@
     <script src="/scripts/eventslist.js"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
+    <!-- <script src="/scripts/event-details.js"></script> -->
     <title>Document</title>
   </head>
 
@@ -177,12 +178,19 @@
     <div class="container">
       <div id="eventsList">
         <div v-for="(event, index) in events" :key="index" class="eventContainer">
-          <img
-            v-bind:src="event.event_picture"
-            alt="Event Picture"
-            style="border-radius: 10px 10px 0 0; max-height: 150px; object-fit: cover"
-          />
-          <div class="eventDetails">
+          <a
+            v-bind:href="'/event-details?event=' + event.event_id"
+            class="eventContainerHREF"
+            id="detailsHREF"
+          >
+            <img
+              v-bind:src="event.event_picture"
+              alt="Event Picture"
+              style="border-radius: 10px 10px 0 0; height: 150px; object-fit: cover"
+              v-bind:data-eventId="event.event_id"
+            />
+          </a>
+          <div class="eventDetails" v-bind:data-eventId="event.event_id">
             <p style="color: #d9b11f">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
             <p style="font-size: 1.4em; font-weight: 600">{{event.title}}</p>
             <p style="font-size: 0.86em; margin-top: 6%">Created by : {{event.created_by}}</p>

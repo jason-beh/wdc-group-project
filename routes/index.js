@@ -29,6 +29,10 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/my-events", function (req, res, next) {
+  if (!userIsLoggedIn(req.session.user)) {
+    return res.status(401).send("Unauthorized Access!!");
+  }
+
   res.sendFile(pathToHtml("my-events.html"));
 });
 

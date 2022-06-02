@@ -9,6 +9,8 @@
   7. Events List
   8. Verify Account
   9. Specify Availability
+  10. Admin View
+  11. My Events
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap");
@@ -23,6 +25,15 @@ body {
 
 a {
   color: #00b7ff;
+}
+
+a:hover {
+  color: unset;
+  text-decoration: none;
+}
+
+button:focus {
+  outline: none;
 }
 
 input:disabled {
@@ -250,11 +261,17 @@ input:disabled {
   box-sizing: border-box;
   height: 50px;
 }
-.button1:hover {
-  color: #0d184f;
-  background-color: #f3c61f;
-  transition: 0.5s;
+
+.button2:hover {
+  transition: 0.1s;
+  background-color: rgba(220, 220, 220, 0.8);
 }
+
+.button1:hover {
+  background-color: rgba(13, 24, 79, 0.85);
+  transition: 0.1s;
+}
+
 .profileContainer {
   display: flex;
 }
@@ -580,4 +597,211 @@ input:disabled {
   border: solid white;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
+}
+
+/* 10. Admin View */
+
+.adminContainer {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-table {
+  width: 100%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.admin-table tr:nth-child(2n) {
+  background-color: #e8e8e8;
+}
+.admin-table th {
+  padding: 1.5% 0 1.5% 0;
+  text-align: center;
+}
+
+.admin-table td {
+  padding: 10px 0 10px 0;
+  text-align: center;
+}
+/* 11. My Events */
+.events-type-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 30px;
+}
+
+.events-type-row button {
+  width: 40%;
+  margin: 0;
+}
+
+.events-type-row button:first-child {
+  margin-right: 20px;
+}
+
+.cta-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.cta-row a {
+  margin-top: 0;
+  text-align: center;
+  width: 40%;
+}
+
+.cta-row .button1:hover {
+  color: white;
+}
+
+.cta-row .button2 {
+  margin-top: 0;
+  text-align: center;
+  color: #0d184f;
+}
+
+.cta-row button:first-child {
+  margin-right: 20px;
+}
+
+.left-section {
+  width: 60%;
+}
+
+.right-section {
+  width: 30%;
+  margin-left: 10%;
+}
+
+.no-events-message {
+  margin-top: 40px;
+}
+
+.large-cta-container {
+  margin-top: 100px;
+}
+
+.large-cta-container h1 {
+  text-align: center;
+}
+
+.create-event-cta-container {
+  padding: 50px 40px;
+  background: #0d184f;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  border-radius: 10px;
+}
+
+.create-event-cta-container a {
+  width: 100%;
+  background-color: white;
+  color: #0d184f;
+}
+
+.create-event-cta-container h3 {
+  font-weight: bold;
+}
+
+.create-event-cta-container p {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.create-event-cta-container a:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+@media only screen and (max-width: 992px) {
+  .left-section {
+    width: 100%;
+  }
+
+  .right-section {
+    margin-top: 100px;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .create-event-cta-container {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .no-events-message {
+    text-align: center;
+  }
+
+  .events-type-row {
+    justify-content: center;
+  }
+}
+
+/* 12. Event Details */
+.detailMainContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 4% 0;
+}
+
+.detailImage {
+  width: 100;
+  display: block;
+  max-width: 100%;
+  height: 35%;
+}
+
+.detailList {
+  font-weight: 500;
+  padding: 0 2% 2%;
+  box-sizing: border-box;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin: 0 2% 2% 5%;
+}
+
+.detailList h1,
+.detailList h5 {
+  font-weight: bold;
+}
+
+.detailAll {
+  padding: 0 0 10% 0;
+}
+
+.detailMap {
+  width: 100%;
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* padding: 0 4% 0 4%; */
+  /* margin: 4% 0; */
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.detailsDescription {
+  margin: 20px 20px 10px 20px;
+  font-weight: bold;
+}
+
+.detailsDescriptionList {
+  margin: 0 20px 20px;
+}
+
+.eventContainerHREF {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }

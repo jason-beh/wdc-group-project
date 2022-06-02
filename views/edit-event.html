@@ -3,9 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />    
-    <meta name="google-signin-client_id" content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com">
-    <meta name="google-signin-plugin_name" content="APP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
     <title>Document</title>
 
     <link
@@ -141,9 +144,11 @@
               <a class="nav-link" href="/logout">Logout</a>
             </li>
             <li class="nav-item">
-              <form class="form navbar-searchbar-form w-100 my-2 my-lg-0"
-              action="/search"
-              method="POST">
+              <form
+                class="form navbar-searchbar-form w-100 my-2 my-lg-0"
+                action="/search"
+                method="POST"
+              >
                 <div class="input-group">
                   <input
                     type="text"
@@ -151,7 +156,7 @@
                     placeholder="Search Events..."
                     aria-label="Search Events..."
                     v-model="query"
-name="query"
+                    name="query"
                   />
                   <button class="navbar-searchbar-icon">
                     <ion-icon name="search-outline"></ion-icon>
@@ -277,9 +282,9 @@ name="query"
         </div>
         <div id="times" style="display: flex; flex-direction: column">
           <p v-for="(time, index) in proposed_times" :key="index">
-            Proposed time&nbsp:&nbsp{{time}} </p>
-          </div>
-        </ul>
+            Proposed time&nbsp:&nbsp{{time}}
+          </p>
+        </div>
         <button onclick="addTimeSelect()" class="button1" id="addTimeButton" style="margin-top: 0">
           Add a proposed start time
         </button>

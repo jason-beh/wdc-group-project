@@ -9,9 +9,27 @@ const { createDate, addHours } = require("../utils/datetime");
 
 var router = express.Router();
 
+var nodemailer = require("nodemailer");
+
+// Create the transporter with the required configuration for Outlook
+var transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email", // hostname
+  secureConnection: false, // TLS requires secureConnection to be false
+  secure: false,
+  port: 587, // port for secure SMTP,
+  pool: true,
+  maxConnections: 5,
+  tls: {
+    ciphers: "SSLv3",
+  },
+  auth: {
+    user: "hy7tjayeu3f3ganq@ethereal.email",
+    pass: "kGSvXP3g4974KTHGgW",
+  },
+});
+
 // add multer library
 var multer = require("multer");
-const { emit } = require("process");
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/images/events");
@@ -208,7 +226,7 @@ router.get("/my-events/organized", function (req, res, next) {
       return next(err);
     }
     var query = "SELECT * FROM Events WHERE created_by = ?";
-    connection.query(query, [req.user.email], function (err, rows, fields) {
+    connection.query(query, [req.session.user.email], function (err, rows, fields) {
       connection.release();
       if (err) {
         return next(err);
@@ -228,8 +246,8 @@ router.get("/my-events/attended", function (req, res, next) {
       return next(err);
     }
     var query =
-      "select title, description, proposal_date, start_date, end_date, custom_link, address_line, state, country, postcode from Events inner join Attendance where Attendance.email = ? && Attendance.event_id = Events.event_id";
-    connection.query(query, [req.user.email], function (err, rows, fields) {
+      "SELECT * FROM Events INNER JOIN Attendance WHERE Attendance.email = ? and Attendance.event_id = Events.event_id";
+    connection.query(query, [req.session.user.email], function (err, rows, fields) {
       connection.release();
       if (err) {
         return next(err);
@@ -301,6 +319,69 @@ router.post("/finalise-event-time", function (req, res, next) {
           }
         );
       });
+    });
+  });
+});
+
+router.post("/send-confirmation-email", function (req, res, next) {
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return next(err);
+    }
+    var { event_id } = req.body;
+    var query = "select * from Events where event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return next(err);
+      }
+      // Get the event details
+      var eventContent = rows[0];
+
+      query =
+        "select distinct email from Availability inner join Proposed_Event_Time on Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id where event_id = ?;";
+      connection.query(query, [event_id], function (err, rows, fields) {
+        connection.release();
+        if (err) {
+          return next(err);
+        }
+
+        console.log(rows.length);
+
+        for (var index = 0; index < rows.length; index++) {
+          // setup e-mail data, even with unicode symbols
+          var mailOptions = {
+            from: "socialah@outlook.com", // sender address (who sends)
+            to: rows[index]["email"],
+            subject: "Confirm my attendance!", // Subject line
+            text: "Hello world ", // plaintext body
+          };
+          mailOptions["html"] = `<h1>${eventContent["title"]}</h1>
+              <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
+          // send mail with defined transport object
+          transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              return console.log(error);
+            }
+          });
+        }
+      });
+      return res.send("Success in sending confirmation email!");
+    });
+  });
+});
+
+router.post("/show-details", function (req, res, next) {
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return next(err);
+    }
+    var { event_id } = req.body;
+    var query = "SELECT * FROM Events where event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return next(err);
+      }
+      connection.release();
     });
   });
 });

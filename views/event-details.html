@@ -40,7 +40,8 @@
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="/scripts/ajax.js"></script>
-    <script src="/scripts/profile.js"></script>
+    <script src="/scripts/nav.js"></script>
+    <script src="/scripts/event-details.js"></script>
     <title>Document</title>
   </head>
 
@@ -165,118 +166,42 @@
       <!-- ========================================================================================== -->
 
       <div class="container" id="container">
-        <h1 class="profileHeader">Event Details</h1>
-        <div class="mainContainer">
-          <div class="profileContainer">
-            <form @submit="onSubmit" id="profile-form" class="form1">
-              <div class="profileName">
-                <div class="inputs names">
-                  <label for="first_name">First Name</label>
-                  <input
-                    class="inputBox"
-                    id="first_name"
-                    name="first_name"
-                    value="first_name"
-                    v-model="first_name"
-                    type="text"
-                    required
-                  />
-                </div>
-                <div class="inputs names">
-                  <label for="last_name">Last Name</label>
-                  <input
-                    class="inputBox"
-                    id="last_name"
-                    name="last_name"
-                    value="last_name"
-                    v-model="last_name"
-                    type="text"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div class="inputs">
-                <label for="birthday">Birthday</label>
-                <input
-                  class="inputBox"
-                  id="birthday"
-                  name="birthday"
-                  v-model="birthday"
-                  type="date"
-                  required
-                />
-              </div>
-              <div class="inputs">
-                <label for="instagram_handle">Instagram Handle</label>
-                <input
-                  class="inputBox"
-                  id="instagram_handle"
-                  name="instagram_handle"
-                  value="instagram_handle"
-                  v-model="instagram_handle"
-                  type="text"
-                  required
-                />
-              </div>
-              <div class="inputs">
-                <label for="facebook_handle">Facebook Handle</label>
-                <input
-                  class="inputBox"
-                  id="facebook_handle"
-                  name="facebook_handle"
-                  value="facebook_handle"
-                  v-model="facebook_handle"
-                  type="text"
-                  required
-                />
-              </div>
-              <div class="inputs">
-                <label for="state">State</label>
-                <input
-                  class="inputBox"
-                  id="state"
-                  name="state"
-                  value="state"
-                  v-model="state"
-                  type="text"
-                  required
-                />
-              </div>
-              <div class="inputs">
-                <label for="country">Country</label>
-                <input
-                  class="inputBox"
-                  id="country"
-                  name="country"
-                  value="country"
-                  v-model="country"
-                  type="text"
-                  required
-                />
-              </div>
-              <button type="submit" id="submit-button" class="inputs button1">
-                Update my profile
-              </button>
-            </form>
-          </div>
-          <div class="profilePic">
-            <label for="profilePic">Profile Picture</label>
+        <!-- <h1 class="profileHeader">Event Details</h1> -->
+        <div class="detailMainContainer" id="eventDetail">
+          <div class="detailsContainer">
             <img
-              v-if="profile_picture != '/user-profiles/defaultUserProfile.png'"
-              v-bind:src="profile_picture"
-              class="profileIMG"
-              alt="dummy profile pic"
+              class="detailImage"
+              v-bind:src="event_picture"
+              style="border-radius: 10px"
+              alt="event picture"
             />
-            <form
-              @submit="changeProfilePicture"
-              method="post"
-              id="changeProfilePicture"
-              enctype="multipart/form-data"
-            >
-              <input type="file" name="file" class="profile-image-file" />
-              <button type="submit" class="inputs button1">Update Image</button>
-            </form>
+            <label for="eventDescription" class="detailsDescription">Description</label>
+            <p id="eventDescription" class="detailsDescriptionList">{{description}}</p>
+          </div>
+          <div class="detailList">
+            <div class="detailAll">
+              <h1>{{title}}</h1>
+              <h6>by {{created_by}}</h6>
+            </div>
+            <div class="detailAll">
+              <h5>Proposed Date</h5>
+              <p>{{proposed_date}}</p>
+              <button type="submit" class="inputs button1">Specify Availability</button>
+            </div>
+            <div class="detailAll">
+              <h5>Location</h5>
+              <p>
+                {{street_number}} {{street_name}},{{suburb}} <br />
+                {{state}},{{postcode}},{{country}}
+              </p>
+              <img src="images/exampleLocation.png" class="detailMap" />
+            </div>
+            <div>
+              <h5>Share Event</h5>
+              <button type="submit" class="inputs button1" onclick="copyClipboard()">
+                Copy Event Link
+              </button>
+            </div>
           </div>
         </div>
       </div>
