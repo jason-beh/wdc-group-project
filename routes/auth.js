@@ -46,12 +46,14 @@ router.post("/login", function (req, res, next) {
 
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
+      console.log(err);
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
     var query = "SELECT * FROM Authentication WHERE email = ?";
     connection.query(query, [email], function (err, rows, fields) {
       if (err) {
+        console.log(err);
         return res.status(500).send("An interval server error occurred.");
       }
 
@@ -90,6 +92,7 @@ router.post("/login", function (req, res, next) {
             connection.query(query, [user.email], function (err, rows, fields) {
               connection.release();
               if (err) {
+                console.log(err);
                 return res.status(500).send("An interval server error occurred.");
               }
               console.log(rows[0]);
@@ -108,6 +111,7 @@ router.post("/login", function (req, res, next) {
           }
         })
         .catch(function (err) {
+          console.log(err);
           return res.status(500).send("An interval server error occurred.");
         });
     });

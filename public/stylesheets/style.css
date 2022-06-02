@@ -314,8 +314,24 @@ input:disabled {
 }
 
 /* 5. Login */
+
+.fix {
+  max-height: 100vh;
+}
 .loginMainContainer {
   display: flex;
+}
+.loginButton {
+  margin-top: 40px;
+}
+.loginHref {
+  text-align: end;
+  margin-top: 3%;
+}
+#loginIMG {
+  width: 50%;
+  object-fit: cover;
+  min-height: 100vh;
 }
 .loginContainer {
   width: 50%;
@@ -338,6 +354,9 @@ input:disabled {
   margin: 6.5% 0 4% 0;
 }
 
+.signUpOrImage {
+  margin: 20px 0px 20px 0;
+}
 .authMessage {
   color: red;
   font-weight: 500;
@@ -405,6 +424,12 @@ input:disabled {
   margin-bottom: 20%;
 }
 
+.eventDiv1 {
+  padding-right: 6%;
+}
+.eventDiv2 {
+  padding: 0 10% 0 10%;
+}
 .createEventDiv {
   width: 100%;
   box-sizing: border-box;
@@ -423,8 +448,20 @@ input:disabled {
   padding-right: 5px;
 }
 
+@media only screen and (max-width: 992px) {
+  .form2 {
+    flex-direction: column !important;
+  }
+  .createEventDiv {
+    padding: 0 6% 0 6%;
+  }
+}
+
 /*7. Events List*/
 
+.eventDiv1 {
+  line-height: 110%;
+}
 .eventListBanner {
   height: 250px;
   width: 100%;
@@ -436,6 +473,24 @@ input:disabled {
   font-weight: bold;
   display: flex;
   align-items: center;
+}
+
+.eventP1 {
+  color: #d9b11f;
+}
+
+.eventP2 {
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.eventP3 {
+  font-size: 0.86em;
+  margin-top: 6%;
+}
+
+.eventP4 {
+  margin-top: 6%;
 }
 .eventContainer {
   display: flex;
@@ -462,6 +517,10 @@ input:disabled {
 
 .eventDetails p {
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .event-horizontal {

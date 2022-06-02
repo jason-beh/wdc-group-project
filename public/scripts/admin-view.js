@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (err) {
               console.log(err);
             } else {
+              document.getElementById("dismiss-button1").click();
               app.viewUsers();
               alert("Succesfully deleted user !");
             }
@@ -95,8 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
           if (err) {
             console.log(err);
           } else {
-            app.viewUsers();
+            document.getElementById("dismiss-button2").click();
             alert("Successfully updated profile !");
+            app.viewUsers();
           }
           // TODO: Notify user whether it fails or succeeds
         });
@@ -111,6 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (err) {
             console.log(err);
           } else {
+            document.getElementById("dismiss-button3").click();
             alert("Successfully created admin !");
             app.userEmail = "";
             app.userPassword = "";
@@ -129,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (err) {
             console.log(err);
           } else {
+            document.getElementById("dismiss-button4").click();
             alert("Successfully created user !");
             app.userEmail = "";
             app.userPassword = "";

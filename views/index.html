@@ -173,7 +173,7 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="eventListBanner">
-      <div class="container" style="line-height: 110%">
+      <div class="container eventDiv1">
         <p>Social Events<br />You Can’t Miss</p>
       </div>
     </div>
@@ -187,10 +187,10 @@
             style="border-radius: 10px 10px 0 0; height: 150px; object-fit: cover"
           />
           <div class="eventDetails">
-            <p style="color: #d9b11f">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
-            <p style="font-size: 1.4em; font-weight: 600">{{event.title}}</p>
-            <p style="font-size: 0.86em; margin-top: 6%">Created by : {{event.created_by}}</p>
-            <p style="margin-top: 6%">{{event.street_name}}</p>
+            <p class="eventP1">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
+            <p class="eventP2">{{event.title}}</p>
+            <p class="eventP3">Created by : {{event.created_by}}</p>
+            <p class="eventP4">{{event.street_name}}</p>
           </div>
         </div>
       </div>
