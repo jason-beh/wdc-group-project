@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
           formData.append("event_id", this.event_id);
 
           let file = e.target[9].files;
+          console.log(file);
           if (file.length !== 0) {
             formData.append("file", file[0]);
           }
