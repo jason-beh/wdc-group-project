@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       confirmDelete(e) {
         sendAJAX(
-          "POST",
+          "DELETE",
           "/admin/delete-event",
           JSON.stringify({ eventID: this.eventID }),
           function (err, res) {
