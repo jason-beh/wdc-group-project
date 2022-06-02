@@ -3,7 +3,7 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     // do something
     console.log(err);
   }
-
+  console.log(res);
   if (res !== "") {
     res = JSON.parse(res);
   } else {

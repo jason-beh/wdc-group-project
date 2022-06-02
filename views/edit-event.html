@@ -49,7 +49,7 @@
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/create-event.js"></script>
+    <script src="/scripts/edit-event.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
   </head>
 
@@ -124,7 +124,7 @@
                 <a class="dropdown-item" href="/my-events">My Events</a>
                 <a class="dropdown-item" href="/profile">Profile</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/logout">Logout</a>
+                <a class="dropdown-item" onclick="signOut()" href="#">Logout</a>
               </div>
             </li>
           </ul>
@@ -163,6 +163,8 @@
                     aria-label="Search Events..."
                     v-model="query"
                     name="query"
+                    v-model="query"
+                    name="query"
                   />
                   <button class="navbar-searchbar-icon">
                     <ion-icon name="search-outline"></ion-icon>
@@ -178,7 +180,7 @@
     <div class="container">
       <h1 class="profileHeader">Edit Event</h1>
       <div class="mainContainer">
-        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form2">
+        <form @submit="onSubmit" enctype="multipart/form-data" id="edit-form" class="form2">
           <div class="createEventDiv" style="padding-right: 6%">
             <div class="inputs">
               <label for="title">Title</label>
@@ -202,17 +204,6 @@
                 class="inputBox"
                 style="min-height: 100px"
               ></textarea>
-            </div>
-            <div class="inputs">
-              <label for="proposed_date">Proposed Date</label>
-              <input
-                id="proposed_date"
-                name="proposed_date"
-                type="date"
-                v-model="proposed_date"
-                required
-                class="inputBox"
-              />
             </div>
             <div class="inputs">
               <label for="street_number">Street Number</label>
@@ -283,31 +274,27 @@
               </div>
             </div>
 
-            <button type="submit" class="button1">Create an event</button>
+            <button type="submit" class="button1">Edit an event</button>
           </div>
           <div class="createEventDiv" style="padding: 0 10% 0 10%">
             <div class="inputs">
               <label for="image">Cover Photo</label>
-              <input id="image" name="file" type="file" required autofocus />
-            </div>
-            <div class="inputs">
-              <label for="duration">Event Duration (Hours) </label>
-              <input
-                id="duration"
-                name="duration"
-                type="number"
-                v-model="duration"
-                required
-                class="inputBox"
-              />
+              <img v-bind:src="event_picture" class="eventIMG" alt="dummy event pic" />
+              <input type="file" name="file" class="profile-image-file" />
+              <!-- <form
+                @submit="changeEventPicture"
+                method="post"
+                id="changeEventPicture"
+                enctype="multipart/form-data"
+              >
+                <input type="file" name="file" class="profile-image-file" />
+                <button type="submit" class="inputs button1">Update Image</button>
+              </form> -->
             </div>
             <ul
               id="times"
               style="display: flex; flex-direction: column; padding-inline-start: 0"
             ></ul>
-            <button @click="addTimeSelect" class="button1" style="margin-top: 20px">
-              Add a proposed start time
-            </button>
           </div>
         </form>
       </div>
