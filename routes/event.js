@@ -99,7 +99,7 @@ router.post("/create-event", function (req, res, next) {
       proposed_times,
     } = req.body;
 
-    var event_picture = `/events/${req.files[0].filename}`;
+    var event_picture = `/images/events/${req.files[0].filename}`;
 
     var query =
       "INSERT INTO Events (title, description, created_by, proposed_date, street_number, street_name, suburb, state, country, postcode, event_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -183,12 +183,6 @@ router.post("/edit-event", function (req, res, next) {
   ) {
     return res.status(400).send("Insufficient Data");
   }
-
-  // 1. if there is file
-  //  - delete the previous file
-  //  - we update everything without image
-  // 2. if there isn't file
-  //  - update without the image
 
   // Remove the previous file
   db.connectionPool.getConnection(function (err, connection) {
