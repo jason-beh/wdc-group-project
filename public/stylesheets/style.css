@@ -44,6 +44,10 @@ input:disabled {
   display: none;
 }
 
+p.description {
+  margin-top: 30px;
+}
+
 @media screen and (max-width: 992px) {
   .mobile-hide {
     display: none !important;
@@ -227,6 +231,12 @@ input:disabled {
   display: flex;
   flex-direction: column;
 }
+
+.checkbox-label {
+  font-weight: normal;
+  margin-left: 10px;
+}
+
 .inputBox {
   border: 1px solid #aaa;
   border-radius: 8px;

@@ -24,15 +24,15 @@ var nodemailer = require("nodemailer");
 
 // Create the transporter with the required configuration for Outlook
 var transporter = nodemailer.createTransport({
-  host: "smtp-mail.outlook.com", // hostname
+  host: "smtp.ethereal.email", // hostname
   secureConnection: false, // TLS requires secureConnection to be false
   port: 587, // port for secure SMTP
   tls: {
     ciphers: "SSLv3",
   },
   auth: {
-    user: "socialah@outlook.com",
-    pass: "wdc2022sem1",
+    user: "hy7tjayeu3f3ganq@ethereal.email",
+    pass: "kGSvXP3g4974KTHGgW",
   },
 });
 
@@ -191,9 +191,24 @@ router.post("/oauth", async function (req, res, next) {
             if (err) {
               return res.status(500).send("An interval server error occurred.");
             }
-          });
 
-          return res.status(200).end();
+            query =
+              "INSERT INTO Notifications_Setting (is_event_cancelled, is_availability_confirmed, is_event_finalised, email) VALUES (1, 1, 1, ?)";
+            connection.query(query, [email], function (err, rows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+
+              // Log the user in
+              req.session.user = {
+                email: email,
+                isAdmin: 0, // When a user signs up, they will not be an admin by default
+                profile_picture: "/user-profiles/defaultUserProfile.png",
+              };
+
+              return res.status(200).end();
+            });
+          });
         });
       }
     });
@@ -345,14 +360,22 @@ router.get("/verify", function (req, res, next) {
               return res.status(500).send("An interval server error occurred.");
             }
 
-            // Log the user in
-            req.session.user = {
-              email: email,
-              isAdmin: 0, // When a user signs up, they will not be an admin by default
-              profile_picture: "/user-profiles/defaultUserProfile.png",
-            };
+            query =
+              "INSERT INTO Notifications_Setting (is_event_cancelled, is_availability_confirmed, is_event_finalised, email) VALUES (1, 1, 1, ?)";
+            connection.query(query, [email], function (err, rows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
 
-            return res.redirect("/");
+              // Log the user in
+              req.session.user = {
+                email: email,
+                isAdmin: 0, // When a user signs up, they will not be an admin by default
+                profile_picture: "/user-profiles/defaultUserProfile.png",
+              };
+
+              return res.redirect("/");
+            });
           });
         });
       });
