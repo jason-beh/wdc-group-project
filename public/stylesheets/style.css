@@ -472,6 +472,10 @@ p.description {
 
 .eventDetails p {
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .event-horizontal {
@@ -502,6 +506,16 @@ p.description {
 
 .event-horizontal-date {
   color: #d9b11f;
+}
+
+.eventIMG {
+  border-radius: 5%;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 10px;
+  height: 100%;
+  max-height: 400px;
+  object-fit: cover;
 }
 
 @media only screen and (max-width: 992px) {

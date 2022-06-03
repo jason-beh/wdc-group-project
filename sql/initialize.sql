@@ -72,7 +72,7 @@ CREATE TABLE Proposed_Event_Time (
     FOREIGN KEY (event_id) REFERENCES Events(event_id) ON DELETE CASCADE
 );
 
---- We manually add foreign key, otherwise, we would face circular reference dependency error.
+-- We manually add foreign key, otherwise, we would face circular reference dependency error.
 alter table Events add finalized_event_time_id INT;
 alter table Events add constraint finalized_event_time_id foreign key (finalized_event_time_id) REFERENCES Proposed_Event_Time(proposed_event_time_id);
 

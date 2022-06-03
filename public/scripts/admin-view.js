@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     methods: {
       viewUsers() {
         // Load profile
-        sendAJAX("GET", "/view-users", null, function (err, res) {
+        sendAJAX("GET", "/admin/view-users", null, function (err, res) {
           if (err) {
             // do something
             console.log(err);
@@ -42,8 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       confirmDelete(e) {
         sendAJAX(
-          "POST",
-          "/delete-user",
+          "DELETE",
+          "/admin/delete-user",
           JSON.stringify({ email: this.currentEmail }),
           function (err, res) {
             if (err) {
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(this.currentEmail);
         sendAJAX(
           "POST",
-          "/get-profile-admin",
+          "/admin/get-profile",
           JSON.stringify({ emailToSearch: this.currentEmail }),
           function (err, res) {
             if (err) {
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
           state: this.state,
           country: this.country,
         };
-        sendAJAX("POST", "/admin-edit-profile", JSON.stringify(formData), function (err, res) {
+        sendAJAX("POST", "/admin/edit-profile", JSON.stringify(formData), function (err, res) {
           if (err) {
             console.log(err);
           } else {
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
           email: this.userEmail,
           password: this.userPassword,
         };
-        sendAJAX("POST", "/create-admin", JSON.stringify(formData), function (err, res) {
+        sendAJAX("POST", "/admin/create-admin", JSON.stringify(formData), function (err, res) {
           if (err) {
             console.log(err);
           } else {
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
           email: this.userEmail,
           password: this.userPassword,
         };
-        sendAJAX("POST", "/create-user", JSON.stringify(formData), function (err, res) {
+        sendAJAX("POST", "/admin/create-user", JSON.stringify(formData), function (err, res) {
           if (err) {
             console.log(err);
           } else {

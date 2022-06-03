@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     methods: {
       viewEvents() {
         // Load profile
-        sendAJAX("GET", "/view-events", null, function (err, res) {
+        sendAJAX("GET", "/admin/view-events", null, function (err, res) {
           if (err) {
             // do something
             console.log(err);
@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       confirmDelete(e) {
         sendAJAX(
-          "POST",
-          "/delete-event",
+          "DELETE",
+          "/admin/delete-event",
           JSON.stringify({ eventID: this.eventID }),
           function (err, res) {
             if (err) {
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(this.eventID);
         sendAJAX(
           "POST",
-          "/get-event-admin",
+          "/admin/get-event",
           JSON.stringify({ eventToSearch: this.eventID }),
           function (err, res) {
             if (err) {
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
           postcode: this.postcode,
           event_picture: this.event_picture,
         };
-        sendAJAX("POST", "/admin-edit-event", JSON.stringify(formData), function (err, res) {
+        sendAJAX("POST", "/admin/edit-event", JSON.stringify(formData), function (err, res) {
           if (err) {
             console.log(err);
           } else {

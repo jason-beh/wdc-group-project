@@ -54,6 +54,9 @@ var upload = multer({
   },
 });
 
+// remove a file
+const fs = require("fs");
+
 router.get("/get-events", function (req, res, next) {
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
@@ -147,51 +150,117 @@ router.post("/create-event", function (req, res, next) {
   });
 });
 
+router.post("/edit-event", upload.array("file", 1));
 router.post("/edit-event", function (req, res, next) {
   // Ensure an user is logged in
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
+
+  var {
+    title,
+    description,
+    street_number,
+    street_name,
+    suburb,
+    state,
+    country,
+    postcode,
+    event_picture,
+    event_id,
+  } = req.body;
+
+  if (
+    !title ||
+    !description ||
+    !street_number ||
+    !street_name ||
+    !suburb ||
+    !state ||
+    !country ||
+    !postcode ||
+    !event_id
+  ) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  // Remove the previous file
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
-      return next(err);
+      return res.status(500).send("An interval server error occurred.");
     }
-    var {
-      title,
-      description,
-      proposal_date,
-      start_date,
-      end_date,
-      address_line,
-      state,
-      country,
-      postcode,
-      event_id,
-    } = req.body;
-    var query =
-      "UPDATE Events set title = ?, description = ?, proposal_date = ?, start_date = ?, end_date = ?, address_line = ?, state = ?, country = ?, postcode = ? where event_id = ?";
-    connection.query(
-      query,
-      [
-        title,
-        description,
-        proposal_date,
-        start_date,
-        end_date,
-        address_line,
-        state,
-        country,
-        postcode,
-        event_id,
-      ],
-      function (err, rows, fields) {
-        connection.release();
-        if (err) {
-          return next(err);
-        }
-        return res.send("Success in modifying the event!");
+    var query = "select * from Events where event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
       }
-    );
+
+      // add another if statement for event
+
+      var previousPath = rows[0]["event_picture"];
+
+      if (req.files.length === 0) {
+        var query =
+          "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ? where event_id = ? and created_by = ?";
+        connection.query(
+          query,
+          [
+            title,
+            description,
+            street_number,
+            street_name,
+            suburb,
+            state,
+            country,
+            postcode,
+            event_id,
+            req.session.user.email,
+          ],
+          function (err, rows, fields) {
+            if (err) {
+              return next(err);
+            }
+            return res.send("Success in modifying the event!");
+          }
+        );
+      } else {
+        try {
+          fs.unlinkSync("public" + previousPath);
+        } catch (err) {
+          console.error(err);
+        }
+
+        req.files.forEach(function (file) {
+          // Sends path name back to database
+          var imagePath = `/images/events/${file.filename}`;
+
+          var query =
+            "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ?, event_picture = ? where event_id = ? and created_by = ?";
+          connection.query(
+            query,
+            [
+              title,
+              description,
+              street_number,
+              street_name,
+              suburb,
+              state,
+              country,
+              postcode,
+              imagePath,
+              event_id,
+              req.session.user.email,
+            ],
+            function (err, rows, fields) {
+              if (err) {
+                return next(err);
+              }
+              return res.send("Success in modifying the event!");
+            }
+          );
+        });
+      }
+    });
   });
 });
 
@@ -259,6 +328,11 @@ router.get("/my-events/attended", function (req, res, next) {
 
 router.get("/events/:event_id", function (req, res, next) {
   let { event_id } = req.params;
+
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+
   db.connectionPool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -270,6 +344,10 @@ router.get("/events/:event_id", function (req, res, next) {
         return res.status(500).send("An interval server error occurred.");
       }
       var info = rows[0];
+      if (info === null || typeof info == "undefined") {
+        return res.status(500).send("An interval server error occurred.");
+      }
+
       // Query another database
       query = "select * from Proposed_Event_Time where event_id = ?;";
       connection.query(query, [event_id], function (err, rows, fields) {
@@ -359,7 +437,6 @@ router.post("/send-confirmation-email", function (req, res, next) {
               <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
           // send mail with defined transport object
           transporter.sendMail(mailOptions, function (error, info) {
-
             if (error) {
               return console.log(error);
             }
