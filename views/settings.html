@@ -10,7 +10,7 @@
     />
     <meta name="google-signin-plugin_name" content="APP" />
     <meta name="theme-color" content="#0D184F" />
-    <title>Socialah - Create Event</title>
+    <title>Socialah - Settings</title>
 
     <link
       rel="stylesheet"
@@ -47,10 +47,10 @@
     ></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/create-event.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/scripts/settings.js"></script>
   </head>
 
   <body>
@@ -180,141 +180,61 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-    <div class="container">
-      <h1 class="profileHeader">Create Event</h1>
-      <div class="mainContainer">
-        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form2">
-          <div class="createEventDiv eventDiv1">
-            <div class="inputs">
-              <label for="title">Title</label>
-              <input
-                id="title"
-                name="title"
-                type="text"
-                v-model="title"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                rows="10"
-                required
-                v-model="description"
-                class="inputBox"
-                style="min-height: 100px"
-              ></textarea>
-            </div>
-            <div class="inputs">
-              <label for="proposed_date">Proposed Date</label>
-              <input
-                id="proposed_date"
-                name="proposed_date"
-                type="date"
-                v-model="proposed_date"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="street_number">Street Number</label>
-              <input
-                id="street_number"
-                name="street_number"
-                type="text"
-                v-model="street_number"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="street_name">Street Name</label>
-              <input
-                id="street_name"
-                name="street_name"
-                type="text"
-                v-model="street_name"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="suburb">Suburb</label>
-              <input
-                id="suburb"
-                name="suburb"
-                type="text"
-                v-model="suburb"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div class="inputs">
-              <label for="state">State</label>
-              <input
-                id="state"
-                name="state"
-                type="text"
-                v-model="state"
-                required
-                class="inputBox"
-              />
-            </div>
-            <div style="display: flex; justify-content: space-between">
-              <div class="inputs" style="width: 45%">
-                <label for="country">Country</label>
-                <input
-                  id="country"
-                  name="country"
-                  type="text"
-                  v-model="country"
-                  required
-                  class="inputBox"
-                />
-              </div>
-              <div class="inputs" style="width: 45%">
-                <label for="postcode">Postcode</label>
-                <input
-                  id="postcode"
-                  name="postcode"
-                  type="text"
-                  v-model="postcode"
-                  required
-                  class="inputBox"
-                />
-              </div>
-            </div>
+    <div class="container" id="wrapper">
+      <h1 class="profileHeader">Settings</h1>
 
-            <button type="submit" class="button1">Create an event</button>
-          </div>
-          <div class="createEventDiv eventDiv2">
-            <div class="inputs">
-              <label for="image">Cover Photo</label>
-              <input id="image" name="file" type="file" required autofocus />
+      <div class="mainContainer">
+        <div class="left-section">
+          <p class="description">
+            Tick the following checkboxes if you would like to receive email notifications for each
+            action.
+          </p>
+          <form @submit="onSubmit" id="create-form" class="form2">
+            <div class="createEventDiv">
+              <div class="inputs">
+                <label>Notifications</label>
+                <div>
+                  <input
+                    type="checkbox"
+                    v-model="is_event_finalised"
+                    name="is_event_finalised"
+                    id="is_event_finalised"
+                  />
+                  <label class="checkbox-label" for="is_event_finalised">Event is finalized</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    v-model="is_event_cancelled"
+                    name="is_event_cancelled"
+                    id="is_event_cancelled"
+                  />
+                  <label class="checkbox-label" for="is_event_cancelled">Event is cancelled</label>
+                </div>
+                <div>
+                  <input
+                    type="checkbox"
+                    name="is_availability_confirmed"
+                    v-model="is_availability_confirmed"
+                    id="is_availability_confirmed"
+                  />
+                  <label class="checkbox-label" for="is_availability_confirmed">
+                    Availability is specified by user (For Event Creators)
+                  </label>
+                </div>
+              </div>
+
+              <button type="submit" class="button1">Save Settings</button>
             </div>
-            <div class="inputs">
-              <label for="duration">Event Duration (Hours) </label>
-              <input
-                id="duration"
-                name="duration"
-                type="number"
-                v-model="duration"
-                required
-                class="inputBox"
-              />
-            </div>
-            <ul
-              id="times"
-              style="display: flex; flex-direction: column; padding-inline-start: 0"
-            ></ul>
-            <button @click="addTimeSelect" class="button1" style="margin-top: 20px">
-              Add a proposed start time
-            </button>
+          </form>
+        </div>
+        <div class="right-section">
+          <div class="create-event-cta-container">
+            <h3>Looking for an event?</h3>
+            <p>Find the best events near you.</p>
+            <a href="/" class="button2">Browse Events</a>
           </div>
-        </form>
+        </div>
       </div>
     </div>
     <footer class="footer navbar-expand-lg">

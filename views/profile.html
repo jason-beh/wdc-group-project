@@ -106,6 +106,8 @@
                 >
                   <img
                     v-bind:src="profile_picture"
+                    onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
+                    onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     class="navbar-profile-picture"
                     alt="profile picture"
                   />
@@ -114,6 +116,7 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="/my-events">My Events</a>
                   <a class="dropdown-item" href="/profile">Profile</a>
+                  <a class="dropdown-item" href="/settings">Settings</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/logout">Logout</a>
                 </div>
@@ -263,7 +266,9 @@
             <label for="profilePic">Profile Picture</label>
             <img
               v-if="profile_picture != '/user-profiles/defaultUserProfile.png'"
+              v-bind:onerror="profile_picture = '/user-profiles/defaultUserProfile.png'"
               v-bind:src="profile_picture"
+              onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
               class="profileIMG"
               alt="dummy profile pic"
             />

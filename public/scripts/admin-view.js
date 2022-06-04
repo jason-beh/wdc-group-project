@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       confirmDelete(e) {
         sendAJAX(
-          "POST",
+          "DELETE",
           "/admin/delete-user",
           JSON.stringify({ email: this.currentEmail }),
           function (err, res) {
