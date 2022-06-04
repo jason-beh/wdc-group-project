@@ -181,10 +181,10 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container">
-      <h1 class="profileHeader">Create Event</h1>
-      <div class="mainContainer">
-        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form2">
-          <div class="createEventDiv eventDiv1">
+      <h1 class="profile-header">Create Event</h1>
+      <div class="main-container">
+        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form-2">
+          <div class="create-event-div event-div-1">
             <div class="inputs">
               <label for="title">Title</label>
               <input
@@ -193,7 +193,7 @@
                 type="text"
                 v-model="title"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -204,8 +204,7 @@
                 rows="10"
                 required
                 v-model="description"
-                class="inputBox"
-                style="min-height: 100px"
+                class="input-box textarea-style"
               ></textarea>
             </div>
             <div class="inputs">
@@ -216,7 +215,7 @@
                 type="date"
                 v-model="proposed_date"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -227,7 +226,7 @@
                 type="text"
                 v-model="street_number"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -238,7 +237,7 @@
                 type="text"
                 v-model="street_name"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -249,7 +248,7 @@
                 type="text"
                 v-model="suburb"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -260,11 +259,11 @@
                 type="text"
                 v-model="state"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
-            <div style="display: flex; justify-content: space-between">
-              <div class="inputs" style="width: 45%">
+            <div class="create-event-div-2">
+              <div class="inputs event-style-1">
                 <label for="country">Country</label>
                 <input
                   id="country"
@@ -272,10 +271,10 @@
                   type="text"
                   v-model="country"
                   required
-                  class="inputBox"
+                  class="input-box"
                 />
               </div>
-              <div class="inputs" style="width: 45%">
+              <div class="inputs event-style-1">
                 <label for="postcode">Postcode</label>
                 <input
                   id="postcode"
@@ -283,14 +282,14 @@
                   type="text"
                   v-model="postcode"
                   required
-                  class="inputBox"
+                  class="input-box"
                 />
               </div>
             </div>
 
-            <button type="submit" class="button1">Create an event</button>
+            <button type="submit" class="button-1">Create an event</button>
           </div>
-          <div class="createEventDiv eventDiv2">
+          <div class="create-event-div event-div-2">
             <div class="inputs">
               <label for="image">Cover Photo</label>
               <input id="image" name="file" type="file" required autofocus />
@@ -303,14 +302,11 @@
                 type="number"
                 v-model="duration"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
-            <ul
-              id="times"
-              style="display: flex; flex-direction: column; padding-inline-start: 0"
-            ></ul>
-            <button @click="addTimeSelect" class="button1" style="margin-top: 20px">
+            <ul id="times" class="create-event-time"></ul>
+            <button @click="addTimeSelect" class="button-1 create-event-button">
               Add a proposed start time
             </button>
           </div>

@@ -41,14 +41,14 @@
     <title>Socialah - Login</title>
   </head>
   <body>
-    <div class="loginMainContainer">
-      <div class="loginContainer">
+    <div class="login-main-container">
+      <div class="login-container">
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Login</h1>
-        <div class="g-signin2 googleButton" data-onsuccess="onSignIn"></div>
-        <img src="/images/orImg.png" alt="orLayout" class="orImage" />
-        <p class="authMessage"></p>
-        <form action="/login" method="post" @submit="onSubmit" id="login-form" class="loginForm">
+        <div class="g-signin2 google-button" data-onsuccess="onSignIn"></div>
+        <img src="/images/orImg.png" alt="orLayout" class="or-image" />
+        <p class="auth-message"></p>
+        <form action="/login" method="post" @submit="onSubmit" id="login-form" class="login-form">
           <div class="inputs">
             <label for="email">Email</label>
             <input
@@ -59,7 +59,7 @@
               v-model="email"
               required
               autofocus
-              class="inputBox"
+              class="input-box"
             />
           </div>
           <div class="inputs">
@@ -71,20 +71,20 @@
               v-model="password"
               autocomplete="current-password"
               required
-              class="inputBox"
+              class="input-box"
             />
           </div>
-          <button type="submit" class="button1 loginButton">Login</button>
-          <a href="_blank" class="links loginHref">Forgot password</a>
+          <button type="submit" class="button-1 login-button">Login</button>
+          <a href="_blank" class="links login-href">Forgot password</a>
 
-          <div class="nAccount">
+          <div class="n-account">
             <p>Don't have an account?</p>
             &nbsp
             <a href="/signup" class="links">Sign Up</a>
           </div>
         </form>
       </div>
-      <img src="/images/loginImage.png" alt="Community" class="loginIMG" id="loginIMG" />
+      <img src="/images/loginImage.png" alt="Community" class="login-image" id="login-image" />
     </div>
   </body>
 </html>

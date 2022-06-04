@@ -171,21 +171,16 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="admin-table">
-      <div class="adminContainer">
+      <div class="admin-container">
         <h2>Users</h2>
-        <div style="display: flex; align-items: center; width: 45%">
-          <button
-            class="button1"
-            style="margin: 0 5% 0 0"
-            data-toggle="modal"
-            data-target="#Modal3"
-          >
+        <div class="admin-div-1">
+          <button class="button-1 admin-button-1" data-toggle="modal" data-target="#Modal3">
             Create Admin
           </button>
-          <button class="button2" data-toggle="modal" data-target="#Modal4">Create User</button>
+          <button class="button-2" data-toggle="modal" data-target="#Modal4">Create User</button>
         </div>
       </div>
-      <table class="admin-table" style="width: 100%; margin-top: 20px">
+      <table class="admin-table">
         <tr>
           <th>Email</th>
           <th>First Name</th>
@@ -220,7 +215,7 @@
               data-target="#Modal"
               v-bind:data-email="user.email"
               @click="setToDelete"
-              style="margin-left: 10px"
+              class="trash-icon"
             />
           </td>
         </tr>
@@ -248,7 +243,7 @@
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
-                id="dismiss-button1"
+                id="dismiss-button-1"
               >
                 Close
               </button>
@@ -277,12 +272,12 @@
               </button>
             </div>
             <div class="modal-body">
-              <form @submit="onSubmit" class="form1">
-                <div class="profileName">
+              <form @submit="onSubmit" class="form-1">
+                <div class="profile-name">
                   <div class="inputs names">
                     <label for="first_name">First Name</label>
                     <input
-                      class="inputBox"
+                      class="input-box"
                       id="first_name"
                       name="first_name"
                       value="first_name"
@@ -294,7 +289,7 @@
                   <div class="inputs names">
                     <label for="last_name">Last Name</label>
                     <input
-                      class="inputBox"
+                      class="input-box"
                       id="last_name"
                       name="last_name"
                       value="last_name"
@@ -308,7 +303,7 @@
                 <div class="inputs">
                   <label for="birthday">Birthday</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="birthday"
                     name="birthday"
                     v-model="birthday"
@@ -319,7 +314,7 @@
                 <div class="inputs">
                   <label for="instagram_handle">Instagram Handle</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="instagram_handle"
                     name="instagram_handle"
                     value="instagram_handle"
@@ -331,7 +326,7 @@
                 <div class="inputs">
                   <label for="facebook_handle">Facebook Handle</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="facebook_handle"
                     name="facebook_handle"
                     value="facebook_handle"
@@ -343,7 +338,7 @@
                 <div class="inputs">
                   <label for="state">State</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="state"
                     name="state"
                     value="state"
@@ -355,7 +350,7 @@
                 <div class="inputs">
                   <label for="country">Country</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="country"
                     name="country"
                     value="country"
@@ -364,28 +359,28 @@
                     required
                   />
                 </div>
-                <button type="submit" id="submit-button" class="inputs button1">
+                <button type="submit" id="submit-button" class="inputs button-1">
                   Update Profile
                 </button>
               </form>
             </div>
-            <!-- <div class="profilePic">
-            <label for="profilePic">Profile Picture</label>
+            <!-- <div class="profile-picture">
+            <label for="profile-picture">Profile Picture</label>
             <img
               v-if="profile_picture != '/user-profiles/defaultUserProfile.png'"
               v-bind:src="profile_picture"
 onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
-              class="profileIMG"
+              class="profile-image"
               alt="dummy profile pic"
             />
             <form
-              @submit="changeProfilePicture"
+              @submit="changeprofile-pictureture"
               method="post"
-              id="changeProfilePicture"
+              id="changeprofile-pictureture"
               enctype="multipart/form-data"
             >
               <input type="file" name="file" class="profile-image-file" />
-              <button type="submit" class="inputs button1">Update Image</button>
+              <button type="submit" class="inputs button-1">Update Image</button>
             </form>
           </div> -->
             <div class="modal-footer">
@@ -393,7 +388,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
-                id="dismiss-button2"
+                id="dismiss-button-2"
               >
                 Close
               </button>
@@ -419,11 +414,11 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
               </button>
             </div>
             <div class="modal-body">
-              <form @submit="createSystemAdmin" class="form1">
+              <form @submit="createSystemAdmin" class="form-1">
                 <div class="inputs">
                   <label for="email">Email</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="userEmail"
                     name="userEmail"
                     value="userEmail"
@@ -435,7 +430,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                 <div class="inputs">
                   <label for="userPassword">Password</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="userPassword"
                     name="userPassword"
                     value="userPassword"
@@ -444,7 +439,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     required
                   />
                 </div>
-                <button type="submit" id="submit-button" class="inputs button1">
+                <button type="submit" id="submit-button" class="inputs button-1">
                   Create System Admin
                 </button>
               </form>
@@ -480,11 +475,11 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
               </button>
             </div>
             <div class="modal-body">
-              <form @submit="createSystemUser" class="form1">
+              <form @submit="createSystemUser" class="form-1">
                 <div class="inputs">
                   <label for="email">Email</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="userEmail"
                     name="userEmail"
                     value="userEmail"
@@ -496,7 +491,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                 <div class="inputs">
                   <label for="userPassword">Password</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="userPassword"
                     name="userPassword"
                     value="userPassword"
@@ -505,7 +500,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     required
                   />
                 </div>
-                <button type="submit" id="submit-button" class="inputs button1">
+                <button type="submit" id="submit-button" class="inputs button-1">
                   Create System User
                 </button>
               </form>

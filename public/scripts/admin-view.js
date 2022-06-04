@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (err) {
               console.log(err);
             } else {
-              document.getElementById("dismiss-button1").click();
+              document.getElementById("dismiss-button-1").click();
               app.viewUsers();
               alert("Succesfully deleted user !");
             }
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (err) {
             console.log(err);
           } else {
-            document.getElementById("dismiss-button2").click();
+            document.getElementById("dismiss-button-2").click();
             alert("Successfully updated profile !");
             app.viewUsers();
           }
