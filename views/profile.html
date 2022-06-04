@@ -189,117 +189,111 @@
         <h1 class="profile-header">Profile</h1>
         <div class="main-container">
           <div class="profile-container">
-            <form @submit="onSubmit" id="profile-form" class="form-1">
-              <div class="profile-name">
-                <div class="inputs names">
-                  <label for="first_name">First Name</label>
-                  <input
-                    class="input-box"
-                    id="first_name"
-                    name="first_name"
-                    value="first_name"
-                    v-model="first_name"
-                    type="text"
-                    required
-                  />
+            <form @submit="onSubmit" id="profile-form" enctype="multipart/form-data" class="form-2">
+              <div class="create-event-div event-div-1">
+                <div class="profile-name">
+                  <div class="inputs names">
+                    <label for="first_name">First Name</label>
+                    <input
+                      class="input-box"
+                      id="first_name"
+                      name="first_name"
+                      value="first_name"
+                      v-model="first_name"
+                      type="text"
+                      required
+                    />
+                  </div>
+                  <div class="inputs names">
+                    <label for="last_name">Last Name</label>
+                    <input
+                      class="input-box"
+                      id="last_name"
+                      name="last_name"
+                      value="last_name"
+                      v-model="last_name"
+                      type="text"
+                      required
+                    />
+                  </div>
                 </div>
-                <div class="inputs names">
-                  <label for="last_name">Last Name</label>
-                  <input
-                    class="input-box"
-                    id="last_name"
-                    name="last_name"
-                    value="last_name"
-                    v-model="last_name"
-                    type="text"
-                    required
-                  />
-                </div>
-              </div>
 
-              <div class="inputs">
-                <label for="birthday">Birthday</label>
-                <input
-                  class="input-box"
-                  id="birthday"
-                  name="birthday"
-                  v-model="birthday"
-                  type="date"
-                  required
-                />
+                <div class="inputs">
+                  <label for="birthday">Birthday</label>
+                  <input
+                    class="input-box"
+                    id="birthday"
+                    name="birthday"
+                    v-model="birthday"
+                    type="date"
+                    required
+                  />
+                </div>
+                <div class="inputs">
+                  <label for="instagram_handle">Instagram Handle</label>
+                  <input
+                    class="input-box"
+                    id="instagram_handle"
+                    name="instagram_handle"
+                    value="instagram_handle"
+                    v-model="instagram_handle"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div class="inputs">
+                  <label for="facebook_handle">Facebook Handle</label>
+                  <input
+                    class="input-box"
+                    id="facebook_handle"
+                    name="facebook_handle"
+                    value="facebook_handle"
+                    v-model="facebook_handle"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div class="inputs">
+                  <label for="state">State</label>
+                  <input
+                    class="input-box"
+                    id="state"
+                    name="state"
+                    value="state"
+                    v-model="state"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div class="inputs">
+                  <label for="country">Country</label>
+                  <input
+                    class="input-box"
+                    id="country"
+                    name="country"
+                    value="country"
+                    v-model="country"
+                    type="text"
+                    required
+                  />
+                </div>
+                <button type="submit" id="submit-button" class="button-1 mobile-hide">
+                  Update my profile
+                </button>
               </div>
-              <div class="inputs">
-                <label for="instagram_handle">Instagram Handle</label>
-                <input
-                  class="input-box"
-                  id="instagram_handle"
-                  name="instagram_handle"
-                  value="instagram_handle"
-                  v-model="instagram_handle"
-                  type="text"
-                  required
+              <div class="create-event-div event-div-2">
+                <label for="profile-picture">Profile Picture</label>
+                <img
+                  onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
+                  v-bind:src="profile_picture"
+                  class="profile-image"
+                  alt="dummy profile pic"
                 />
+                <input type="file" name="file" class="profile-image-file" autofocus />
+                <button type="submit" id="submit-button" class="button-1 desktop-hide">
+                  Update my profile
+                </button>
               </div>
-              <div class="inputs">
-                <label for="facebook_handle">Facebook Handle</label>
-                <input
-                  class="input-box"
-                  id="facebook_handle"
-                  name="facebook_handle"
-                  value="facebook_handle"
-                  v-model="facebook_handle"
-                  type="text"
-                  required
-                />
-              </div>
-              <div class="inputs">
-                <label for="state">State</label>
-                <input
-                  class="input-box"
-                  id="state"
-                  name="state"
-                  value="state"
-                  v-model="state"
-                  type="text"
-                  required
-                />
-              </div>
-              <div class="inputs">
-                <label for="country">Country</label>
-                <input
-                  class="input-box"
-                  id="country"
-                  name="country"
-                  value="country"
-                  v-model="country"
-                  type="text"
-                  required
-                />
-              </div>
-              <button type="submit" id="submit-button" class="inputs button-1">
-                Update my profile
-              </button>
-            </form>
-          </div>
-          <div class="profile-picture">
-            <label for="profile-picture">Profile Picture</label>
-            <!-- TODO: Fix profile image bug -->
-            <img
-              v-if="profile_picture != '/user-profiles/defaultUserProfile.png'"
-              v-bind:onerror="profile_picture = '/user-profiles/defaultUserProfile.png'"
-              v-bind:src="profile_picture"
-              onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
-              class="profile-image"
-              alt="dummy profile pic"
-            />
-            <form
-              @submit="changeprofile-pictureture"
-              method="post"
-              id="changeprofile-pictureture"
-              enctype="multipart/form-data"
-            >
-              <input type="file" name="file" class="profile-image-file" />
-              <button type="submit" class="inputs button-1">Update Image</button>
             </form>
           </div>
         </div>

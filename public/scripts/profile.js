@@ -36,16 +36,21 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         onSubmit(e) {
           e.preventDefault();
-          var formData = {
-            first_name: this.first_name,
-            last_name: this.last_name,
-            birthday: this.birthday,
-            instagram_handle: this.instagram_handle,
-            facebook_handle: this.facebook_handle,
-            state: this.state,
-            country: this.country,
-          };
-          sendAJAX("POST", "/edit-profile", JSON.stringify(formData), function (err, res) {
+
+          let formData = new FormData();
+          formData.append("first_name", this.first_name);
+          formData.append("last_name", this.last_name);
+          formData.append("birthday", this.birthday);
+          formData.append("instagram_handle", this.instagram_handle);
+          formData.append("facebook_handle", this.facebook_handle);
+          formData.append("state", this.state);
+          formData.append("country", this.country);
+          if (e.target[8].files !== null && e.target[8].files.length > 0) {
+            let file = e.target[8].files[0];
+            formData.append("file", file);
+          }
+
+          sendFileAJAX("PUT", "/edit-profile", formData, function (err, res) {
             app.closeAlert();
             window.scrollTo({
               top: 0,
@@ -58,25 +63,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             document.getElementById("alert-success").style.display = "block";
-          });
-        },
-        changeProfilePicture(e) {
-          e.preventDefault();
-          let file = e.target[0].files[0];
-          var formData = new FormData();
-          formData.append("file", file);
 
-          // TODO: combine update profile picture with the update profile form
-          sendFileAJAX("POST", "/change-profile-image", formData, (err, res) => {
-            if (err) {
-              console.log(err);
-            } else {
-              this.profile_picture = res;
+            if (res != "") {
+              res = JSON.parse(res);
+              if (res.path !== null) {
+                app.profile_picture = res.path;
+              }
             }
           });
-        },
-        onUploadFile() {
-          this.changeProfilePicture();
         },
       },
     });
