@@ -42,10 +42,29 @@
     <script src="/scripts/signup.js"></script>
   </head>
   <body>
-    <div class="login-main-container">
+    <div class="login-main-container" id="wrapper">
+      <div class="spinner-overlay">
+        <div class="spinner-border text-warning" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
       <div class="login-container">
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Sign up</h1>
+        <div id="alert-container">
+          <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+            <span id="alert-success-text">Signup success</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-danger alert-bar" id="alert-error">
+            <span id="alert-error-text">Signup error</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
         <p class="auth-message"></p>
         <form action="/signup" @submit="onSubmit" method="post" id="signup-form">
           <div class="inputs">
@@ -84,8 +103,14 @@
             />
           </div>
           <button type="submit" class="button-1">Sign Up</button>
-          <img src="/images/orImg.png" alt="orLayout" class="or-image sign-up-or-image" />
-          <div class="g-signin2 google-button" data-onsuccess="onSignIn"></div>
+          <img src="/images/orImg.svg" alt="orLayout" class="or-image sign-up-or-image" />
+          <div
+            class="g-signin2 googleButton"
+            data-onsuccess="onSignIn"
+            data-height="50"
+            data-width="1000px"
+            data-longtitle="true"
+          ></div>
           <p class="n-account">Have an account?&nbsp<a href="/login" class="links">Login</a></p>
           <p></p>
         </form>

@@ -18,6 +18,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
       },
       methods: {
+        closeAlert() {
+          let alertBars = document.getElementsByClassName("alert-bar");
+          for (let alertBar of alertBars) {
+            alertBar.style.display = "none";
+          }
+        },
         onSubmit(e) {
           e.preventDefault();
           var formData = {
@@ -26,12 +32,18 @@ document.addEventListener("DOMContentLoaded", function () {
             is_availability_confirmed: this.is_availability_confirmed,
           };
           sendAJAX("PUT", "/edit-settings", JSON.stringify(formData), function (err, res) {
+            app.closeAlert();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
             if (err) {
               console.log(err);
+              document.getElementById("alert-error").style.display = "block";
               return;
             }
 
-            console.log("success");
+            document.getElementById("alert-success").style.display = "block";
           });
         },
       },

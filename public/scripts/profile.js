@@ -28,6 +28,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
       },
       methods: {
+        closeAlert() {
+          let alertBars = document.getElementsByClassName("alert-bar");
+          for (let alertBar of alertBars) {
+            alertBar.style.display = "none";
+          }
+        },
         onSubmit(e) {
           e.preventDefault();
           var formData = {
@@ -40,7 +46,18 @@ document.addEventListener("DOMContentLoaded", function () {
             country: this.country,
           };
           sendAJAX("POST", "/edit-profile", JSON.stringify(formData), function (err, res) {
-            // TODO: Notify user whether it fails or succeeds
+            app.closeAlert();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+            if (err) {
+              console.log(err);
+              document.getElementById("alert-error").style.display = "block";
+              return;
+            }
+
+            document.getElementById("alert-success").style.display = "block";
           });
         },
         changeProfilePicture(e) {
@@ -49,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
           var formData = new FormData();
           formData.append("file", file);
 
+          // TODO: combine update profile picture with the update profile form
           sendFileAJAX("POST", "/change-profile-image", formData, (err, res) => {
             if (err) {
               console.log(err);

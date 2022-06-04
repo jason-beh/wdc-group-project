@@ -27,6 +27,13 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
   });
 });
 
+function renderOAuthButton() {
+  gapi.signin2.render("my-signin2", {
+    height: 50,
+    longtitle: true,
+  });
+}
+
 function signOut() {
   // Delete session in backend
   sendAJAX("GET", "/logout", null, function (err, res) {

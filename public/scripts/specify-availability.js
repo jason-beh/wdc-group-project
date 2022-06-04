@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let event_id = query.get("event");
 
   if (event_id === null) {
+    // TODO: Create 404 page
     alert("invalid event id");
     window.location.href = "/";
     return;

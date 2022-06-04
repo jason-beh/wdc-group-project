@@ -180,7 +180,21 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-    <div class="container">
+    <div class="container" id="wrapper">
+      <div id="alert-container">
+        <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+          <span id="alert-success-text">Success in creating event</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger alert-bar" id="alert-error">
+          <span id="alert-error-text">Error in creating event</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
       <h1 class="profile-header">Create Event</h1>
       <div class="main-container">
         <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form-2">
@@ -216,6 +230,7 @@
                 v-model="proposed_date"
                 required
                 class="input-box"
+                v-bind:min="new Date().toISOString().split('T')[0]"
               />
             </div>
             <div class="inputs">
@@ -301,12 +316,17 @@
                 name="duration"
                 type="number"
                 v-model="duration"
+                min="1"
                 required
                 class="input-box"
               />
             </div>
             <ul id="times" class="create-event-time"></ul>
-            <button @click="addTimeSelect" class="button-1 create-event-button">
+            <button
+              @click="addTimeSelect"
+              id="add-start-time-button"
+              class="button-1 create-event-button"
+            >
               Add a proposed start time
             </button>
           </div>
