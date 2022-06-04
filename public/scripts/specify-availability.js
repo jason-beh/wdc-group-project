@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Get event
   sendAJAX("GET", `/events/${event_id}`, null, function (err, res) {
     if (err) {
-      // do something
-      console.log(err);
+      window.location.href = "/404";
       return;
     }
 
@@ -42,6 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
       },
       methods: {
+        closeAlert() {
+          let alertBars = document.getElementsByClassName("alert-bar");
+          for (let alertBar of alertBars) {
+            alertBar.style.display = "none";
+          }
+        },
         loadPreviousAvailabilities(availabilityRes) {
           for (let availability of availabilityRes) {
             let { proposed_event_time_id } = availability;
@@ -77,15 +82,20 @@ document.addEventListener("DOMContentLoaded", function () {
             "/specify-availability",
             JSON.stringify(formData),
             function (err, availabilityRes) {
+              app.closeAlert();
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
               if (err) {
-                // do something
                 console.log(err);
-                return;
+                document.getElementById("alert-error-text").innerText = err.message;
+                document.getElementById("alert-error").style.display = "block";
+              } else {
+                document.getElementById("alert-success-text").innerText =
+                  "Successfully specified availability";
+                document.getElementById("alert-success").style.display = "block";
               }
-
-              alert("success");
-
-              console.log(availabilityRes);
             }
           );
         },

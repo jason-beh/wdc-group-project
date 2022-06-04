@@ -1,4 +1,3 @@
-// TODO: move to separate script file
 document.addEventListener("DOMContentLoaded", function () {
   // Load profile
   sendAJAX("GET", "/get-events", null, function (err, res) {

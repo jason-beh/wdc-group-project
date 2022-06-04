@@ -195,7 +195,9 @@ router.post("/edit-event", function (req, res, next) {
         return res.status(500).send("An interval server error occurred.");
       }
 
-      // add another if statement for event
+      if (!rows || rows.length === 0) {
+        return res.status(500).send("Event could not be found");
+      }
 
       var previousPath = rows[0]["event_picture"];
 

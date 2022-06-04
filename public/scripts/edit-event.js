@@ -1,4 +1,3 @@
-// TODO: move to separate script file
 document.addEventListener("DOMContentLoaded", function () {
   // Get event id from param
   let query = new URLSearchParams(window.location.search);
@@ -15,6 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
       // do something
       console.log(err);
     }
+
+    // TODO: Check if it is valid event id and its editable by the current user
 
     res = JSON.parse(res);
 
@@ -35,6 +36,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
       },
       methods: {
+        closeAlert() {
+          let alertBars = document.getElementsByClassName("alert-bar");
+          for (let alertBar of alertBars) {
+            alertBar.style.display = "none";
+          }
+        },
         onSubmit(e) {
           e.preventDefault();
           var formData = new FormData();
@@ -53,15 +60,20 @@ document.addEventListener("DOMContentLoaded", function () {
             formData.append("file", file[0]);
           }
           sendFileAJAX("POST", "/edit-event", formData, (err, res) => {
+            app.closeAlert();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
             if (err) {
               console.log(err);
+              document.getElementById("alert-error-text").innerText = err.message;
+              document.getElementById("alert-error").style.display = "block";
+            } else {
+              document.getElementById("alert-success-text").innerText = "Successfully edited event";
+              document.getElementById("alert-success").style.display = "block";
             }
-            console.log(formData);
           });
-
-          // sendAJAX("POST", "/edit-event", JSON.stringify(formData), function (err, res) {
-          //   // TODO: Notify user whether it fails or succeeds
-          // });
         },
       },
     });

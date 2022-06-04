@@ -1,4 +1,3 @@
-// TODO: move to separate script file
 document.addEventListener("DOMContentLoaded", function () {
   var app = new Vue({
     el: "#app",

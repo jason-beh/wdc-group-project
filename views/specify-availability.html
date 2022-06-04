@@ -194,51 +194,75 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
 
     <div class="container" id="app">
-      <h1 class="profile-header">Specify Availability</h1>
-
-      <div class="profile-container">
-        <form @submit="onSubmit" id="profile-form" class="form-1">
-          <div class="inputs">
-            <label for="email">Email</label>
-            <input
-              class="input-box"
-              id="email-input"
-              id="email"
-              name="email"
-              v-model="email"
-              type="email"
-              required
-            />
-          </div>
-          <div class="inputs" id="proposed_times">
-            <label for="instagram_handle">Choose timeslots</label>
-            <div
-              v-for="(proposed_date, index) in event.proposed_date"
-              :key="index"
-              v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container input-box selected' : 'checkmark-container input-box'"
-            >
-              <input
-                type="checkbox"
-                @click="onClick"
-                v-bind:checked="proposed_date.proposed_event_time_id in selected_proposed_time_id"
-                v-bind:data-id="proposed_date.proposed_event_time_id"
-              />
-              <div class="checkmark-inner">
-                <span class="checkmark-icon"></span>
-                {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
-                Date(proposed_date.end_date).toLocaleTimeString()}`}}
-              </div>
-            </div>
-          </div>
-          <button type="submit" id="submit-button" class="inputs button-1">Submit</button>
-        </form>
+      <div id="alert-container">
+        <div
+          class="alert alert-success alert-bar"
+          id="alert-success"
+          @click="closeAlert"
+          role="alert"
+        >
+          <span id="alert-success-text">Success in updating notifications</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
+          <span id="alert-danger-text">Error in updating profile</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
       </div>
+      <div class="main-container">
+        <div class="create-event-div event-div-1">
+          <h1 class="profile-header">Specify Availability</h1>
+          <div class="profile-container">
+            <form @submit="onSubmit" id="profile-form" class="form-1">
+              <div class="inputs">
+                <label for="email">Email</label>
+                <input
+                  class="input-box"
+                  id="email-input"
+                  id="email"
+                  name="email"
+                  v-model="email"
+                  type="email"
+                  required
+                />
+              </div>
+              <div class="inputs" id="proposed_times">
+                <label for="instagram_handle">Choose timeslots</label>
+                <div
+                  v-for="(proposed_date, index) in event.proposed_date"
+                  :key="index"
+                  v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container input-box selected' : 'checkmark-container input-box'"
+                >
+                  <input
+                    type="checkbox"
+                    @click="onClick"
+                    v-bind:checked="proposed_date.proposed_event_time_id in selected_proposed_time_id"
+                    v-bind:data-id="proposed_date.proposed_event_time_id"
+                  />
+                  <div class="checkmark-inner">
+                    <span class="checkmark-icon"></span>
+                    {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
+                    Date(proposed_date.end_date).toLocaleTimeString()}`}}
+                  </div>
+                </div>
+              </div>
+              <button type="submit" id="submit-button" class="inputs button-1">Submit</button>
+            </form>
+          </div>
+        </div>
+        <div class="create-event-div event-div-1">
+          <h1 class="profile-header">Calendar Data</h1>
+          <!--Add buttons to initiate auth sequence and sign out-->
+          <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
 
-      <h1 class="profile-header">Calendar Data</h1>
-      <!--Add buttons to initiate auth sequence and sign out-->
-      <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
-
-      <pre id="content" class="specify-pre"></pre>
+          <!-- TODO: Style calendar and swap API key -->
+          <pre id="content" class="specify-pre"></pre>
+        </div>
+      </div>
     </div>
 
     <footer class="footer navbar-expand-lg">
