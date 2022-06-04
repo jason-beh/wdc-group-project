@@ -79,6 +79,12 @@
                 <span class="sr-only">Browse Events</span>
               </a>
             </li>
+            <li v-if="isAdmin === 1" class="nav-item">
+              <a class="nav-link" href="/admin">
+                Admin Dashboard
+                <span class="sr-only">Admin Dashboard</span>
+              </a>
+            </li>
           </ul>
           <form
             class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
@@ -138,6 +144,12 @@
               <a class="nav-link" href="/"
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
+            </li>
+            <li class="nav-item" v-if="isAdmin === 1">
+              <a class="nav-link" href="/admin">
+                Admin Dashboard
+                <span class="sr-only">Admin Dashboard</span>
+              </a>
             </li>
             <li v-if="profile_picture == null" class="nav-item">
               <a class="nav-link" href="/login">Login</a>

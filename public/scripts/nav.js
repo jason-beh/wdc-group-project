@@ -20,6 +20,7 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     data() {
       return {
         profile_picture: res.profile_picture,
+        isAdmin: res.isAdmin,
         query: query,
       };
     },

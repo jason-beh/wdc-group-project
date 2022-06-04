@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,14 +10,6 @@
       content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
     />
     <meta name="google-signin-plugin_name" content="APP" />
-    <meta name="theme-color" content="#0D184F" />
-    <title>Socialah - Settings</title>
-
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
-      type="text/css"
-    />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -25,7 +18,6 @@
     />
     <link rel="shortcut icon" href="/images/custom-favicon.png" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
-
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -46,11 +38,18 @@
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
     ></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/settings.js"></script>
+    <script src="/scripts/my-events.js"></script>
+    <meta name="theme-color" content="#0D184F" />
+    <title>Socialah - My Events</title>
   </head>
 
   <body>
@@ -192,81 +191,20 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-    <div class="container" id="wrapper">
-      <div id="alert-container">
-        <div
-          class="alert alert-success alert-bar"
-          id="alert-success"
-          @click="closeAlert"
-          role="alert"
-        >
-          <span id="alert-success-text">Success in updating notifications</span>
-          <button class="close alert-close" @click="closeAlert">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
-          <span id="alert-danger-text">Error in updating profile</span>
-          <button class="close alert-close" @click="closeAlert">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      </div>
-      <h1 class="profile-header">Settings</h1>
-      <div class="main-container">
-        <div class="left-section">
-          <p class="description">
-            Tick the following checkboxes if you would like to receive email notifications for each
-            action.
-          </p>
-          <form @submit="onSubmit" id="create-form" class="form-2">
-            <div class="create-event-div">
-              <div class="inputs">
-                <label>Notifications</label>
-                <div>
-                  <input
-                    type="checkbox"
-                    v-model="is_event_finalised"
-                    name="is_event_finalised"
-                    id="is_event_finalised"
-                  />
-                  <label class="checkbox-label" for="is_event_finalised">Event is finalized</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    v-model="is_event_cancelled"
-                    name="is_event_cancelled"
-                    id="is_event_cancelled"
-                  />
-                  <label class="checkbox-label" for="is_event_cancelled">Event is cancelled</label>
-                </div>
-                <div>
-                  <input
-                    type="checkbox"
-                    name="is_availability_confirmed"
-                    v-model="is_availability_confirmed"
-                    id="is_availability_confirmed"
-                  />
-                  <label class="checkbox-label" for="is_availability_confirmed">
-                    Availability is specified by user (For Event Creators)
-                  </label>
-                </div>
-              </div>
-
-              <button type="submit" class="button-1">Save Settings</button>
-            </div>
-          </form>
-        </div>
-        <div class="right-section">
-          <div class="create-event-cta-container">
-            <h3>Looking for an event?</h3>
-            <p>Find the best events near you.</p>
-            <a href="/" class="button-2">Browse Events</a>
-          </div>
-        </div>
+    <div class="container" id="app">
+      <h1 class="profile-header">Admin Dashboard</h1>
+      <div class="admin-dashboard">
+        <a href="/admin/users" class="admin-dashboard-button">
+          <img src="/images/admin-users.png" alt="" />
+          <h4>View Users</h4>
+        </a>
+        <a href="/admin/events" class="admin-dashboard-button">
+          <img src="/images/admin-event.png" alt="" />
+          <h4>View Events</h4>
+        </a>
       </div>
     </div>
+
     <footer class="footer navbar-expand-lg">
       <div class="container">
         <p>&#169; Socialah 2022</p>
