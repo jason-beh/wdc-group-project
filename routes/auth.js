@@ -68,7 +68,11 @@ router.post("/login", function (req, res, next) {
 
       // If the user is not verified, we return 401
       if (user.isVerified == false) {
-        return res.status(401).send("Please verify your email.");
+        return res
+          .status(401)
+          .send(
+            `Please verify your email. <span onclick="sendVerificationEmail('${email}')">Resend verification email</span>`
+          );
       }
 
       // Proceed to verify the hashed password
@@ -263,7 +267,7 @@ router.get("/send-email", function (req, res, next) {
         // send mail with defined transport object
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
-            return console.log(error);
+            return res.status(500).send("An interval server error occurred.");
           }
 
           return res.send(email);

@@ -42,11 +42,29 @@
     <script src="/scripts/signup.js"></script>
   </head>
   <body>
-    <div style="display: flex">
+    <div style="display: flex" id="wrapper" class="auth-wrapper">
+      <div class="spinner-overlay">
+        <div class="spinner-border text-warning" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
       <div class="loginContainer">
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Sign up</h1>
-        <p class="authMessage"></p>
+        <div id="alert-container">
+          <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+            <span id="alert-success-text">Signup success</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-danger alert-bar" id="alert-error">
+            <span id="alert-error-text">Signup error</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
         <form action="/signup" @submit="onSubmit" method="post" id="signup-form">
           <div class="inputs">
             <label for="email">Email</label>
@@ -84,15 +102,18 @@
             />
           </div>
           <button type="submit" class="button1">Sign Up</button>
-          <img
-            src="/images/orImg.png"
-            alt="orLayout"
-            class="orImage"
-            style="margin: 20px 0px 20px 0"
-          />
-          <div class="g-signin2 googleButton" data-onsuccess="onSignIn"></div>
-          <p class="nAccount">Have an account?&nbsp<a href="/login" class="links">Login</a></p>
-          <p></p>
+          <img src="/images/orImg.svg" alt="orLayout" class="orImage" />
+          <div
+            class="g-signin2 googleButton"
+            data-onsuccess="onSignIn"
+            data-height="50"
+            data-longtitle="true"
+          ></div>
+          <div class="nAccount">
+            <p>Have an existing account?</p>
+            &nbsp
+            <a href="/login" class="links">Login</a>
+          </div>
         </form>
       </div>
       <img

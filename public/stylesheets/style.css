@@ -20,7 +20,6 @@
 body {
   font-family: "Barlow", sans-serif;
   background-color: #f9f9f9;
-  margin-bottom: 100px;
 }
 
 a {
@@ -44,6 +43,48 @@ input:disabled {
   display: none;
 }
 
+.alert-bar {
+  margin-top: 40px;
+  display: none;
+}
+
+.alert-bar span {
+  font-weight: 500;
+}
+
+#alert-error-text span {
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.spinner-overlay {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.spinner-border {
+  color: rgb(13, 24, 79);
+}
+
+.auth-wrapper {
+  min-height: 100vh;
+}
+
+.g-signin2 {
+  border-radius: 10px;
+  box-sizing: border-box;
+  height: 50px;
+}
+
 p.description {
   margin-top: 30px;
 }
@@ -55,6 +96,10 @@ p.description {
 
   .desktop-hide {
     display: block !important;
+  }
+
+  body {
+    margin-bottom: 100px;
   }
 }
 
@@ -345,7 +390,7 @@ p.description {
 }
 .orImage {
   width: 100%;
-  margin: 6.5% 0 4% 0;
+  margin: 20px 0px 20px 0;
 }
 
 .authMessage {
