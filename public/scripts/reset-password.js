@@ -3,6 +3,11 @@ document.addEventListener("DOMContentLoaded", function () {
   let email = query.get("email");
   let token = query.get("token");
 
+  if (email === null || token === null) {
+    window.location.href = "/404";
+    return;
+  }
+
   var app = new Vue({
     el: "#wrapper",
     data() {
