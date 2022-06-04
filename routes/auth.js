@@ -399,7 +399,31 @@ router.post("/forget-password", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  return res.redirect(`/send-email?email=${email}&action=reset-password`);
+  // Check if the email exists
+  db.connectionPool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
+    }
+    // Query the database
+    var query = "SELECT * FROM Authentication WHERE email = ?";
+    connection.query(query, [email], function (err, rows, fields) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
+      }
+
+      // Email does not exist
+      if (rows.length === 0) {
+        return res.status(403).send("The email does not exist.");
+      }
+
+      // Email is signed up using Google
+      if (rows[0].isGoogleSignUp == true) {
+        return res.status(401).send("Please use Google to sign in.");
+      }
+
+      return res.redirect(`/send-email?email=${email}&action=reset-password`);
+    });
+  });
 });
 
 router.post("/reset-password", function (req, res, next) {
@@ -421,9 +445,12 @@ router.post("/reset-password", function (req, res, next) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
+
+      // Token or email does not exist in table
       if (rows.length === 0) {
         return res.status(403).send("Invalid token or email");
       }
+
       // Delete the token
       query = "delete from Account_Verification where token = ? and email = ?;";
       connection.query(query, [token, email], function (err, rows, fields) {
@@ -434,7 +461,7 @@ router.post("/reset-password", function (req, res, next) {
         argon2
           .hash(password)
           .then(function (hashedPassword) {
-            // Insert new user into database
+            // Insert new password into database
             query = "UPDATE Authentication set password = ? where email = ?";
             connection.query(query, [hashedPassword, email], function (err) {
               connection.release();
