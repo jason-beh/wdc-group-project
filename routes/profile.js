@@ -37,57 +37,8 @@ const fs = require("fs");
 
 var router = express.Router();
 
-var previousPath;
-router.post("/change-profile-image", upload.array("file", 1));
-router.post("/change-profile-image", function (req, res, next) {
-  // Remove previous file
-  db.connectionPool.getConnection(function (err, connection) {
-    if (err) {
-      return res.status(500).send("An interval server error occurred.");
-    }
-    var query = "select profile_picture from User_Profile where email = ?;";
-    connection.query(query, [req.session.user.email], function (err, rows, fields) {
-      connection.release();
-      if (err) {
-        return res.status(500).send("An interval server error occurred.");
-      }
-      previousPath = rows[0]["profile_picture"];
-      // if previousPath exists
-      if (previousPath !== "/user-profiles/defaultUserProfile.png") {
-        try {
-          fs.unlinkSync("public" + previousPath);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    });
-  });
-  req.files.forEach(function (file) {
-    // Sends path name back to database
-    var path = `/user-profiles/${file.filename}`;
-    db.connectionPool.getConnection(function (err, connection) {
-      if (err) {
-        return res.status(500).send("An interval server error occurred.");
-      }
-      var query = "update User_Profile set profile_picture = ? where email = ?;";
-      connection.query(query, [path, req.session.user.email], function (err, rows, fields) {
-        connection.release();
-        if (err) {
-          return res.status(500).send("An interval server error occurred.");
-        }
-
-        // Update user session
-        let userSession = req.session.user;
-        userSession["profile_picture"] = path;
-        req.session.user = userSession;
-
-        return res.send(path);
-      });
-    });
-  });
-});
-
-router.post("/edit-profile", function (req, res, next) {
+router.put("/edit-profile", upload.array("file", 1));
+router.put("/edit-profile", function (req, res, next) {
   // Ensure the user is logged in
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
@@ -97,32 +48,98 @@ router.post("/edit-profile", function (req, res, next) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
+
     // Deference
-    var { first_name, last_name, birthday, instagram_handle, facebook_handle, state, country } =
+    let { first_name, last_name, birthday, instagram_handle, facebook_handle, state, country } =
       req.body;
-    // Update data
-    var query =
-      "update User_Profile set first_name = ?, last_name = ?, birthday = ?, instagram_handle = ?, facebook_handle = ?, state = ?, country = ? where email = ?";
-    connection.query(
-      query,
-      [
-        first_name,
-        last_name,
-        birthday,
-        instagram_handle,
-        facebook_handle,
-        state,
-        country,
-        req.session.user.email,
-      ],
-      function (err, rows, fields) {
+
+    if (
+      !first_name ||
+      !last_name ||
+      !birthday ||
+      !instagram_handle ||
+      !facebook_handle ||
+      !state ||
+      !country
+    ) {
+      return res.status(400).send("Insufficient Data");
+    }
+
+    if (req.files != null && req.files.length > 0) {
+      let query = "select profile_picture from User_Profile where email = ?";
+      connection.query(query, [req.session.user.email], function (err, rows, fields) {
         connection.release();
         if (err) {
           return res.status(500).send("An interval server error occurred.");
         }
-        return res.send("Success in updating profile!");
-      }
-    );
+        let previousPath = rows[0]["profile_picture"];
+        // if previousPath exists
+        if (previousPath !== "/user-profiles/defaultUserProfile.png") {
+          try {
+            fs.unlinkSync("public" + previousPath);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+
+        req.files.forEach(function (file) {
+          // Sends path name back to database
+          var path = `/user-profiles/${file.filename}`;
+
+          var query =
+            "update User_Profile set first_name = ?, last_name = ?, birthday = ?, instagram_handle = ?, facebook_handle = ?, state = ?, country = ?, profile_picture = ? where email = ?";
+          connection.query(
+            query,
+            [
+              first_name,
+              last_name,
+              birthday,
+              instagram_handle,
+              facebook_handle,
+              state,
+              country,
+              path,
+              req.session.user.email,
+            ],
+            function (err, rows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+
+              // Update user session
+              let userSession = req.session.user;
+              userSession["profile_picture"] = path;
+              req.session.user = userSession;
+
+              return res.send({ path });
+            }
+          );
+        });
+      });
+    } else {
+      let query =
+        "update User_Profile set first_name = ?, last_name = ?, birthday = ?, instagram_handle = ?, facebook_handle = ?, state = ?, country = ? where email = ?";
+      connection.query(
+        query,
+        [
+          first_name,
+          last_name,
+          birthday,
+          instagram_handle,
+          facebook_handle,
+          state,
+          country,
+          req.session.user.email,
+        ],
+        function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            return res.status(500).send("An interval server error occurred.");
+          }
+          return res.status(200).end();
+        }
+      );
+    }
   });
 });
 

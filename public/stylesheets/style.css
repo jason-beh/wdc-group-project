@@ -83,8 +83,16 @@ input:disabled {
   display: flex;
 }
 
+.abcRioButton {
+  border-radius: 10px !important;
+}
+
 p.description {
   margin-top: 30px;
+}
+
+.desktop-hide {
+  display: none !important;
 }
 
 @media screen and (max-width: 992px) {
@@ -240,9 +248,13 @@ p.description {
 .profile-container {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
   box-sizing: border-box;
   font-weight: bold;
+}
+
+.profile-image-file {
+  display: block;
 }
 
 .profile-name {
@@ -324,6 +336,7 @@ p.description {
   height: 100%;
   max-height: 150px;
   object-fit: cover;
+  display: block;
 }
 .profile-picture {
   display: flex;
@@ -518,7 +531,7 @@ p.description {
     flex-direction: column !important;
   }
   .create-event-div {
-    padding: 0 6% 0 6%;
+    padding: 0;
   }
 }
 
