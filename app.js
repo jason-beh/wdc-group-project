@@ -18,7 +18,6 @@ var searchRouter = require("./routes/search");
 var adminRouter = require("./routes/admin");
 var attendanceRouter = require("./routes/attendance");
 var settingsRouter = require("./routes/settings");
-const { pathToFileURL } = require("url");
 const { pathToHtml } = require("./utils/routes");
 
 // module2 for storing Session in MySQL Database
