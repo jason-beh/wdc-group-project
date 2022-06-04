@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="fix">
   <head>
     <link
       rel="stylesheet"
@@ -41,13 +41,13 @@
     <title>Socialah - Login</title>
   </head>
   <body>
-    <div class="loginMainContainer" id="wrapper">
+    <div class="login-main-container">
       <div class="spinner-overlay">
         <div class="spinner-border text-warning" role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>
-      <div class="loginContainer">
+      <div class="login-container">
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Login</h1>
         <div id="alert-container">
@@ -64,7 +64,10 @@
             </button>
           </div>
         </div>
-        <form action="/login" method="post" @submit="onSubmit" id="login-form" class="loginForm">
+        <div class="g-signin2 google-button" data-onsuccess="onSignIn"></div>
+        <img src="/images/orImg.png" alt="orLayout" class="or-image" />
+        <p class="auth-message"></p>
+        <form action="/login" method="post" @submit="onSubmit" id="login-form" class="login-form">
           <div class="inputs">
             <label for="email">Email</label>
             <input
@@ -75,7 +78,7 @@
               v-model="email"
               required
               autofocus
-              class="inputBox"
+              class="input-box"
             />
           </div>
           <div class="inputs">
@@ -87,11 +90,11 @@
               v-model="password"
               autocomplete="current-password"
               required
-              class="inputBox"
+              class="input-box"
             />
           </div>
-          <button type="submit" class="button1" style="margin-top: 40px">Login</button>
-          <a href="_blank" class="links" style="text-align: end; margin-top: 3%">Forgot password</a>
+          <button type="submit" class="button-1 login-button">Login</button>
+          <a href="_blank" class="links login-href">Forgot password</a>
           <img src="/images/orImg.svg" alt="orLayout" class="orImage" />
           <div
             class="g-signin2 googleButton"
@@ -99,19 +102,14 @@
             data-height="50"
             data-longtitle="true"
           ></div>
-          <div class="nAccount">
+          <div class="n-account">
             <p>Don't have an account?</p>
             &nbsp
             <a href="/signup" class="links">Sign Up</a>
           </div>
         </form>
       </div>
-      <img
-        src="/images/loginImage.png"
-        alt="Community"
-        style="width: 50%; object-fit: cover; min-height: 100vh"
-        id="loginIMG"
-      />
+      <img src="/images/loginImage.png" alt="Community" class="login-image" id="login-image" />
     </div>
   </body>
 </html>

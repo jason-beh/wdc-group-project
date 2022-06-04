@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     res = JSON.parse(res);
 
-    if(res.length === 0) {
-      let message = document.createElement('p');
+    if (res.length === 0) {
+      let message = document.createElement("p");
       message.innerText = "There are no events available.";
-      document.getElementById('eventsList').appendChild(message);
+      document.getElementById("events-list").appendChild(message);
     }
 
     var app = new Vue({
-      el: "#eventsList",
+      el: "#events-list",
       data() {
         return {
           events: res,

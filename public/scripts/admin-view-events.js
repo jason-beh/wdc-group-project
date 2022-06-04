@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var timeList = document.getElementById("times");
 
         var newTimeSection = document.createElement("div");
-        newTimeSection.setAttribute("class", "timeBox");
+        newTimeSection.setAttribute("class", "time-box");
 
         var newTime = document.createElement("input");
         newTime.type = "time";

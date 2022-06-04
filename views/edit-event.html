@@ -183,10 +183,10 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container">
-      <h1 class="profileHeader">Edit Event</h1>
-      <div class="mainContainer">
-        <form @submit="onSubmit" enctype="multipart/form-data" id="edit-form" class="form2">
-          <div class="createEventDiv" style="padding-right: 6%">
+      <h1 class="profile-header">Edit Event</h1>
+      <div class="main-container">
+        <form @submit="onSubmit" enctype="multipart/form-data" id="edit-form" class="form-2">
+          <div class="create-event-div event-div-1">
             <div class="inputs">
               <label for="title">Title</label>
               <input
@@ -195,7 +195,7 @@
                 type="text"
                 v-model="title"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -206,8 +206,7 @@
                 rows="10"
                 required
                 v-model="description"
-                class="inputBox"
-                style="min-height: 100px"
+                class="input-box event-description"
               ></textarea>
             </div>
             <div class="inputs">
@@ -218,7 +217,7 @@
                 type="text"
                 v-model="street_number"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -229,7 +228,7 @@
                 type="text"
                 v-model="street_name"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -240,7 +239,7 @@
                 type="text"
                 v-model="suburb"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -251,11 +250,11 @@
                 type="text"
                 v-model="state"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
-            <div style="display: flex; justify-content: space-between">
-              <div class="inputs" style="width: 45%">
+            <div class="create-event-div-2">
+              <div class="inputs event-style-1">
                 <label for="country">Country</label>
                 <input
                   id="country"
@@ -263,10 +262,10 @@
                   type="text"
                   v-model="country"
                   required
-                  class="inputBox"
+                  class="input-box"
                 />
               </div>
-              <div class="inputs" style="width: 45%">
+              <div class="inputs event-style-1">
                 <label for="postcode">Postcode</label>
                 <input
                   id="postcode"
@@ -274,17 +273,17 @@
                   type="text"
                   v-model="postcode"
                   required
-                  class="inputBox"
+                  class="input-box"
                 />
               </div>
             </div>
 
-            <button type="submit" class="button1">Edit an event</button>
+            <button type="submit" class="button-1">Edit an event</button>
           </div>
-          <div class="createEventDiv" style="padding: 0 10% 0 10%">
+          <div class="create-event-div event-div-2">
             <div class="inputs">
               <label for="image">Cover Photo</label>
-              <img v-bind:src="event_picture" class="eventIMG" alt="dummy event pic" />
+              <img v-bind:src="event_picture" class="event-image" alt="dummy event pic" />
               <input type="file" name="file" class="profile-image-file" />
               <!-- <form
                 @submit="changeEventPicture"
@@ -293,13 +292,10 @@
                 enctype="multipart/form-data"
               >
                 <input type="file" name="file" class="profile-image-file" />
-                <button type="submit" class="inputs button1">Update Image</button>
+                <button type="submit" class="inputs button-1">Update Image</button>
               </form> -->
             </div>
-            <ul
-              id="times"
-              style="display: flex; flex-direction: column; padding-inline-start: 0"
-            ></ul>
+            <ul id="times" class="create-event-time"></ul>
           </div>
         </form>
       </div>

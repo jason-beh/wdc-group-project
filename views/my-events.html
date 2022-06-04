@@ -180,7 +180,7 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="app">
-      <h1 class="profileHeader">My Events</h1>
+      <h1 class="profile-header">My Events</h1>
 
       <div
         class="large-cta-container"
@@ -191,22 +191,22 @@
           attended or organized.
         </h1>
         <div class="cta-row">
-          <a href="/" class="button1">Browse Events</a>
-          <a href="/create-event" class="button2">Create an Event</a>
+          <a href="/" class="button-1">Browse Events</a>
+          <a href="/create-event" class="button-2">Create an Event</a>
         </div>
       </div>
 
-      <div v-if="organizedEvents.length > 0 || attendedEvents.length > 0" class="mainContainer">
+      <div v-if="organizedEvents.length > 0 || attendedEvents.length > 0" class="main-container">
         <div class="left-section">
           <div class="events-type-row">
             <button
-              v-bind:class="currentView == 'attendedEvents' ? 'button1' : 'button2'"
+              v-bind:class="currentView == 'attendedEvents' ? 'button-1' : 'button-2'"
               @click="switchView('attendedEvents')"
             >
               Attended Events
             </button>
             <button
-              v-bind:class="currentView == 'organizedEvents' ? 'button1' : 'button2'"
+              v-bind:class="currentView == 'organizedEvents' ? 'button-1' : 'button-2'"
               @click="switchView('organizedEvents')"
             >
               Organized Events
@@ -270,7 +270,7 @@
           <div class="create-event-cta-container">
             <h3>Prefer To Create Your Own Event?</h3>
             <p>Creating an event is as easy as ABC.</p>
-            <a href="/create-event" class="button2">Create Event</a>
+            <a href="/create-event" class="button-2">Create Event</a>
           </div>
         </div>
       </div>

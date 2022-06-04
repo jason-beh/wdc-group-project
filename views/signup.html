@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="fix">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -42,13 +42,13 @@
     <script src="/scripts/signup.js"></script>
   </head>
   <body>
-    <div style="display: flex" id="wrapper" class="auth-wrapper">
+    <div class="login-main-container" id="wrapper">
       <div class="spinner-overlay">
         <div class="spinner-border text-warning" role="status">
           <span class="sr-only">Loading...</span>
         </div>
       </div>
-      <div class="loginContainer">
+      <div class="login-container">
         <img src="/images/blueLogo.png" alt="App logo" />
         <h1>Sign up</h1>
         <div id="alert-container">
@@ -65,6 +65,7 @@
             </button>
           </div>
         </div>
+        <p class="auth-message"></p>
         <form action="/signup" @submit="onSubmit" method="post" id="signup-form">
           <div class="inputs">
             <label for="email">Email</label>
@@ -75,7 +76,7 @@
               v-model="email"
               autocomplete="email"
               required
-              class="inputBox"
+              class="input-box"
             />
           </div>
           <div class="inputs">
@@ -87,7 +88,7 @@
               v-model="password"
               autocomplete="new-password"
               required
-              class="inputBox"
+              class="input-box"
             />
           </div>
           <div class="inputs">
@@ -98,30 +99,22 @@
               type="password"
               v-model="confirm_password"
               required
-              class="inputBox"
+              class="input-box"
             />
           </div>
-          <button type="submit" class="button1">Sign Up</button>
-          <img src="/images/orImg.svg" alt="orLayout" class="orImage" />
+          <button type="submit" class="button-1">Sign Up</button>
+          <img src="/images/orImg.svg" alt="orLayout" class="or-image sign-up-or-image" />
           <div
             class="g-signin2 googleButton"
             data-onsuccess="onSignIn"
             data-height="50"
             data-longtitle="true"
           ></div>
-          <div class="nAccount">
-            <p>Have an existing account?</p>
-            &nbsp
-            <a href="/login" class="links">Login</a>
-          </div>
+          <p class="n-account">Have an account?&nbsp<a href="/login" class="links">Login</a></p>
+          <p></p>
         </form>
       </div>
-      <img
-        src="/images/signUpImg.png"
-        alt="Community"
-        id="signUpIMG"
-        style="width: 50%; object-fit: cover; max-height: 100vh"
-      />
+      <img src="/images/signUpImg.png" alt="Community" id="sign-up-image" />
     </div>
   </body>
 </html>

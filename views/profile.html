@@ -186,15 +186,15 @@
             </button>
           </div>
         </div>
-        <h1 class="profileHeader">Profile</h1>
-        <div class="mainContainer">
-          <div class="profileContainer">
-            <form @submit="onSubmit" id="profile-form" class="form1">
-              <div class="profileName">
+        <h1 class="profile-header">Profile</h1>
+        <div class="main-container">
+          <div class="profile-container">
+            <form @submit="onSubmit" id="profile-form" class="form-1">
+              <div class="profile-name">
                 <div class="inputs names">
                   <label for="first_name">First Name</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="first_name"
                     name="first_name"
                     value="first_name"
@@ -206,7 +206,7 @@
                 <div class="inputs names">
                   <label for="last_name">Last Name</label>
                   <input
-                    class="inputBox"
+                    class="input-box"
                     id="last_name"
                     name="last_name"
                     value="last_name"
@@ -220,7 +220,7 @@
               <div class="inputs">
                 <label for="birthday">Birthday</label>
                 <input
-                  class="inputBox"
+                  class="input-box"
                   id="birthday"
                   name="birthday"
                   v-model="birthday"
@@ -231,7 +231,7 @@
               <div class="inputs">
                 <label for="instagram_handle">Instagram Handle</label>
                 <input
-                  class="inputBox"
+                  class="input-box"
                   id="instagram_handle"
                   name="instagram_handle"
                   value="instagram_handle"
@@ -243,7 +243,7 @@
               <div class="inputs">
                 <label for="facebook_handle">Facebook Handle</label>
                 <input
-                  class="inputBox"
+                  class="input-box"
                   id="facebook_handle"
                   name="facebook_handle"
                   value="facebook_handle"
@@ -255,7 +255,7 @@
               <div class="inputs">
                 <label for="state">State</label>
                 <input
-                  class="inputBox"
+                  class="input-box"
                   id="state"
                   name="state"
                   value="state"
@@ -267,7 +267,7 @@
               <div class="inputs">
                 <label for="country">Country</label>
                 <input
-                  class="inputBox"
+                  class="input-box"
                   id="country"
                   name="country"
                   value="country"
@@ -276,30 +276,30 @@
                   required
                 />
               </div>
-              <button type="submit" id="submit-button" class="inputs button1">
+              <button type="submit" id="submit-button" class="inputs button-1">
                 Update my profile
               </button>
             </form>
           </div>
-          <div class="profilePic">
-            <label for="profilePic">Profile Picture</label>
+          <div class="profile-picture">
+            <label for="profile-picture">Profile Picture</label>
             <!-- TODO: Fix profile image bug -->
             <img
               v-if="profile_picture != '/user-profiles/defaultUserProfile.png'"
               v-bind:onerror="profile_picture = '/user-profiles/defaultUserProfile.png'"
               v-bind:src="profile_picture"
               onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
-              class="profileIMG"
+              class="profile-image"
               alt="dummy profile pic"
             />
             <form
-              @submit="changeProfilePicture"
+              @submit="changeprofile-pictureture"
               method="post"
-              id="changeProfilePicture"
+              id="changeprofile-pictureture"
               enctype="multipart/form-data"
             >
               <input type="file" name="file" class="profile-image-file" />
-              <button type="submit" class="inputs button1">Update Image</button>
+              <button type="submit" class="inputs button-1">Update Image</button>
             </form>
           </div>
         </div>

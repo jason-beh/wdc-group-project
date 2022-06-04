@@ -177,25 +177,21 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-    <div class="eventListBanner">
-      <div class="container" style="line-height: 110%">
+    <div class="event-list-banner">
+      <div class="container event-div-1">
         <p>Social Events<br />You Can’t Miss</p>
       </div>
     </div>
 
     <div class="container">
-      <div id="eventsList">
-        <div v-for="(event, index) in events" :key="index" class="eventContainer">
-          <img
-            v-bind:src="event.event_picture"
-            alt="Event Picture"
-            style="border-radius: 10px 10px 0 0; height: 150px; object-fit: cover"
-          />
-          <div class="eventDetails">
-            <p style="color: #d9b11f">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
-            <p style="font-size: 1.4em; font-weight: 600">{{event.title}}</p>
-            <p style="font-size: 0.86em; margin-top: 6%">Created by : {{event.created_by}}</p>
-            <p style="margin-top: 6%">{{event.street_name}}</p>
+      <div id="events-list">
+        <div v-for="(event, index) in events" :key="index" class="event-container">
+          <img v-bind:src="event.event_picture" alt="Event Picture" class="event-picture" />
+          <div class="event-details">
+            <p class="event-p-1">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
+            <p class="event-p-2">{{event.title}}</p>
+            <p class="event-p-3">Created by : {{event.created_by}}</p>
+            <p class="event-p-4">{{event.street_name}}</p>
           </div>
         </div>
       </div>
