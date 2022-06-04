@@ -42,7 +42,12 @@ document.addEventListener("DOMContentLoaded", function () {
               });
               document.getElementsByClassName("spinner-overlay")[0].style.display = "none";
               setTimeout(function () {
-                window.location.href = "/";
+                res = JSON.parse(res);
+                if (res.isAdmin === 1) {
+                  window.location.href = "/admin";
+                } else {
+                  window.location.href = "/";
+                }
               }, 1500);
             }
           }, 1500);

@@ -110,7 +110,9 @@ router.post("/login", function (req, res, next) {
               // Save userSession to user's session
               req.session.user = userSession;
 
-              return res.status(200).end();
+              return res.send({
+                isAdmin: user.isAdmin,
+              });
             });
           }
         })
@@ -174,7 +176,9 @@ router.post("/oauth", async function (req, res, next) {
           // Save userSession to user's session
           req.session.user = userSession;
 
-          return res.status(200).end();
+          return res.send({
+            isAdmin: user.isAdmin,
+          });
         });
       } else {
         // Insert new user into database
@@ -214,7 +218,9 @@ router.post("/oauth", async function (req, res, next) {
                 profile_picture: "/user-profiles/defaultUserProfile.png",
               };
 
-              return res.status(200).end();
+              return res.send({
+                isAdmin: 0,
+              });
             });
           });
         });

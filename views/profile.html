@@ -73,6 +73,12 @@
                   <span class="sr-only">Browse Events</span>
                 </a>
               </li>
+              <li v-if="isAdmin === 1" class="nav-item">
+                <a class="nav-link" href="/admin">
+                  Admin Dashboard
+                  <span class="sr-only">Admin Dashboard</span>
+                </a>
+              </li>
             </ul>
             <form
               class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
@@ -107,7 +113,6 @@
                   <img
                     v-bind:src="profile_picture"
                     onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
-                    onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     class="navbar-profile-picture"
                     alt="profile picture"
                   />
@@ -127,15 +132,25 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="/events"
-                  >Browse Events <span class="sr-only">Browse Events</span></a
-                >
+                <a class="nav-link" href="/events">
+                  Browse Events
+                  <span class="sr-only">Browse Events</span>
+                </a>
+              </li>
+              <li class="nav-item" v-if="isAdmin === 1">
+                <a class="nav-link" href="/admin">
+                  Admin Dashboard
+                  <span class="sr-only">Admin Dashboard</span>
+                </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/my-events">My Events</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/profile">Profile</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/settings">Settings</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
@@ -282,14 +297,17 @@
                 </button>
               </div>
               <div class="create-event-div event-div-2">
-                <label for="profile-picture">Profile Picture</label>
-                <img
-                  onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
-                  v-bind:src="profile_picture"
-                  class="profile-image"
-                  alt="dummy profile pic"
-                />
-                <input type="file" name="file" class="profile-image-file" autofocus />
+                <div class="inputs">
+                  <label for="profile-picture">Profile Picture</label>
+                  <img
+                    onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
+                    v-bind:src="profile_picture"
+                    class="profile-image"
+                    alt="dummy profile pic"
+                  />
+                  <input type="file" name="file" class="profile-image-file" autofocus />
+                </div>
+
                 <button type="submit" id="submit-button" class="button-1 desktop-hide">
                   Update my profile
                 </button>

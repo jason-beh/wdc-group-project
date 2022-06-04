@@ -379,11 +379,24 @@ router.post("/get-profile", function (req, res, next) {
 });
 
 // Rendering Pages
+router.get("/", function (req, res, next) {
+  if (!userIsAdmin(req.session.user)) {
+    return res.redirect("/404");
+  }
+  res.sendFile(pathToHtml("admin-dashboard.html"));
+});
+
 router.get("/users", function (req, res, next) {
+  if (!userIsAdmin(req.session.user)) {
+    return res.redirect("/404");
+  }
   res.sendFile(pathToHtml("admin-users.html"));
 });
 
 router.get("/events", function (req, res, next) {
+  if (!userIsAdmin(req.session.user)) {
+    return res.redirect("/404");
+  }
   res.sendFile(pathToHtml("admin-events.html"));
 });
 module.exports = router;
