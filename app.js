@@ -18,6 +18,7 @@ var searchRouter = require("./routes/search");
 var adminRouter = require("./routes/admin");
 var attendanceRouter = require("./routes/attendance");
 var settingsRouter = require("./routes/settings");
+const { pathToHtml } = require("./utils/routes");
 
 // module2 for storing Session in MySQL Database
 var sessionStore = new mysqlStore(db.options);
@@ -79,5 +80,10 @@ app.use("/", searchRouter);
 app.use("/admin", adminRouter);
 app.use("/", attendanceRouter);
 app.use("/", settingsRouter);
+
+// catch 404
+app.use((req, res, next) => {
+  res.sendFile(pathToHtml("404.html"));
+});
 
 module.exports = app;

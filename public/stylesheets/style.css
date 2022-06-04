@@ -297,6 +297,8 @@ p.description {
   border-radius: 10px;
   border: none;
   margin: 30px auto 0 auto;
+  display: flex;
+  justify-content: center;
   align-items: center;
   box-sizing: border-box;
   height: 50px;
@@ -695,6 +697,13 @@ p.description {
 
 .verify-account a:hover {
   text-decoration: underline;
+}
+
+.verify-account .button-1 {
+  width: 50%;
+  margin: 30px auto;
+  font-weight: normal;
+  color: white;
 }
 
 @media only screen and (max-width: 992px) {
