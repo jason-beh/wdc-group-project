@@ -50,7 +50,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/admin-view.js"></script>
+    <script src="/scripts/admin-view-users.js"></script>
   </head>
 
   <body>
@@ -88,6 +88,8 @@
           </ul>
           <form
             class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
+            action="/search"
+            method="POST"
           >
             <div class="input-group">
               <input
@@ -95,6 +97,8 @@
                 class="form-control navbar-searchbar"
                 placeholder="Search Events..."
                 aria-label="Search Events..."
+                v-model="query"
+                name="query"
               />
               <button class="navbar-searchbar-icon">
                 <ion-icon name="search-outline"></ion-icon>
@@ -183,8 +187,22 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="admin-table">
+      <div id="alert-container">
+        <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+          <span id="alert-success-text">Success</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger alert-bar" id="alert-error">
+          <span id="alert-error-text">Error</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
       <div class="admin-container">
-        <h2>Users</h2>
+        <h2 class="profile-header">Users</h2>
         <div class="admin-div-1">
           <button class="button-1 admin-button-1" data-toggle="modal" data-target="#Modal3">
             Create Admin
@@ -204,31 +222,31 @@
           <th>Actions</th>
         </tr>
         <tr v-for="user in users">
-          <td>{{user.email}}</td>
-          <td>{{user.first_name}}</td>
-          <td>{{user.last_name}}</td>
-          <td>{{user.birthday}}</td>
-          <td>{{user.instagram_handle}}</td>
-          <td>{{user.facebook_handle}}</td>
-          <td>{{user.state}}</td>
+          <td>{{truncate(user.email)}}</td>
+          <td>{{truncate(user.first_name)}}</td>
+          <td>{{truncate(user.last_name)}}</td>
+          <td>{{truncate(user.birthday)}}</td>
+          <td>{{truncate(user.instagram_handle)}}</td>
+          <td>{{truncate(user.facebook_handle)}}</td>
+          <td>{{truncate(user.state)}}</td>
           <td>
-            <img
-              src="/images/edit-icon.png"
-              alt="delete icon"
+            <ion-icon
+              name="pencil"
+              alt="edit icon"
               data-toggle="modal"
               data-target="#Modal2"
               v-bind:data-email="user.email"
               @click="getCurrentUser"
-            />
-            <img
-              src="/images/trash-icon.png"
-              alt="edit icon"
+            ></ion-icon>
+            <ion-icon
+              name="trash"
+              alt="delete icon"
               data-toggle="modal"
               data-target="#Modal"
               v-bind:data-email="user.email"
               @click="setToDelete"
               class="trash-icon"
-            />
+            ></ion-icon>
           </td>
         </tr>
       </table>
@@ -240,6 +258,7 @@
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        data-backdrop="static"
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -274,6 +293,7 @@
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        data-backdrop="static"
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -400,7 +420,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
-                id="dismiss-button-2"
+                id="dismiss-button-3"
               >
                 Close
               </button>
@@ -447,7 +467,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     name="userPassword"
                     value="userPassword"
                     v-model="userPassword"
-                    type="text"
+                    type="password"
                     required
                   />
                 </div>
@@ -481,13 +501,13 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Create System User</h2>
+              <h2 class="modal-title" id="exampleModalLabel">Create User</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form @submit="createSystemUser" class="form-1">
+              <form @submit="createUser" class="form-1">
                 <div class="inputs">
                   <label for="email">Email</label>
                   <input
@@ -508,12 +528,12 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     name="userPassword"
                     value="userPassword"
                     v-model="userPassword"
-                    type="text"
+                    type="password"
                     required
                   />
                 </div>
                 <button type="submit" id="submit-button" class="inputs button-1">
-                  Create System User
+                  Create User
                 </button>
               </form>
             </div>

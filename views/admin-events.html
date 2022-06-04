@@ -88,6 +88,8 @@
           </ul>
           <form
             class="ml-auto form navbar-searchbar-form navbar-searchbar-form-desktop my-2 my-lg-0"
+            action="/search"
+            method="POST"
           >
             <div class="input-group">
               <input
@@ -95,6 +97,8 @@
                 class="form-control navbar-searchbar"
                 placeholder="Search Events..."
                 aria-label="Search Events..."
+                v-model="query"
+                name="query"
               />
               <button class="navbar-searchbar-icon">
                 <ion-icon name="search-outline"></ion-icon>
@@ -183,13 +187,28 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="admin-table-events">
+      <div id="alert-container">
+        <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+          <span id="alert-success-text">Success</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger alert-bar" id="alert-error">
+          <span id="alert-error-text">Error</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
       <div class="admin-container">
-        <h2>Events</h2>
+        <h2 class="profile-header">Events</h2>
         <div class="admin-event-buttons">
           <button
             class="button-1 admin-create-event-button"
             data-toggle="modal"
             data-target="#Modal2"
+            @click="clearCurrentEvent"
           >
             Create Event
           </button>
@@ -199,40 +218,73 @@
         <tr>
           <th>Title</th>
           <th>Created By</th>
-          <th>Start Date</th>
+          <th>Proposed Date</th>
           <th>Street Name</th>
           <th>Suburb</th>
           <th>State</th>
           <th>Actions</th>
         </tr>
         <tr v-for="event in events">
-          <td>{{event.title}}</td>
-          <td>{{event.created_by}}</td>
-          <td>{{event.proposed_date}}</td>
-          <td>{{event.street_name}}</td>
-          <td>{{event.suburb}}</td>
-          <td>{{event.state}}</td>
+          <td>{{truncate(event.title)}}</td>
+          <td>{{truncate(event.created_by)}}</td>
+          <td>{{truncate(event.proposed_date)}}</td>
+          <td>{{truncate(event.street_name)}}</td>
+          <td>{{truncate(event.suburb)}}</td>
+          <td>{{truncate(event.state)}}</td>
           <td>
-            <img
-              src="/images/edit-icon.png"
-              alt="delete icon"
-              data-toggle="modal"
-              data-target="#Modal2"
-              v-bind:data-eventId="event.event_id"
-              @click="getCurrentEvent"
-            />
-            <img
-              src="/images/trash-icon.png"
+            <ion-icon
+              name="pencil"
               alt="edit icon"
               data-toggle="modal"
+              data-target="#Modal3"
+              v-bind:data-eventId="event.event_id"
+              @click="getCurrentEvent"
+            ></ion-icon>
+            <ion-icon
+              name="trash"
+              alt="delete icon"
+              data-toggle="modal"
               data-target="#Modal"
-              v-bind:data-eventid="event.event_id"
+              v-bind:data-eventId="event.event_id"
               @click="setToDelete"
               class="trash-icon"
-            />
+            ></ion-icon>
           </td>
         </tr>
       </table>
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="Modal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+        data-backdrop="static"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="exampleModalLabel">Delete Event</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">Please take note that this action is irreversible.</div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="confirmDelete"
+                data-dismiss="modal"
+              >
+                Delete Event
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- Modal -->
       <div
         class="modal fade"
@@ -265,7 +317,7 @@
           </div>
         </div>
       </div>
-      <!-- Modal -->
+      <!-- Modal 2 -->
       <div
         class="modal fade"
         id="Modal2"
@@ -321,6 +373,7 @@
                       v-model="proposed_date"
                       required
                       class="input-box"
+                      v-bind:min="new Date().toISOString().split('T')[0]"
                     />
                   </div>
                   <div class="inputs">
@@ -367,7 +420,165 @@
                       class="input-box"
                     />
                   </div>
-                  <div class="event-div-2">
+                  <div class="inputs">
+                    <label for="country">Country</label>
+                    <input
+                      id="country"
+                      name="country"
+                      type="text"
+                      v-model="country"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+                  <div class="inputs">
+                    <label for="postcode">Postcode</label>
+                    <input
+                      id="postcode"
+                      name="postcode"
+                      type="text"
+                      v-model="postcode"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+
+                  <button type="submit" class="button-1">Create an event</button>
+                </div>
+                <div class="create-event-div admin-view-right">
+                  <div class="inputs">
+                    <label for="image">Cover Photo</label>
+                    <input id="image" name="file" type="file" required autofocus />
+                  </div>
+                  <div class="inputs">
+                    <label for="duration">Event Duration (Hours) </label>
+                    <input
+                      id="duration"
+                      name="duration"
+                      type="number"
+                      v-model="duration"
+                      min="1"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+                  <ul id="times" class="create-event-time"></ul>
+                  <button
+                    @click="addTimeSelect"
+                    class="button-1 admin-create-event-button"
+                    id="add-start-time-button"
+                  >
+                    Add a proposed start time
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="dismiss-button"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Modal 3 -->
+      <div
+        class="modal fade"
+        id="Modal3"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="editEventLabel"
+        aria-hidden="true"
+        data-backdrop="static"
+      >
+        <div class="modal-dialog modal-xl" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="editEventLabel">Edit Event</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form
+                @submit="onEdit"
+                enctype="multipart/form-data"
+                id="edit-form"
+                class="form-2 admin-create-event-form"
+              >
+                <div class="create-event-div admin-view-left">
+                  <div class="inputs">
+                    <label for="title">Title</label>
+                    <input
+                      id="title"
+                      name="title"
+                      type="text"
+                      v-model="title"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+                  <div class="inputs">
+                    <label for="description">Description</label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      rows="10"
+                      required
+                      v-model="description"
+                      class="input-box event-description"
+                    ></textarea>
+                  </div>
+                  <div class="inputs">
+                    <label for="street_number">Street Number</label>
+                    <input
+                      id="street_number"
+                      name="street_number"
+                      type="text"
+                      v-model="street_number"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+                  <div class="inputs">
+                    <label for="street_name">Street Name</label>
+                    <input
+                      id="street_name"
+                      name="street_name"
+                      type="text"
+                      v-model="street_name"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+                  <div class="inputs">
+                    <label for="suburb">Suburb</label>
+                    <input
+                      id="suburb"
+                      name="suburb"
+                      type="text"
+                      v-model="suburb"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+                  <div class="inputs">
+                    <label for="state">State</label>
+                    <input
+                      id="state"
+                      name="state"
+                      type="text"
+                      v-model="state"
+                      required
+                      class="input-box"
+                    />
+                  </div>
+                  <div class="create-event-div-2">
                     <div class="inputs event-style-1">
                       <label for="country">Country</label>
                       <input
@@ -392,28 +603,29 @@
                     </div>
                   </div>
 
-                  <button type="submit" class="button-1">Create an event</button>
+                  <button type="submit" class="button-1">Submit</button>
                 </div>
                 <div class="create-event-div admin-view-right">
                   <div class="inputs">
                     <label for="image">Cover Photo</label>
-                    <input id="image" name="file" type="file" required autofocus />
-                  </div>
-                  <div class="inputs">
-                    <label for="duration">Event Duration (Hours) </label>
-                    <input
-                      id="duration"
-                      name="duration"
-                      type="number"
-                      v-model="duration"
-                      required
-                      class="input-box"
+                    <img
+                      v-if="event_picture != ''"
+                      v-bind:src="event_picture"
+                      class="event-image"
+                      alt="dummy event pic"
                     />
+                    <input type="file" name="file" class="profile-image-file" />
+                    <!-- <form
+                @submit="changeEventPicture"
+                method="post"
+                id="changeEventPicture"
+                enctype="multipart/form-data"
+              >
+                <input type="file" name="file" class="profile-image-file" />
+                <button type="submit" class="inputs button-1">Update Image</button>
+              </form> -->
                   </div>
                   <ul id="times" class="create-event-time"></ul>
-                  <button @click="addTimeSelect" class="button-1 admin-create-event-button">
-                    Add a proposed start time
-                  </button>
                 </div>
               </form>
             </div>
@@ -421,7 +633,7 @@
               <button
                 type="button"
                 class="btn btn-secondary"
-                id="dismiss-button"
+                id="dismiss-button2"
                 data-dismiss="modal"
               >
                 Close

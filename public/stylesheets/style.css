@@ -801,6 +801,7 @@ p.description {
   display: flex;
   align-items: center;
   width: 45%;
+  margin-top: 40px;
 }
 .admin-event-buttons {
   display: flex;
@@ -810,6 +811,7 @@ p.description {
 
 .admin-create-event-button {
   margin: 0 5% 0 0;
+  margin-top: 40px;
 }
 .admin-create-event-form {
   padding: 6%;
