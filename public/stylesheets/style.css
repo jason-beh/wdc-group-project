@@ -441,13 +441,14 @@ p.description {
 
 .links {
   text-decoration: none;
-  color: black;
+  color: #0d184f;
 }
 
 .links:hover {
   text-decoration: underline;
-  text-decoration-color: black;
+  text-decoration-color: rgba(13, 24, 79, 0.85);
 }
+
 #sign-up-image {
   width: 50%;
   object-fit: cover;
@@ -668,23 +669,40 @@ p.description {
   flex-direction: column;
   align-items: center;
   margin-top: 14%;
+  text-align: center;
 }
 
-.verify-account h1,
-.verify-account h2,
-.verify-account h3 {
+.verify-account h1 {
   margin-top: 20px;
+  font-weight: bold;
+}
+
+.verify-account h4 {
+  margin: 30px 0;
+}
+
+.verify-account img {
+  width: 10%;
+  min-width: 150px;
+  margin-bottom: 30px;
+}
+
+.verify-account a {
+  color: #0d184f;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.verify-account a:hover {
+  text-decoration: underline;
 }
 
 @media only screen and (max-width: 992px) {
   .verify-account h1 {
-    font-size: 24px;
-  }
-  .verify-account h2 {
-    font-size: 18px;
+    font-size: 32px;
   }
 
-  .verify-account h3 {
+  .verify-account h4 {
     font-size: 16px;
   }
 }
