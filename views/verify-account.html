@@ -175,15 +175,37 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-
-    <div class="verify-account">
-      <h1>Congratulations on joining Socialah !</h1>
-      <h2>Before you get to join awesome events ...</h2>
-      <h2>Verify your account through email !</h2>
-      <h3>
-        Did not receive an email ?
-        <a href="#" onclick="resend()">Resend Email</a>
-      </h3>
+    <div class="container">
+      <div id="alert-container">
+        <div
+          class="alert alert-success alert-bar"
+          id="alert-success"
+          @click="closeAlert"
+          role="alert"
+        >
+          <span id="alert-success-text">Password changed successfully</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
+          <span id="alert-error-text">An error has occurred</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="verify-account">
+        <img src="/images/confetti.png" alt="" />
+        <h1>Congratulations on joining Socialah!</h1>
+        <h4>
+          Before you get to join our awesome events, please <br />verify your account via email
+        </h4>
+        <h5>
+          Did not receive an email?
+          <a href="#" onclick="resend()">Resend Email</a>
+        </h5>
+      </div>
     </div>
 
     <footer class="footer navbar-expand-lg">
