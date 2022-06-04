@@ -1,4 +1,3 @@
-// TODO: move to separate script file
 document.addEventListener("DOMContentLoaded", function () {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
