@@ -18,6 +18,12 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     },
     methods: {
+      closeAlert() {
+        let alertBars = document.getElementsByClassName("alert-bar");
+        for (let alertBar of alertBars) {
+          alertBar.style.display = "none";
+        }
+      },
       viewUsers() {
         // Load profile
         sendAJAX("GET", "/admin/view-users", null, function (err, res) {
@@ -28,38 +34,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
           res = JSON.parse(res);
 
-          console.log(res);
-          for (user of res) {
+          for (let user of res) {
             user.birthday = user.birthday !== null ? user.birthday.substring(0, 10) : "";
           }
+
           app.users = res;
         });
       },
 
       setToDelete(e) {
         this.currentEmail = e.target.dataset.email;
-        console.log(this.currentEmail);
       },
-      confirmDelete(e) {
+      confirmDelete() {
         sendAJAX(
           "DELETE",
           "/admin/delete-user",
           JSON.stringify({ email: this.currentEmail }),
           function (err, res) {
+            app.closeAlert();
+            document.getElementById("dismiss-button-1").click();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
             if (err) {
               console.log(err);
+              document.getElementById("alert-error-text").innerText = err.message;
+              document.getElementById("alert-error").style.display = "block";
             } else {
-              document.getElementById("dismiss-button-1").click();
+              document.getElementById("alert-success-text").innerText = "Successfully deleted user";
+              document.getElementById("alert-success").style.display = "block";
               app.viewUsers();
-              alert("Succesfully deleted user !");
             }
-            // TODO: Notify user whether it fails or succeeds
           }
         );
       },
       getCurrentUser(e) {
         this.currentEmail = e.target.dataset.email;
-        console.log(this.currentEmail);
         sendAJAX(
           "POST",
           "/admin/get-profile",
@@ -93,14 +104,22 @@ document.addEventListener("DOMContentLoaded", function () {
           country: this.country,
         };
         sendAJAX("POST", "/admin/edit-profile", JSON.stringify(formData), function (err, res) {
+          app.closeAlert();
+          document.getElementById("dismiss-button-2").click();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
           if (err) {
             console.log(err);
+            document.getElementById("alert-error-text").innerText = err.message;
+            document.getElementById("alert-error").style.display = "block";
           } else {
-            document.getElementById("dismiss-button-2").click();
-            alert("Successfully updated profile !");
+            document.getElementById("alert-success-text").innerText =
+              "Successfully updated profile";
+            document.getElementById("alert-success").style.display = "block";
             app.viewUsers();
           }
-          // TODO: Notify user whether it fails or succeeds
         });
       },
       createSystemAdmin(e) {
@@ -110,35 +129,50 @@ document.addEventListener("DOMContentLoaded", function () {
           password: this.userPassword,
         };
         sendAJAX("POST", "/admin/create-admin", JSON.stringify(formData), function (err, res) {
+          app.closeAlert();
+          document.getElementById("dismiss-button3").click();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
           if (err) {
             console.log(err);
+            document.getElementById("alert-error-text").innerText = err.message;
+            document.getElementById("alert-error").style.display = "block";
           } else {
-            document.getElementById("dismiss-button3").click();
-            alert("Successfully created admin !");
+            document.getElementById("alert-success-text").innerText =
+              "Successfully created system admin";
+            document.getElementById("alert-success").style.display = "block";
             app.userEmail = "";
             app.userPassword = "";
             app.viewUsers();
           }
-          // TODO: Notify user whether it fails or succeeds
         });
       },
-      createSystemUser(e) {
+      createUser(e) {
         e.preventDefault();
         var formData = {
           email: this.userEmail,
           password: this.userPassword,
         };
         sendAJAX("POST", "/admin/create-user", JSON.stringify(formData), function (err, res) {
+          app.closeAlert();
+          document.getElementById("dismiss-button4").click();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
           if (err) {
             console.log(err);
+            document.getElementById("alert-error-text").innerText = err.message;
+            document.getElementById("alert-error").style.display = "block";
           } else {
-            document.getElementById("dismiss-button4").click();
-            alert("Successfully created user !");
+            document.getElementById("alert-success-text").innerText = "Successfully created user";
+            document.getElementById("alert-success").style.display = "block";
             app.userEmail = "";
             app.userPassword = "";
             app.viewUsers();
           }
-          // TODO: Notify user whether it fails or succeeds
         });
       },
     },
@@ -148,3 +182,11 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
 });
+
+function truncate(str) {
+  if (str != null && str.length > 20) {
+    return str.substring(0, 20).concat("...");
+  }
+
+  return str;
+}

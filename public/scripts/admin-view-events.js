@@ -15,12 +15,17 @@ document.addEventListener("DOMContentLoaded", function () {
         suburb: "",
         postcode: "",
         event_picture: "",
-        proposed_date: Date.now(),
         duration: 0,
         proposed_times: {},
       };
     },
     methods: {
+      closeAlert() {
+        let alertBars = document.getElementsByClassName("alert-bar");
+        for (let alertBar of alertBars) {
+          alertBar.style.display = "none";
+        }
+      },
       viewEvents() {
         // Load profile
         sendAJAX("GET", "/admin/view-events", null, function (err, res) {
@@ -31,8 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           res = JSON.parse(res);
 
-          console.log(res);
-          for (singleEvent of res) {
+          for (let singleEvent of res) {
             singleEvent.proposed_date =
               singleEvent.proposed_date !== null ? singleEvent.proposed_date.substring(0, 10) : "";
           }
@@ -42,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
       setToDelete(e) {
         this.eventID = e.target.dataset.eventid;
-        console.log(this.eventID);
       },
       confirmDelete(e) {
         sendAJAX(
@@ -50,18 +53,38 @@ document.addEventListener("DOMContentLoaded", function () {
           "/admin/delete-event",
           JSON.stringify({ eventID: this.eventID }),
           function (err, res) {
+            app.closeAlert();
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
             if (err) {
               console.log(err);
+              document.getElementById("alert-error-text").innerText = "Error deleting event";
+              document.getElementById("alert-error").style.display = "block";
             } else {
+              document.getElementById("alert-success-text").innerText =
+                "Successfully deleted event";
+              document.getElementById("alert-success").style.display = "block";
               app.viewEvents();
             }
-            // TODO: Notify user whether it fails or succeeds
           }
         );
       },
+      clearCurrentEvent(e) {
+        app.title = "";
+        app.description = "";
+        app.proposed_date = "";
+        app.street_number = "";
+        app.street_name = "";
+        app.state = "";
+        app.country = "";
+        app.suburb = "";
+        app.postcode = "";
+        app.event_picture = "";
+      },
       getCurrentEvent(e) {
         this.eventID = e.target.dataset.eventid;
-        console.log(this.eventID);
         sendAJAX(
           "POST",
           "/admin/get-event",
@@ -73,7 +96,8 @@ document.addEventListener("DOMContentLoaded", function () {
             res = JSON.parse(res);
             app.title = res.title;
             app.description = res.description;
-            app.proposed_date = res.proposed_date;
+            app.proposed_date =
+              app.proposed_date !== null ? app.proposed_date.substring(0, 10) : "";
             app.street_number = res.street_number;
             app.street_name = res.street_name;
             app.state = res.state;
@@ -84,29 +108,40 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         );
       },
-      onSubmit(e) {
+      onEdit(e) {
         e.preventDefault();
-        var formData = {
-          event_id: this.eventID,
-          title: this.title,
-          description: this.description,
-          proposed_date: this.proposed_date,
-          street_number: this.street_number,
-          street_name: this.street_name,
-          state: this.state,
-          country: this.country,
-          suburb: this.suburb,
-          postcode: this.postcode,
-          event_picture: this.event_picture,
-        };
-        sendAJAX("POST", "/admin/edit-event", JSON.stringify(formData), function (err, res) {
+        var formData = new FormData();
+        formData.append("title", this.title);
+        formData.append("description", this.description);
+        formData.append("street_number", this.street_number);
+        formData.append("street_name", this.street_name);
+        formData.append("suburb", this.suburb);
+        formData.append("postcode", this.postcode);
+        formData.append("state", this.state);
+        formData.append("country", this.country);
+        formData.append("event_id", this.eventID);
+
+        let file = e.target[9].files;
+        if (file.length !== 0) {
+          formData.append("file", file[0]);
+        }
+
+        sendFileAJAX("POST", "/admin/edit-event", formData, (err, res) => {
+          app.closeAlert();
+          document.getElementById("dismiss-button2").click();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
           if (err) {
             console.log(err);
+            document.getElementById("alert-error-text").innerText = "Error updating event";
+            document.getElementById("alert-error").style.display = "block";
           } else {
-            app.viewEvent();
-            alert("Successfully updated event !");
+            document.getElementById("alert-success-text").innerText = "Successfully updated event";
+            document.getElementById("alert-success").style.display = "block";
+            app.viewEvents();
           }
-          // TODO: Notify user whether it fails or succeeds
         });
       },
       onCreate(e) {
@@ -132,12 +167,20 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("file", file);
 
         sendFileAJAX("POST", "/create-event", formData, function (err, res) {
-          // TODO: Notify user whether it fails or succeeds
+          app.closeAlert();
+          document.getElementById("dismiss-button").click();
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
           if (err) {
             console.log(err);
+            document.getElementById("alert-error-text").innerText = "Error creating event";
+            document.getElementById("alert-error").style.display = "block";
           } else {
-            alert("Event successfully created !");
-            document.getElementById("dismiss-button").click();
+            document.getElementById("alert-success-text").innerText = "Successfully creating event";
+            document.getElementById("alert-success").style.display = "block";
+            app.viewEvents();
           }
         });
       },
@@ -182,9 +225,17 @@ document.addEventListener("DOMContentLoaded", function () {
         timeList.appendChild(newTimeSection);
       },
     },
-
     mounted() {
       this.viewEvents();
     },
   });
+  document.getElementById("add-start-time-button").click();
 });
+
+function truncate(str) {
+  if (str != null && str.length > 20) {
+    return str.substring(0, 20).concat("...");
+  }
+
+  return str;
+}
