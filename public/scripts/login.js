@@ -22,8 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
           password: this.password,
         };
         sendAJAX("POST", "/login", JSON.stringify(formData), (err, res) => {
-          app.closeAlert();
           setTimeout(function () {
+            app.closeAlert();
             if (err !== null) {
               window.scrollTo({
                 top: 0,

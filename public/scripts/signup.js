@@ -35,9 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
             password: this.password,
           };
           sendAJAX("POST", "/signup", JSON.stringify(formData), (err, res) => {
-            app.closeAlert();
             if (err !== null) {
               setTimeout(function () {
+                app.closeAlert();
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",
@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 app.confirm_password = "";
               }, 1500);
             } else {
+              app.closeAlert();
               document.getElementById("alert-success").style.display = "block";
               window.scrollTo({
                 top: 0,

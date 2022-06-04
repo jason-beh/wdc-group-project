@@ -41,7 +41,7 @@
     <title>Socialah - Login</title>
   </head>
   <body>
-    <div class="login-main-container">
+    <div class="login-main-container" id="wrapper">
       <div class="spinner-overlay">
         <div class="spinner-border text-warning" role="status">
           <span class="sr-only">Loading...</span>
@@ -64,9 +64,6 @@
             </button>
           </div>
         </div>
-        <div class="g-signin2 google-button" data-onsuccess="onSignIn"></div>
-        <img src="/images/orImg.png" alt="orLayout" class="or-image" />
-        <p class="auth-message"></p>
         <form action="/login" method="post" @submit="onSubmit" id="login-form" class="login-form">
           <div class="inputs">
             <label for="email">Email</label>
@@ -95,11 +92,12 @@
           </div>
           <button type="submit" class="button-1 login-button">Login</button>
           <a href="_blank" class="links login-href">Forgot password</a>
-          <img src="/images/orImg.svg" alt="orLayout" class="orImage" />
+          <img src="/images/orImg.svg" alt="orLayout" class="or-image" />
           <div
             class="g-signin2 googleButton"
             data-onsuccess="onSignIn"
             data-height="50"
+            data-width="1000px"
             data-longtitle="true"
           ></div>
           <div class="n-account">
