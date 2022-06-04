@@ -76,7 +76,7 @@ app.use("/", profileRouter);
 app.use("/", eventRouter);
 app.use("/", availabilityRouter);
 app.use("/", searchRouter);
-app.use("/", adminRouter);
+app.use("/admin", adminRouter);
 app.use("/", attendanceRouter);
 app.use("/", settingsRouter);
 

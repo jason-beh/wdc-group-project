@@ -171,12 +171,11 @@
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="admin-table-events">
-      <div class="adminContainer">
+      <div class="admin-container">
         <h2>Events</h2>
-        <div style="display: flex; align-items: center; width: 45%">
+        <div class="admin-event-buttons">
           <button
-            class="button1"
-            style="margin: 0 5% 0 0"
+            class="button-1 admin-create-event-button"
             data-toggle="modal"
             data-target="#Modal2"
           >
@@ -184,7 +183,7 @@
           </button>
         </div>
       </div>
-      <table class="admin-table" style="width: 100%; margin-top: 20px">
+      <table class="admin-table">
         <tr>
           <th>Title</th>
           <th>Created By</th>
@@ -217,7 +216,7 @@
               data-target="#Modal"
               v-bind:data-eventid="event.event_id"
               @click="setToDelete"
-              style="margin-left: 10px"
+              class="trash-icon"
             />
           </td>
         </tr>
@@ -276,10 +275,9 @@
                 @submit="onCreate"
                 enctype="multipart/form-data"
                 id="create-form"
-                class="form2"
-                style="padding: 6%; box-sizing: border-box; margin: -35px 0 -50px 0"
+                class="form-2 admin-create-event-form"
               >
-                <div class="createEventDiv" style="padding-right: 6%">
+                <div class="create-event-div admin-view-left">
                   <div class="inputs">
                     <label for="title">Title</label>
                     <input
@@ -288,7 +286,7 @@
                       type="text"
                       v-model="title"
                       required
-                      class="inputBox"
+                      class="input-box"
                     />
                   </div>
                   <div class="inputs">
@@ -299,8 +297,7 @@
                       rows="10"
                       required
                       v-model="description"
-                      class="inputBox"
-                      style="min-height: 100px"
+                      class="input-box textarea-style"
                     ></textarea>
                   </div>
                   <div class="inputs">
@@ -311,7 +308,7 @@
                       type="date"
                       v-model="proposed_date"
                       required
-                      class="inputBox"
+                      class="input-box"
                     />
                   </div>
                   <div class="inputs">
@@ -322,7 +319,7 @@
                       type="text"
                       v-model="street_number"
                       required
-                      class="inputBox"
+                      class="input-box"
                     />
                   </div>
                   <div class="inputs">
@@ -333,7 +330,7 @@
                       type="text"
                       v-model="street_name"
                       required
-                      class="inputBox"
+                      class="input-box"
                     />
                   </div>
                   <div class="inputs">
@@ -344,7 +341,7 @@
                       type="text"
                       v-model="suburb"
                       required
-                      class="inputBox"
+                      class="input-box"
                     />
                   </div>
                   <div class="inputs">
@@ -355,11 +352,11 @@
                       type="text"
                       v-model="state"
                       required
-                      class="inputBox"
+                      class="input-box"
                     />
                   </div>
-                  <div style="display: flex; justify-content: space-between">
-                    <div class="inputs" style="width: 45%">
+                  <div class="event-div-2">
+                    <div class="inputs event-style-1">
                       <label for="country">Country</label>
                       <input
                         id="country"
@@ -367,10 +364,10 @@
                         type="text"
                         v-model="country"
                         required
-                        class="inputBox"
+                        class="input-box"
                       />
                     </div>
-                    <div class="inputs" style="width: 45%">
+                    <div class="inputs event-style-1">
                       <label for="postcode">Postcode</label>
                       <input
                         id="postcode"
@@ -378,14 +375,14 @@
                         type="text"
                         v-model="postcode"
                         required
-                        class="inputBox"
+                        class="input-box"
                       />
                     </div>
                   </div>
 
-                  <button type="submit" class="button1">Create an event</button>
+                  <button type="submit" class="button-1">Create an event</button>
                 </div>
-                <div class="createEventDiv" style="padding: 0 10% 0 10%">
+                <div class="create-event-div admin-view-right">
                   <div class="inputs">
                     <label for="image">Cover Photo</label>
                     <input id="image" name="file" type="file" required autofocus />
@@ -398,14 +395,11 @@
                       type="number"
                       v-model="duration"
                       required
-                      class="inputBox"
+                      class="input-box"
                     />
                   </div>
-                  <ul
-                    id="times"
-                    style="display: flex; flex-direction: column; padding-inline-start: 0"
-                  ></ul>
-                  <button @click="addTimeSelect" class="button1" style="margin-top: 20px">
+                  <ul id="times" class="create-event-time"></ul>
+                  <button @click="addTimeSelect" class="button-1 admin-create-event-button">
                     Add a proposed start time
                   </button>
                 </div>

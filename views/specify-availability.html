@@ -182,14 +182,14 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
 
     <div class="container" id="app">
-      <h1 class="profileHeader">Specify Availability</h1>
+      <h1 class="profile-header">Specify Availability</h1>
 
-      <div class="profileContainer">
-        <form @submit="onSubmit" id="profile-form" class="form1">
+      <div class="profile-container">
+        <form @submit="onSubmit" id="profile-form" class="form-1">
           <div class="inputs">
             <label for="email">Email</label>
             <input
-              class="inputBox"
+              class="input-box"
               id="email-input"
               id="email"
               name="email"
@@ -203,7 +203,7 @@
             <div
               v-for="(proposed_date, index) in event.proposed_date"
               :key="index"
-              v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container inputBox selected' : 'checkmark-container inputBox'"
+              v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container input-box selected' : 'checkmark-container input-box'"
             >
               <input
                 type="checkbox"
@@ -218,15 +218,15 @@
               </div>
             </div>
           </div>
-          <button type="submit" id="submit-button" class="inputs button1">Submit</button>
+          <button type="submit" id="submit-button" class="inputs button-1">Submit</button>
         </form>
       </div>
 
-      <h1 class="profileHeader">Calendar Data</h1>
+      <h1 class="profile-header">Calendar Data</h1>
       <!--Add buttons to initiate auth sequence and sign out-->
       <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
 
-      <pre id="content" style="white-space: pre-wrap"></pre>
+      <pre id="content" class="specify-pre"></pre>
     </div>
 
     <footer class="footer navbar-expand-lg">
