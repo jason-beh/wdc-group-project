@@ -5,6 +5,7 @@ var path = require("path");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 const { createDate, addHours } = require("../utils/datetime");
+const { body, validationResult, check } = require("express-validator");
 
 var router = express.Router();
 
@@ -394,81 +395,90 @@ router.get("/events/:event_id", function (req, res, next) {
   });
 });
 
-router.post("/finalise-event-time", function (req, res, next) {
-  // Ensure an user is logged in
-  if (!userIsLoggedIn(req.session.user)) {
-    return res.status(401).send("Unauthorized Access!!");
-  }
-  // Make sure the user is the event creator
-  req.pool.getConnection(function (err, connection) {
-    if (err) {
-      return next(err);
+router.post(
+  "/finalise-event-time",
+  check("email").isEmail().withMessage("Email is invalid"),
+  function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let error = errors.array()[0];
+      return res.status(400).send(error.msg);
     }
-    var { email, event_id, proposed_event_time_id } = req.body;
-    var query = "select * from Events where created_by = ? and event_id = ?;";
-    connection.query(query, [email, event_id], function (err, rows, fields) {
-      if (!rows || rows.length == 0) {
-        return res.status(401).send("Not an event creator!");
+    // Ensure an user is logged in
+    if (!userIsLoggedIn(req.session.user)) {
+      return res.status(401).send("Unauthorized Access!!");
+    }
+    // Make sure the user is the event creator
+    req.pool.getConnection(function (err, connection) {
+      if (err) {
+        return next(err);
       }
-
-      let event = rows[0];
-
-      query =
-        "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
-      connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
-        if (err) {
-          return next(err);
+      var { email, event_id, proposed_event_time_id } = req.body;
+      var query = "select * from Events where created_by = ? and event_id = ?;";
+      connection.query(query, [email, event_id], function (err, rows, fields) {
+        if (!rows || rows.length == 0) {
+          return res.status(401).send("Not an event creator!");
         }
-        query = "update Events set finalized_event_time_id = ? where event_id = ?;";
-        connection.query(
-          query,
-          [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
-          function (err, rows, field) {
-            if (err) {
-              return next(err);
-            }
 
-            // Send email to all users who previously specified availability
-            query =
-              "SELECT * from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
-            connection.query(query, [event_id], function (err, rows, fields) {
-              if (err) {
-                return res.status(500).send("An interval server error occurred.");
-              }
+        let event = rows[0];
 
-              for (let row of rows) {
-                query = "SELECT * FROM Notifications_Setting WHERE email = ?";
-                connection.query(query, [row["email"]], function (err, settingsRows, fields) {
-                  if (err) {
-                    return res.status(500).send("An interval server error occurred.");
-                  }
-                  // Send an email if they enable notifications
-                  if (settingsRows[0]["is_event_finalised"] === 1) {
-                    var mailOptions = {
-                      from: "socialah@outlook.com", // sender address (who sends)
-                      to: rows[0]["email"],
-                      subject: "Event finalised", // Subject line
-                      text: "Hello world ", // plaintext body
-                    };
-                    // TODO: Add finalised time into message
-                    mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
-                    // send mail with defined transport object
-                    req.transporter.sendMail(mailOptions, function (error, info) {
-                      if (error) {
-                        return console.log(error);
-                      }
-                    });
-                  }
-                });
-              }
-              return res.send("Success in finalise an event!");
-            });
+        query =
+          "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
+        connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
+          if (err) {
+            return next(err);
           }
-        );
+          query = "update Events set finalized_event_time_id = ? where event_id = ?;";
+          connection.query(
+            query,
+            [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
+            function (err, rows, field) {
+              if (err) {
+                return next(err);
+              }
+
+              // Send email to all users who previously specified availability
+              query =
+                "SELECT * from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
+              connection.query(query, [event_id], function (err, rows, fields) {
+                if (err) {
+                  return res.status(500).send("An interval server error occurred.");
+                }
+
+                for (let row of rows) {
+                  query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+                  connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+                    if (err) {
+                      return res.status(500).send("An interval server error occurred.");
+                    }
+                    // Send an email if they enable notifications
+                    if (settingsRows[0]["is_event_finalised"] === 1) {
+                      var mailOptions = {
+                        from: "socialah@outlook.com", // sender address (who sends)
+                        to: rows[0]["email"],
+                        subject: "Event finalised", // Subject line
+                        text: "Hello world ", // plaintext body
+                      };
+                      // TODO: Add finalised time into message
+                      mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
+                      // send mail with defined transport object
+                      req.transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                          return console.log(error);
+                        }
+                      });
+                    }
+                  });
+                }
+                return res.send("Success in finalise an event!");
+              });
+            }
+          );
+        });
       });
     });
-  });
-});
+  }
+);
 
 router.post("/send-confirmation-email", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
