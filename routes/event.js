@@ -1,6 +1,5 @@
 var express = require("express");
 var passport = require("passport");
-var db = require("../utils/db");
 var objects = require("../utils/objects");
 var path = require("path");
 const { userIsLoggedIn } = require("../utils/auth");
@@ -8,25 +7,6 @@ const { pathToHtml } = require("../utils/routes");
 const { createDate, addHours } = require("../utils/datetime");
 
 var router = express.Router();
-
-var nodemailer = require("nodemailer");
-
-// Create the transporter with the required configuration for Outlook
-var transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email", // hostname
-  secureConnection: false, // TLS requires secureConnection to be false
-  secure: false,
-  port: 587, // port for secure SMTP,
-  pool: true,
-  maxConnections: 5,
-  tls: {
-    ciphers: "SSLv3",
-  },
-  auth: {
-    user: "hy7tjayeu3f3ganq@ethereal.email",
-    pass: "kGSvXP3g4974KTHGgW",
-  },
-});
 
 // add multer library
 var multer = require("multer");
@@ -58,7 +38,7 @@ var upload = multer({
 const fs = require("fs");
 
 router.get("/get-events", function (req, res, next) {
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -80,7 +60,7 @@ router.post("/create-event", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
   // Get all data from request body
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -185,7 +165,7 @@ router.post("/edit-event", function (req, res, next) {
   }
 
   // Remove the previous file
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -271,7 +251,7 @@ router.delete("/delete-event", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -322,7 +302,7 @@ router.delete("/delete-event", function (req, res, next) {
                 };
                 mailOptions["html"] = `<h1>Event cancelled: ${event["title"]}</h1>`;
                 // send mail with defined transport object
-                transporter.sendMail(mailOptions, function (error, info) {
+                req.transporter.sendMail(mailOptions, function (error, info) {
                   if (error) {
                     return console.log(error);
                   }
@@ -342,7 +322,7 @@ router.get("/my-events/organized", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -362,7 +342,7 @@ router.get("/my-events/attended", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -385,7 +365,7 @@ router.get("/events/:event_id", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -420,7 +400,7 @@ router.post("/finalise-event-time", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
   // Make sure the user is the event creator
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -473,7 +453,7 @@ router.post("/finalise-event-time", function (req, res, next) {
                     // TODO: Add finalised time into message
                     mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
                     // send mail with defined transport object
-                    transporter.sendMail(mailOptions, function (error, info) {
+                    req.transporter.sendMail(mailOptions, function (error, info) {
                       if (error) {
                         return console.log(error);
                       }
@@ -491,7 +471,7 @@ router.post("/finalise-event-time", function (req, res, next) {
 });
 
 router.post("/send-confirmation-email", function (req, res, next) {
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -523,7 +503,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
           mailOptions["html"] = `<h1>${eventContent["title"]}</h1>
               <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
           // send mail with defined transport object
-          transporter.sendMail(mailOptions, function (error, info) {
+          req.transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
               return console.log(error);
             }

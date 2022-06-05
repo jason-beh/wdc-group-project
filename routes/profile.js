@@ -1,7 +1,6 @@
 var express = require("express");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
-var db = require("../utils/db");
 var argon2 = require("argon2");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
@@ -44,7 +43,7 @@ router.put("/edit-profile", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
   // Get all data from request body
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -147,7 +146,7 @@ router.get("/get-profile", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access !!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }

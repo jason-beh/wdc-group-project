@@ -1,5 +1,4 @@
 var express = require("express");
-var db = require("../utils/db");
 const { pathToHtml } = require("../utils/routes");
 
 var router = express.Router();
@@ -11,7 +10,7 @@ router.get("/search", function (req, res, next) {
     return res.send([]);
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
