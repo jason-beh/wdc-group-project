@@ -30,11 +30,16 @@ var upload = multer({
   },
 });
 
-router.get("/view-events", function (req, res, next) {
-  // Ensure the admin is logged in
+// Middleware to ensure the admin is logged in
+router.use(function(req, res, next) {
   if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access");
+    return res.redirect("/404");
+  } else {
+    next();
   }
+});
+
+router.get("/view-events", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -51,10 +56,6 @@ router.get("/view-events", function (req, res, next) {
 });
 
 router.get("/view-users", function (req, res, next) {
-  // Ensure the admin is logged in
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access");
-  }
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -71,10 +72,6 @@ router.get("/view-users", function (req, res, next) {
 });
 
 router.post("/create-admin", function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access");
-  }
-
   let { email, password } = req.body;
 
   // If we lack any of these data, we return err
@@ -134,9 +131,6 @@ router.post("/create-admin", function (req, res, next) {
 });
 
 router.post("/create-user", function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access");
-  }
 
   let { email, password } = req.body;
 
@@ -197,10 +191,6 @@ router.post("/create-user", function (req, res, next) {
 });
 
 router.delete("/delete-user", function (req, res, next) {
-  // Ensure the admin is logged in
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access");
-  }
 
   let { email } = req.body;
 
@@ -227,10 +217,6 @@ router.delete("/delete-user", function (req, res, next) {
 });
 
 router.delete("/delete-event", function (req, res, next) {
-  // Ensure the admin is logged in
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access");
-  }
 
   let { eventID } = req.body;
 
@@ -258,10 +244,6 @@ router.delete("/delete-event", function (req, res, next) {
 
 router.post("/edit-event", upload.array("file", 1));
 router.post("/edit-event", function (req, res, next) {
-  // Ensure an user is logged in
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access!!");
-  }
 
   var {
     title,
@@ -309,7 +291,7 @@ router.post("/edit-event", function (req, res, next) {
 
       if (req.files.length === 0) {
         var query =
-          "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ? where event_id = ? and created_by = ?";
+          "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ? where event_id = ?";
         connection.query(
           query,
           [
@@ -322,7 +304,6 @@ router.post("/edit-event", function (req, res, next) {
             country,
             postcode,
             event_id,
-            req.session.user.email,
           ],
           function (err, rows, fields) {
             if (err) {
@@ -373,11 +354,7 @@ router.post("/edit-event", function (req, res, next) {
 });
 
 router.post("/edit-profile", function (req, res, next) {
-  // Ensure the user is logged in
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access!!");
-  }
-  // Deference
+ 
   var {
     first_name,
     last_name,
@@ -429,9 +406,7 @@ router.post("/get-event", function (req, res, next) {
   if (!eventToSearch) {
     return res.status(400).send("Insufficient Data");
   }
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access !!");
-  }
+
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -457,9 +432,7 @@ router.post("/get-profile", function (req, res, next) {
   if (!emailToSearch) {
     return res.status(400).send("Insufficient Data");
   }
-  if (!userIsAdmin(req.session.user)) {
-    return res.status(401).send("Unauthorized Access !!");
-  }
+
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -482,23 +455,14 @@ router.post("/get-profile", function (req, res, next) {
 
 // Rendering Pages
 router.get("/", function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.redirect("/404");
-  }
   res.sendFile(pathToHtml("admin-dashboard.html"));
 });
 
 router.get("/users", function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.redirect("/404");
-  }
   res.sendFile(pathToHtml("admin-users.html"));
 });
 
 router.get("/events", function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.redirect("/404");
-  }
   res.sendFile(pathToHtml("admin-events.html"));
 });
 module.exports = router;
