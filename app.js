@@ -50,8 +50,27 @@ app.use(
   })
 );
 
+var nodemailer = require("nodemailer");
+
+var transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email", // hostname
+  secureConnection: false, // TLS requires secureConnection to be false
+  secure: false,
+  port: 587, // port for secure SMTP,
+  pool: true,
+  maxConnections: 5,
+  tls: {
+    ciphers: "SSLv3",
+  },
+  auth: {
+    user: "hy7tjayeu3f3ganq@ethereal.email",
+    pass: "kGSvXP3g4974KTHGgW",
+  },
+});
+
 app.use(function (req, _, next) {
   req.pool = db.connectionPool;
+  req.transporter = transporter;
   next();
 });
 

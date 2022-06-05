@@ -1,6 +1,5 @@
 var express = require("express");
 const { userIsLoggedIn } = require("../utils/auth");
-var db = require("../utils/db");
 const { pathToHtml } = require("../utils/routes");
 
 var router = express.Router();
@@ -11,7 +10,7 @@ router.get("/get-settings", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -50,7 +49,7 @@ router.put("/edit-settings", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }

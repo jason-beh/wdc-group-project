@@ -1,5 +1,4 @@
 var express = require("express");
-var db = require("../utils/db");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 
@@ -10,7 +9,7 @@ router.post("/get-availability", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -28,7 +27,7 @@ router.post("/get-availability", function (req, res, next) {
 });
 
 router.post("/specify-availability", function (req, res, next) {
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An internal server error occurred.");
     }

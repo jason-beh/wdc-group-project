@@ -1,27 +1,9 @@
 var express = require("express");
-var db = require("../utils/db");
 
 var router = express.Router();
-var nodemailer = require("nodemailer");
-
-var transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email", // hostname
-  secureConnection: false, // TLS requires secureConnection to be false
-  secure: false,
-  port: 587, // port for secure SMTP,
-  pool: true,
-  maxConnections: 5,
-  tls: {
-    ciphers: "SSLv3",
-  },
-  auth: {
-    user: "hy7tjayeu3f3ganq@ethereal.email",
-    pass: "kGSvXP3g4974KTHGgW",
-  },
-});
 
 router.get("/confirm-attendance", function (req, res, next) {
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       console.log(err);
       return res.status(500).send("An interval server error occurred.");
@@ -76,7 +58,7 @@ router.get("/confirm-attendance", function (req, res, next) {
                 "html"
               ] = `<h1>${email} has specified their availability for ${event["title"]}</h1>`;
               // send mail with defined transport object
-              transporter.sendMail(mailOptions, function (error, info) {
+              req.transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                   return console.log(error);
                 }
