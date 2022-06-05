@@ -9,11 +9,16 @@ router.post("/get-availability", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
+  var { event_id } = req.body;
+  // If insufficient data, throw error
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
-    var { event_id } = req.body;
+
     var query =
       "SELECT * from Availability INNER JOIN Proposed_Event_Time ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE event_id = ? AND email = ?;";
     connection.query(query, [event_id, req.session.user.email], function (err, rows, fields) {
@@ -27,14 +32,14 @@ router.post("/get-availability", function (req, res, next) {
 });
 
 router.post("/specify-availability", function (req, res, next) {
+  var { proposed_event_id, event_id } = req.body;
+
+  if (!proposed_event_id || !event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An internal server error occurred.");
-    }
-    var { proposed_event_id, event_id } = req.body;
-
-    if (!proposed_event_id || !event_id) {
-      return res.status(400).send("Insufficient Data");
     }
 
     let baseQueryOptions;

@@ -388,6 +388,20 @@ router.post("/edit-profile", function (req, res, next) {
     country,
     email,
   } = req.body;
+  // Get all data from request body and check for completeness
+  if (
+    !first_name ||
+    !last_name ||
+    !birthday ||
+    !instagram_handle ||
+    !facebook_handle ||
+    !state ||
+    !country ||
+    !email
+  ) {
+    return res.status(400).send("Insufficient Data");
+  }
+
   // Get all data from request body
   req.pool.getConnection(function (err, connection) {
     if (err) {
