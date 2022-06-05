@@ -14,37 +14,22 @@ const { pathToHtml } = require("../utils/routes");
 const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID = "1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com";
 const client = new OAuth2Client(CLIENT_ID);
-var db = require("../utils/db");
 var argon2 = require("argon2");
 const { v4: uuidv4 } = require("uuid");
 
 var router = express.Router();
 
-var nodemailer = require("nodemailer");
-
-// Create the transporter with the required configuration for Outlook
-var transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email", // hostname
-  secureConnection: false, // TLS requires secureConnection to be false
-  port: 587, // port for secure SMTP
-  tls: {
-    ciphers: "SSLv3",
-  },
-  auth: {
-    user: "hy7tjayeu3f3ganq@ethereal.email",
-    pass: "kGSvXP3g4974KTHGgW",
-  },
-});
-
 router.post("/login", function (req, res, next) {
   let { email, password } = req.body;
+
+  console.log(req.body);
 
   // If we lack any of these data, we return err
   if (!email || !password) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       console.log(err);
       return res.status(500).send("An interval server error occurred.");
@@ -139,7 +124,7 @@ router.post("/oauth", async function (req, res, next) {
   const { picture, email, given_name, family_name } = payload;
 
   // Check if the user is existed
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -237,7 +222,7 @@ router.get("/send-email", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -275,7 +260,7 @@ router.get("/send-email", function (req, res, next) {
         }
 
         // send mail with defined transport object
-        transporter.sendMail(mailOptions, function (error, info) {
+        req.transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
             return res.status(500).send("An interval server error occurred.");
           }
@@ -295,7 +280,7 @@ router.post("/signup", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -341,7 +326,7 @@ router.get("/verify", function (req, res, next) {
   }
 
   // Check if the token is exist or not
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -406,7 +391,7 @@ router.post("/forget-password", function (req, res, next) {
   }
 
   // Check if the email exists
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -441,7 +426,7 @@ router.post("/reset-password", function (req, res, next) {
   }
 
   // Check if the email and token exist
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }

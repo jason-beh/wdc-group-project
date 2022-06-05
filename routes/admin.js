@@ -1,6 +1,5 @@
 var express = require("express");
 const { userIsAdmin } = require("../utils/auth");
-var db = require("../utils/db");
 var argon2 = require("argon2");
 const { pathToHtml } = require("../utils/routes");
 var router = express.Router();
@@ -36,7 +35,7 @@ router.get("/view-events", function (req, res, next) {
   if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -56,7 +55,7 @@ router.get("/view-users", function (req, res, next) {
   if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -83,7 +82,7 @@ router.post("/create-admin", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -146,7 +145,7 @@ router.post("/create-user", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -210,7 +209,7 @@ router.delete("/delete-user", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -240,7 +239,7 @@ router.delete("/delete-event", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -292,7 +291,7 @@ router.post("/edit-event", function (req, res, next) {
   }
 
   // Remove the previous file
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -402,7 +401,9 @@ router.post("/edit-profile", function (req, res, next) {
   ) {
     return res.status(400).send("Insufficient Data");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+
+  // Get all data from request body
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -431,7 +432,7 @@ router.post("/get-event", function (req, res, next) {
   if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access !!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -459,7 +460,7 @@ router.post("/get-profile", function (req, res, next) {
   if (!userIsAdmin(req.session.user)) {
     return res.status(401).send("Unauthorized Access !!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }

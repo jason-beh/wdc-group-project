@@ -1,5 +1,4 @@
 var express = require("express");
-var db = require("../utils/db");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 
@@ -15,7 +14,7 @@ router.post("/get-availability", function (req, res, next) {
   if (!event_id) {
     return res.status(400).send("Insufficient Data");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -38,7 +37,7 @@ router.post("/specify-availability", function (req, res, next) {
   if (!proposed_event_id || !event_id) {
     return res.status(400).send("Insufficient Data");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An internal server error occurred.");
     }

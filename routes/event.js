@@ -1,6 +1,5 @@
 var express = require("express");
 var passport = require("passport");
-var db = require("../utils/db");
 var objects = require("../utils/objects");
 var path = require("path");
 const { userIsLoggedIn } = require("../utils/auth");
@@ -8,25 +7,6 @@ const { pathToHtml } = require("../utils/routes");
 const { createDate, addHours } = require("../utils/datetime");
 
 var router = express.Router();
-
-var nodemailer = require("nodemailer");
-
-// Create the transporter with the required configuration for Outlook
-var transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email", // hostname
-  secureConnection: false, // TLS requires secureConnection to be false
-  secure: false,
-  port: 587, // port for secure SMTP,
-  pool: true,
-  maxConnections: 5,
-  tls: {
-    ciphers: "SSLv3",
-  },
-  auth: {
-    user: "hy7tjayeu3f3ganq@ethereal.email",
-    pass: "kGSvXP3g4974KTHGgW",
-  },
-});
 
 // add multer library
 var multer = require("multer");
@@ -58,7 +38,7 @@ var upload = multer({
 const fs = require("fs");
 
 router.get("/get-events", function (req, res, next) {
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -80,7 +60,7 @@ router.post("/create-event", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
   // Get all data from request body
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -198,7 +178,7 @@ router.post("/edit-event", function (req, res, next) {
   }
 
   // Remove the previous file
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -285,22 +265,67 @@ router.delete("/delete-event", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
   var { event_id } = req.body;
-  // Get all data from request body and check for completeness
   if (!event_id) {
     return res.status(400).send("Insufficient Data");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
 
-    var query = "DELETE from Events where event_id = ?";
-    connection.query(query, [event_id], function (err, rows, fields) {
-      connection.release();
+    let query = "SELECT * from Events WHERE event_id = ? and created_by = ?";
+    connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
       if (err) {
-        return next(err);
+        console.log(err);
+        return res.status(500).send("An interval server error occurred.");
       }
-      return res.send("Success in deleting an event!");
+
+      if (!rows || rows.length === 0) {
+        return res.status(500).send("Event could not be found");
+      }
+
+      let event = rows[0];
+
+      query = "DELETE * from Events where event_id = ? and created_by = ?";
+      connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+          return res.status(500).send("An interval server error occurred.");
+        }
+
+        // Send email to all confirmed attendance
+        query = "SELECT email FROM Attendance WHERE event_id = ?";
+        connection.query(query, [event_id], function (err, rows, fields) {
+          if (err) {
+            return res.status(500).send("An interval server error occurred.");
+          }
+          for (let row of rows) {
+            query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+            connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+              // Send an email if they enable notifications
+              if (settingsRows[0]["is_event_cancelled"] === 1) {
+                var mailOptions = {
+                  from: "socialah@outlook.com", // sender address (who sends)
+                  to: rows[0]["email"],
+                  subject: "Event cancelled", // Subject line
+                  text: "Hello world ", // plaintext body
+                };
+                mailOptions["html"] = `<h1>Event cancelled: ${event["title"]}</h1>`;
+                // send mail with defined transport object
+                req.transporter.sendMail(mailOptions, function (error, info) {
+                  if (error) {
+                    return console.log(error);
+                  }
+                });
+              }
+            });
+          }
+          return res.send("Success in deleting an event!");
+        });
+      });
     });
   });
 });
@@ -310,7 +335,7 @@ router.get("/my-events/organized", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -330,7 +355,7 @@ router.get("/my-events/attended", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -353,7 +378,7 @@ router.get("/events/:event_id", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
 
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -392,7 +417,7 @@ router.post("/finalise-event-time", function (req, res, next) {
     return res.status(400).send("Insufficient Data");
   }
   // Make sure the user is the event creator
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -402,6 +427,9 @@ router.post("/finalise-event-time", function (req, res, next) {
       if (!rows || rows.length == 0) {
         return res.status(401).send("Not an event creator!");
       }
+
+      let event = rows[0];
+
       query =
         "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
       connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
@@ -413,11 +441,45 @@ router.post("/finalise-event-time", function (req, res, next) {
           query,
           [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
           function (err, rows, field) {
-            connection.release();
             if (err) {
               return next(err);
             }
-            return res.send("Success in finalise an event!");
+
+            // Send email to all users who previously specified availability
+            query =
+              "SELECT * from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
+            connection.query(query, [event_id], function (err, rows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+
+              for (let row of rows) {
+                query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+                connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+                  if (err) {
+                    return res.status(500).send("An interval server error occurred.");
+                  }
+                  // Send an email if they enable notifications
+                  if (settingsRows[0]["is_event_finalised"] === 1) {
+                    var mailOptions = {
+                      from: "socialah@outlook.com", // sender address (who sends)
+                      to: rows[0]["email"],
+                      subject: "Event finalised", // Subject line
+                      text: "Hello world ", // plaintext body
+                    };
+                    // TODO: Add finalised time into message
+                    mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
+                    // send mail with defined transport object
+                    req.transporter.sendMail(mailOptions, function (error, info) {
+                      if (error) {
+                        return console.log(error);
+                      }
+                    });
+                  }
+                });
+              }
+              return res.send("Success in finalise an event!");
+            });
           }
         );
       });
@@ -430,7 +492,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
   if (!event_id) {
     return res.status(400).send("Insufficient Data");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -451,8 +513,6 @@ router.post("/send-confirmation-email", function (req, res, next) {
           return next(err);
         }
 
-        console.log(rows.length);
-
         for (var index = 0; index < rows.length; index++) {
           // setup e-mail data, even with unicode symbols
           var mailOptions = {
@@ -464,7 +524,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
           mailOptions["html"] = `<h1>${eventContent["title"]}</h1>
               <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
           // send mail with defined transport object
-          transporter.sendMail(mailOptions, function (error, info) {
+          req.transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
               return console.log(error);
             }
