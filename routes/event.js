@@ -276,13 +276,63 @@ router.delete("/delete-event", function (req, res, next) {
       return next(err);
     }
     var { event_id } = req.body;
-    var query = "DELETE from Events where event_id = ?";
-    connection.query(query, [event_id], function (err, rows, fields) {
-      connection.release();
+    if (!event_id) {
+      return res.status(400).send("Insufficient Data");
+    }
+
+    let query = "SELECT * from Events WHERE event_id = ? and created_by = ?";
+    connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
       if (err) {
-        return next(err);
+        console.log(err);
+        return res.status(500).send("An interval server error occurred.");
       }
-      return res.send("Success in deleting an event!");
+
+      if (!rows || rows.length === 0) {
+        return res.status(500).send("Event could not be found");
+      }
+
+      let event = rows[0];
+
+      query = "DELETE * from Events where event_id = ? and created_by = ?";
+      connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+          return res.status(500).send("An interval server error occurred.");
+        }
+
+        // Send email to all confirmed attendance
+        query = "SELECT email FROM Attendance WHERE event_id = ?";
+        connection.query(query, [event_id], function (err, rows, fields) {
+          if (err) {
+            return res.status(500).send("An interval server error occurred.");
+          }
+          for (let row of rows) {
+            query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+            connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+              // Send an email if they enable notifications
+              if (settingsRows[0]["is_event_cancelled"] === 1) {
+                var mailOptions = {
+                  from: "socialah@outlook.com", // sender address (who sends)
+                  to: rows[0]["email"],
+                  subject: "Event cancelled", // Subject line
+                  text: "Hello world ", // plaintext body
+                };
+                mailOptions["html"] = `<h1>Event cancelled: ${event["title"]}</h1>`;
+                // send mail with defined transport object
+                transporter.sendMail(mailOptions, function (error, info) {
+                  if (error) {
+                    return console.log(error);
+                  }
+                });
+              }
+            });
+          }
+          return res.send("Success in deleting an event!");
+        });
+      });
     });
   });
 });
@@ -380,6 +430,9 @@ router.post("/finalise-event-time", function (req, res, next) {
       if (!rows || rows.length == 0) {
         return res.status(401).send("Not an event creator!");
       }
+
+      let event = rows[0];
+
       query =
         "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
       connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
@@ -391,11 +444,45 @@ router.post("/finalise-event-time", function (req, res, next) {
           query,
           [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
           function (err, rows, field) {
-            connection.release();
             if (err) {
               return next(err);
             }
-            return res.send("Success in finalise an event!");
+
+            // Send email to all users who previously specified availability
+            query =
+              "SELECT * from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
+            connection.query(query, [event_id], function (err, rows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+
+              for (let row of rows) {
+                query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+                connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+                  if (err) {
+                    return res.status(500).send("An interval server error occurred.");
+                  }
+                  // Send an email if they enable notifications
+                  if (settingsRows[0]["is_event_finalised"] === 1) {
+                    var mailOptions = {
+                      from: "socialah@outlook.com", // sender address (who sends)
+                      to: rows[0]["email"],
+                      subject: "Event finalised", // Subject line
+                      text: "Hello world ", // plaintext body
+                    };
+                    // TODO: Add finalised time into message
+                    mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
+                    // send mail with defined transport object
+                    transporter.sendMail(mailOptions, function (error, info) {
+                      if (error) {
+                        return console.log(error);
+                      }
+                    });
+                  }
+                });
+              }
+              return res.send("Success in finalise an event!");
+            });
           }
         );
       });
@@ -424,8 +511,6 @@ router.post("/send-confirmation-email", function (req, res, next) {
         if (err) {
           return next(err);
         }
-
-        console.log(rows.length);
 
         for (var index = 0; index < rows.length; index++) {
           // setup e-mail data, even with unicode symbols
