@@ -3,7 +3,6 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     // do something
     console.log(err);
   }
-
   if (res !== "") {
     res = JSON.parse(res);
   } else {
@@ -21,6 +20,7 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
     data() {
       return {
         profile_picture: res.profile_picture,
+        isAdmin: res.isAdmin,
         query: query,
       };
     },

@@ -9,7 +9,8 @@
       content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
     />
     <meta name="google-signin-plugin_name" content="APP" />
-    <title>Document</title>
+    <meta name="theme-color" content="#0D184F" />
+    <title>Socialah - Create Event</title>
 
     <link
       rel="stylesheet"
@@ -22,6 +23,7 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link rel="shortcut icon" href="/images/custom-favicon.png" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
 
     <script
@@ -72,9 +74,15 @@
         <div class="mobile-hide navbar-nav-container">
           <ul class="navbar-nav navbar-nav-desktop mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="/events">
+              <a class="nav-link" href="/">
                 Browse Events
                 <span class="sr-only">Browse Events</span>
+              </a>
+            </li>
+            <li v-if="isAdmin === 1" class="nav-item">
+              <a class="nav-link" href="/admin">
+                Admin Dashboard
+                <span class="sr-only">Admin Dashboard</span>
               </a>
             </li>
           </ul>
@@ -113,6 +121,7 @@
               >
                 <img
                   v-bind:src="profile_picture"
+                  onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                   class="navbar-profile-picture"
                   alt="profile picture"
                 />
@@ -121,6 +130,7 @@
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="/my-events">My Events</a>
                 <a class="dropdown-item" href="/profile">Profile</a>
+                <a class="dropdown-item" href="/settings">Settings</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/logout">Logout</a>
               </div>
@@ -131,9 +141,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="/events"
+              <a class="nav-link" href="/"
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
+            </li>
+            <li class="nav-item" v-if="isAdmin === 1">
+              <a class="nav-link" href="/admin">
+                Admin Dashboard
+                <span class="sr-only">Admin Dashboard</span>
+              </a>
             </li>
             <li v-if="profile_picture == null" class="nav-item">
               <a class="nav-link" href="/login">Login</a>
@@ -143,6 +159,9 @@
             </li>
             <li v-if="profile_picture != null" class="nav-item">
               <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li v-if="profile_picture != null" class="nav-item">
+              <a class="nav-link" href="/settings">Settings</a>
             </li>
             <li v-if="profile_picture != null" class="nav-item">
               <a class="nav-link" href="/logout">Logout</a>
@@ -173,11 +192,25 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-    <div class="container">
-      <h1 class="profileHeader">Create Event</h1>
-      <div class="mainContainer">
-        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form2">
-          <div class="createEventDiv" style="padding-right: 6%">
+    <div class="container" id="wrapper">
+      <div id="alert-container">
+        <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+          <span id="alert-success-text">Success in creating event</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-danger alert-bar" id="alert-error">
+          <span id="alert-error-text">Error in creating event</span>
+          <button class="close alert-close" @click="closeAlert">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <h1 class="profile-header">Create Event</h1>
+      <div class="main-container">
+        <form @submit="onSubmit" enctype="multipart/form-data" id="create-form" class="form-2">
+          <div class="create-event-div event-div-1">
             <div class="inputs">
               <label for="title">Title</label>
               <input
@@ -186,7 +219,7 @@
                 type="text"
                 v-model="title"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -197,8 +230,7 @@
                 rows="10"
                 required
                 v-model="description"
-                class="inputBox"
-                style="min-height: 100px"
+                class="input-box textarea-style"
               ></textarea>
             </div>
             <div class="inputs">
@@ -209,7 +241,8 @@
                 type="date"
                 v-model="proposed_date"
                 required
-                class="inputBox"
+                class="input-box"
+                v-bind:min="new Date().toISOString().split('T')[0]"
               />
             </div>
             <div class="inputs">
@@ -220,7 +253,7 @@
                 type="text"
                 v-model="street_number"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -231,7 +264,7 @@
                 type="text"
                 v-model="street_name"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -242,7 +275,7 @@
                 type="text"
                 v-model="suburb"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
             <div class="inputs">
@@ -253,11 +286,11 @@
                 type="text"
                 v-model="state"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
-            <div style="display: flex; justify-content: space-between">
-              <div class="inputs" style="width: 45%">
+            <div class="create-event-div-2">
+              <div class="inputs event-style-1">
                 <label for="country">Country</label>
                 <input
                   id="country"
@@ -265,10 +298,10 @@
                   type="text"
                   v-model="country"
                   required
-                  class="inputBox"
+                  class="input-box"
                 />
               </div>
-              <div class="inputs" style="width: 45%">
+              <div class="inputs event-style-1">
                 <label for="postcode">Postcode</label>
                 <input
                   id="postcode"
@@ -276,14 +309,14 @@
                   type="text"
                   v-model="postcode"
                   required
-                  class="inputBox"
+                  class="input-box"
                 />
               </div>
             </div>
 
-            <button type="submit" class="button1">Create an event</button>
+            <button type="submit" class="button-1">Create an event</button>
           </div>
-          <div class="createEventDiv" style="padding: 0 10% 0 10%">
+          <div class="create-event-div event-div-2">
             <div class="inputs">
               <label for="image">Cover Photo</label>
               <input id="image" name="file" type="file" required autofocus />
@@ -295,15 +328,17 @@
                 name="duration"
                 type="number"
                 v-model="duration"
+                min="1"
                 required
-                class="inputBox"
+                class="input-box"
               />
             </div>
-            <ul
-              id="times"
-              style="display: flex; flex-direction: column; padding-inline-start: 0"
-            ></ul>
-            <button @click="addTimeSelect" class="button1" style="margin-top: 20px">
+            <ul id="times" class="create-event-time"></ul>
+            <button
+              @click="addTimeSelect"
+              id="add-start-time-button"
+              class="button-1 create-event-button"
+            >
               Add a proposed start time
             </button>
           </div>

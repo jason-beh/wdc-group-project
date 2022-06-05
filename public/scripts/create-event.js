@@ -1,7 +1,6 @@
-// TODO: move to separate script file
 document.addEventListener("DOMContentLoaded", function () {
   var app = new Vue({
-    el: "#create-form",
+    el: "#wrapper",
     data() {
       return {
         title: "",
@@ -18,10 +17,23 @@ document.addEventListener("DOMContentLoaded", function () {
       };
     },
     methods: {
+      closeAlert() {
+        let alertBars = document.getElementsByClassName("alert-bar");
+        for (let alertBar of alertBars) {
+          alertBar.style.display = "none";
+        }
+      },
       onSubmit(e) {
         e.preventDefault();
         if (Object.values(this.proposed_times).length == 0) {
-          alert("Please add at least one proposed start time !");
+          document.getElementById("alert-error-text").innerText =
+            "Please add at least one proposed start time";
+          document.getElementById("alert-error").style.display = "block";
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+
           return;
         }
         var formData = new FormData();
@@ -41,7 +53,22 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append("file", file);
 
         sendFileAJAX("POST", "/create-event", formData, function (err, res) {
-          // TODO: Notify user whether it fails or succeeds
+          if (err) {
+            console.log(err);
+            document.getElementById("alert-error-text").innerText = "Error in creating event";
+            document.getElementById("alert-error").style.display = "block";
+            return;
+          }
+
+          document.getElementById("alert-success").style.display = "block";
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+
+          setTimeout(function () {
+            window.location.href = "/";
+          }, 2000);
         });
       },
       addTimeSelect(e) {
@@ -51,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var timeList = document.getElementById("times");
 
         var newTimeSection = document.createElement("div");
-        newTimeSection.setAttribute("class", "timeBox");
+        newTimeSection.setAttribute("class", "time-box");
 
         var newTime = document.createElement("input");
         newTime.type = "time";
@@ -86,4 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     },
   });
+
+  document.getElementById("add-start-time-button").click();
 });

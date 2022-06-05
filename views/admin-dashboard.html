@@ -10,7 +10,6 @@
       content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
     />
     <meta name="google-signin-plugin_name" content="APP" />
-
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -39,18 +38,18 @@
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
     ></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script src="https://accounts.google.com/gsi/client"></script>
-
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
-    <script src="/scripts/specify-availability.js"></script>
-
+    <script src="/scripts/my-events.js"></script>
     <meta name="theme-color" content="#0D184F" />
-    <title>Socialah - Specify Availability</title>
+    <title>Socialah - My Events</title>
   </head>
 
   <body>
@@ -132,7 +131,7 @@
                 <a class="dropdown-item" href="/profile">Profile</a>
                 <a class="dropdown-item" href="/settings">Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" onclick="signOut()" href="#">Logout</a>
+                <a class="dropdown-item" href="/logout">Logout</a>
               </div>
             </li>
           </ul>
@@ -192,76 +191,17 @@
       </div>
     </nav>
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
-
     <div class="container" id="app">
-      <div id="alert-container">
-        <div
-          class="alert alert-success alert-bar"
-          id="alert-success"
-          @click="closeAlert"
-          role="alert"
-        >
-          <span id="alert-success-text">Success in updating notifications</span>
-          <button class="close alert-close" @click="closeAlert">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
-          <span id="alert-danger-text">Error in updating profile</span>
-          <button class="close alert-close" @click="closeAlert">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      </div>
-      <div class="main-container">
-        <div class="create-event-div event-div-1">
-          <h1 class="profile-header">Specify Availability</h1>
-          <div class="profile-container">
-            <form @submit="onSubmit" id="profile-form" class="form-1">
-              <div class="inputs">
-                <label for="email">Email</label>
-                <input
-                  class="input-box"
-                  id="email-input"
-                  id="email"
-                  name="email"
-                  v-model="email"
-                  type="email"
-                  required
-                />
-              </div>
-              <div class="inputs" id="proposed_times">
-                <label for="instagram_handle">Choose timeslots</label>
-                <div
-                  v-for="(proposed_date, index) in event.proposed_date"
-                  :key="index"
-                  v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container input-box selected' : 'checkmark-container input-box'"
-                >
-                  <input
-                    type="checkbox"
-                    @click="onClick"
-                    v-bind:checked="proposed_date.proposed_event_time_id in selected_proposed_time_id"
-                    v-bind:data-id="proposed_date.proposed_event_time_id"
-                  />
-                  <div class="checkmark-inner">
-                    <span class="checkmark-icon"></span>
-                    {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
-                    Date(proposed_date.end_date).toLocaleTimeString()}`}}
-                  </div>
-                </div>
-              </div>
-              <button type="submit" id="submit-button" class="inputs button-1">Submit</button>
-            </form>
-          </div>
-        </div>
-        <div class="create-event-div event-div-1">
-          <h1 class="profile-header">Calendar Data</h1>
-          <!--Add buttons to initiate auth sequence and sign out-->
-          <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
-
-          <!-- TODO: Style calendar and swap API key -->
-          <pre id="content" class="specify-pre"></pre>
-        </div>
+      <h1 class="profile-header">Admin Dashboard</h1>
+      <div class="admin-dashboard">
+        <a href="/admin/users" class="admin-dashboard-button">
+          <img src="/images/admin-users.png" alt="" />
+          <h4>View Users</h4>
+        </a>
+        <a href="/admin/events" class="admin-dashboard-button">
+          <img src="/images/admin-event.png" alt="" />
+          <h4>View Events</h4>
+        </a>
       </div>
     </div>
 

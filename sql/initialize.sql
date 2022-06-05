@@ -18,7 +18,7 @@ CREATE TABLE Account_Verification (
 -- Steps to replicate
 -- 1. Create a new user in the database
 -- 2. Check the table structure of sessions table.
-CREATE TABLE sessions (
+CREATE TABLE Sessions (
   session_id varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   expires int unsigned NOT NULL,
   data mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
@@ -45,8 +45,6 @@ CREATE TABLE Events (
     description TEXT NOT NULL,
     created_by VARCHAR(255),
     proposed_date date,
-    start_date TIMESTAMP,
-    end_date TIMESTAMP,
     street_number VARCHAR(255) NOT NULL,
     street_name VARCHAR(255) NOT NULL,
     suburb VARCHAR(255) NOT NULL,
@@ -62,7 +60,6 @@ CREATE TABLE Attendance (
     email VARCHAR(255),
     event_id INT,
     PRIMARY KEY (email, event_id),
-    FOREIGN KEY (email) REFERENCES Authentication(email) ON DELETE CASCADE,
     FOREIGN KEY (event_id) REFERENCES Events(event_id) ON DELETE CASCADE
 );
 
@@ -75,9 +72,22 @@ CREATE TABLE Proposed_Event_Time (
     FOREIGN KEY (event_id) REFERENCES Events(event_id) ON DELETE CASCADE
 );
 
+-- We manually add foreign key, otherwise, we would face circular reference dependency error.
+alter table Events add finalized_event_time_id INT;
+alter table Events add constraint finalized_event_time_id foreign key (finalized_event_time_id) REFERENCES Proposed_Event_Time(proposed_event_time_id);
+
 CREATE TABLE Availability (
     email VARCHAR(255),
     proposed_event_time_id INT,
     PRIMARY KEY (email, proposed_event_time_id),
     FOREIGN KEY (proposed_event_time_id) REFERENCES Proposed_Event_Time(proposed_event_time_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Notifications_Setting (
+    email VARCHAR(255),
+    is_event_cancelled BOOLEAN DEFAULT 1,
+    is_availability_confirmed BOOLEAN DEFAULT 1,
+    is_event_finalised BOOLEAN DEFAULT 1,
+    PRIMARY KEY (email),
+    FOREIGN KEY (email) REFERENCES Authentication(email) ON DELETE CASCADE
 );

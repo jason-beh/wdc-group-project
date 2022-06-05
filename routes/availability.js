@@ -1,7 +1,7 @@
 var express = require("express");
-var db = require("../utils/db");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
+const { body, validationResult, check } = require("express-validator");
 
 var router = express.Router();
 
@@ -10,11 +10,15 @@ router.post("/get-availability", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  var { event_id } = req.body;
+  // If insufficient data, throw error
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
-    var { event_id } = req.body;
     var query =
       "SELECT * from Availability INNER JOIN Proposed_Event_Time ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE event_id = ? AND email = ?;";
     connection.query(query, [event_id, req.session.user.email], function (err, rows, fields) {
@@ -28,14 +32,14 @@ router.post("/get-availability", function (req, res, next) {
 });
 
 router.post("/specify-availability", function (req, res, next) {
-  db.connectionPool.getConnection(function (err, connection) {
+  var { proposed_event_id, event_id } = req.body;
+
+  if (!proposed_event_id || !event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An internal server error occurred.");
-    }
-    var { proposed_event_id, event_id } = req.body;
-
-    if (!proposed_event_id || !event_id) {
-      return res.status(400).send("Insufficient Data");
     }
 
     let baseQueryOptions;
@@ -43,6 +47,12 @@ router.post("/specify-availability", function (req, res, next) {
     if (!userIsLoggedIn(req.session.user)) {
       if (!req.body.email) {
         return res.status(400).send("Insufficient Data");
+      }
+      check(req.body.email).isEmail().withMessage("Email is invalid");
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        let error = errors.array()[0];
+        return res.status(400).send(error.msg);
       }
       baseQueryOptions = [req.body["email"]];
     } else {

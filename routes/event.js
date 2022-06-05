@@ -1,11 +1,11 @@
 var express = require("express");
 var passport = require("passport");
-var db = require("../utils/db");
 var objects = require("../utils/objects");
 var path = require("path");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 const { createDate, addHours } = require("../utils/datetime");
+const { body, validationResult, check } = require("express-validator");
 
 var router = express.Router();
 
@@ -54,8 +54,16 @@ var upload = multer({
   },
 });
 
+<<<<<<< HEAD
 router.get("/get-events", function (req, res, next) {
   db.connectionPool.getConnection(function (err, connection) {
+=======
+// remove a file
+const fs = require("fs");
+
+router.get("/get-events", function (req, res, next) {
+  req.pool.getConnection(function (err, connection) {
+>>>>>>> c114863b358cda252f78ca380bc09f5ed6e7ed03
     if (err) {
       return next(err);
     }
@@ -77,7 +85,7 @@ router.post("/create-event", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
   // Get all data from request body
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -95,9 +103,22 @@ router.post("/create-event", function (req, res, next) {
       duration,
       proposed_times,
     } = req.body;
-
+    // Get all data from request body and check for completeness
+    if (
+      !title ||
+      !description ||
+      !proposed_date ||
+      !street_number ||
+      !street_name ||
+      !state ||
+      !country ||
+      !postcode ||
+      !duration ||
+      !proposed_times
+    ) {
+      return res.status(400).send("Insufficient Data");
+    }
     var event_picture = `/images/events/${req.files[0].filename}`;
-
     var query =
       "INSERT INTO Events (title, description, created_by, proposed_date, street_number, street_name, suburb, state, country, postcode, event_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     connection.query(
@@ -147,51 +168,119 @@ router.post("/create-event", function (req, res, next) {
   });
 });
 
+router.post("/edit-event", upload.array("file", 1));
 router.post("/edit-event", function (req, res, next) {
   // Ensure an user is logged in
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+
+  var {
+    title,
+    description,
+    street_number,
+    street_name,
+    suburb,
+    state,
+    country,
+    postcode,
+    event_picture,
+    event_id,
+  } = req.body;
+
+  if (
+    !title ||
+    !description ||
+    !street_number ||
+    !street_name ||
+    !suburb ||
+    !state ||
+    !country ||
+    !postcode ||
+    !event_id
+  ) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  // Remove the previous file
+  req.pool.getConnection(function (err, connection) {
     if (err) {
-      return next(err);
+      return res.status(500).send("An interval server error occurred.");
     }
-    var {
-      title,
-      description,
-      proposal_date,
-      start_date,
-      end_date,
-      address_line,
-      state,
-      country,
-      postcode,
-      event_id,
-    } = req.body;
-    var query =
-      "UPDATE Events set title = ?, description = ?, proposal_date = ?, start_date = ?, end_date = ?, address_line = ?, state = ?, country = ?, postcode = ? where event_id = ?";
-    connection.query(
-      query,
-      [
-        title,
-        description,
-        proposal_date,
-        start_date,
-        end_date,
-        address_line,
-        state,
-        country,
-        postcode,
-        event_id,
-      ],
-      function (err, rows, fields) {
-        connection.release();
-        if (err) {
-          return next(err);
-        }
-        return res.send("Success in modifying the event!");
+    var query = "select * from Events where event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
       }
-    );
+
+      if (!rows || rows.length === 0) {
+        return res.status(500).send("Event could not be found");
+      }
+
+      var previousPath = rows[0]["event_picture"];
+
+      if (req.files.length === 0) {
+        var query =
+          "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ? where event_id = ? and created_by = ?";
+        connection.query(
+          query,
+          [
+            title,
+            description,
+            street_number,
+            street_name,
+            suburb,
+            state,
+            country,
+            postcode,
+            event_id,
+            req.session.user.email,
+          ],
+          function (err, rows, fields) {
+            if (err) {
+              return next(err);
+            }
+            return res.send("Success in modifying the event!");
+          }
+        );
+      } else {
+        try {
+          fs.unlinkSync("public" + previousPath);
+        } catch (err) {
+          console.error(err);
+        }
+
+        req.files.forEach(function (file) {
+          // Sends path name back to database
+          var imagePath = `/images/events/${file.filename}`;
+
+          var query =
+            "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ?, event_picture = ? where event_id = ? and created_by = ?";
+          connection.query(
+            query,
+            [
+              title,
+              description,
+              street_number,
+              street_name,
+              suburb,
+              state,
+              country,
+              postcode,
+              imagePath,
+              event_id,
+              req.session.user.email,
+            ],
+            function (err, rows, fields) {
+              if (err) {
+                return next(err);
+              }
+              return res.send("Success in modifying the event!");
+            }
+          );
+        });
+      }
+    });
   });
 });
 
@@ -200,18 +289,68 @@ router.delete("/delete-event", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  var { event_id } = req.body;
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
-    var { event_id } = req.body;
-    var query = "DELETE from Events where event_id = ?";
-    connection.query(query, [event_id], function (err, rows, fields) {
-      connection.release();
+
+    let query = "SELECT * from Events WHERE event_id = ? and created_by = ?";
+    connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
       if (err) {
-        return next(err);
+        console.log(err);
+        return res.status(500).send("An interval server error occurred.");
       }
-      return res.send("Success in deleting an event!");
+
+      if (!rows || rows.length === 0) {
+        return res.status(500).send("Event could not be found");
+      }
+
+      let event = rows[0];
+
+      query = "DELETE * from Events where event_id = ? and created_by = ?";
+      connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
+        if (err) {
+          console.log(err);
+          return res.status(500).send("An interval server error occurred.");
+        }
+
+        // Send email to all confirmed attendance
+        query = "SELECT email FROM Attendance WHERE event_id = ?";
+        connection.query(query, [event_id], function (err, rows, fields) {
+          if (err) {
+            return res.status(500).send("An interval server error occurred.");
+          }
+          for (let row of rows) {
+            query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+            connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+              // Send an email if they enable notifications
+              if (settingsRows[0]["is_event_cancelled"] === 1) {
+                var mailOptions = {
+                  from: "socialah@outlook.com", // sender address (who sends)
+                  to: rows[0]["email"],
+                  subject: "Event cancelled", // Subject line
+                  text: "Hello world ", // plaintext body
+                };
+                mailOptions["html"] = `<h1>Event cancelled: ${event["title"]}</h1>`;
+                // send mail with defined transport object
+                req.transporter.sendMail(mailOptions, function (error, info) {
+                  if (error) {
+                    return console.log(error);
+                  }
+                });
+              }
+            });
+          }
+          return res.send("Success in deleting an event!");
+        });
+      });
     });
   });
 });
@@ -221,7 +360,7 @@ router.get("/my-events/organized", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -241,7 +380,7 @@ router.get("/my-events/attended", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
-  db.connectionPool.getConnection(function (err, connection) {
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
@@ -259,7 +398,12 @@ router.get("/my-events/attended", function (req, res, next) {
 
 router.get("/events/:event_id", function (req, res, next) {
   let { event_id } = req.params;
-  db.connectionPool.getConnection(function (err, connection) {
+
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
@@ -270,6 +414,10 @@ router.get("/events/:event_id", function (req, res, next) {
         return res.status(500).send("An interval server error occurred.");
       }
       var info = rows[0];
+      if (info === null || typeof info == "undefined") {
+        return res.status(500).send("An interval server error occurred.");
+      }
+
       // Query another database
       query = "select * from Proposed_Event_Time where event_id = ?;";
       connection.query(query, [event_id], function (err, rows, fields) {
@@ -284,41 +432,142 @@ router.get("/events/:event_id", function (req, res, next) {
   });
 });
 
-router.post("/finalise-event-time", function (req, res, next) {
-  // Ensure an user is logged in
-  if (!userIsLoggedIn(req.session.user)) {
-    return res.status(401).send("Unauthorized Access!!");
+router.post(
+  "/finalise-event-time",
+  check("email").isEmail().withMessage("Email is invalid"),
+  function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let error = errors.array()[0];
+      return res.status(400).send(error.msg);
+    }
+    // Ensure an user is logged in
+    if (!userIsLoggedIn(req.session.user)) {
+      return res.status(401).send("Unauthorized Access!!");
+    }
+
+    var { email, event_id, proposed_event_time_id } = req.body;
+    if (!email || !event_id || !proposed_event_time_id) {
+      return res.status(400).send("Insufficient Data");
+    }
+
+    // Make sure the user is the event creator
+    req.pool.getConnection(function (err, connection) {
+      if (err) {
+        return next(err);
+      }
+      var { email, event_id, proposed_event_time_id } = req.body;
+      var query = "select * from Events where created_by = ? and event_id = ?;";
+      connection.query(query, [email, event_id], function (err, rows, fields) {
+        if (!rows || rows.length == 0) {
+          return res.status(401).send("Not an event creator!");
+        }
+
+        let event = rows[0];
+
+        query =
+          "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
+        connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
+          if (err) {
+            return next(err);
+          }
+          query = "update Events set finalized_event_time_id = ? where event_id = ?;";
+          connection.query(
+            query,
+            [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
+            function (err, rows, field) {
+              if (err) {
+                return next(err);
+              }
+
+              // Send email to all users who previously specified availability
+              query =
+                "SELECT * from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
+              connection.query(query, [event_id], function (err, rows, fields) {
+                if (err) {
+                  return res.status(500).send("An interval server error occurred.");
+                }
+
+                for (let row of rows) {
+                  query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+                  connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+                    if (err) {
+                      return res.status(500).send("An interval server error occurred.");
+                    }
+                    // Send an email if they enable notifications
+                    if (settingsRows[0]["is_event_finalised"] === 1) {
+                      var mailOptions = {
+                        from: "socialah@outlook.com", // sender address (who sends)
+                        to: rows[0]["email"],
+                        subject: "Event finalised", // Subject line
+                        text: "Hello world ", // plaintext body
+                      };
+                      // TODO: Add finalised time into message
+                      mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
+                      // send mail with defined transport object
+                      req.transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                          return console.log(error);
+                        }
+                      });
+                    }
+                  });
+                }
+                return res.send("Success in finalise an event!");
+              });
+            }
+          );
+        });
+      });
+    });
   }
-  // Make sure the user is the event creator
-  db.connectionPool.getConnection(function (err, connection) {
+);
+
+router.post("/send-confirmation-email", function (req, res, next) {
+  var { event_id } = req.body;
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+  req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
-    var { email, event_id, proposed_event_time_id } = req.body;
-    var query = "select * from Events where created_by = ? and event_id = ?;";
-    connection.query(query, [email, event_id], function (err, rows, fields) {
-      if (!rows || rows.length == 0) {
-        return res.status(401).send("Not an event creator!");
+
+    var query = "select * from Events where event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return next(err);
       }
+      // Get the event details
+      var eventContent = rows[0];
+
       query =
-        "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
-      connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
+        "select distinct email from Availability inner join Proposed_Event_Time on Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id where event_id = ?;";
+      connection.query(query, [event_id], function (err, rows, fields) {
+        connection.release();
         if (err) {
           return next(err);
         }
-        query = "update Events set finalized_event_time_id = ? where event_id = ?;";
-        connection.query(
-          query,
-          [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
-          function (err, rows, field) {
-            connection.release();
-            if (err) {
-              return next(err);
+
+        for (var index = 0; index < rows.length; index++) {
+          // setup e-mail data, even with unicode symbols
+          var mailOptions = {
+            from: "socialah@outlook.com", // sender address (who sends)
+            to: rows[index]["email"],
+            subject: "Confirm my attendance!", // Subject line
+            text: "Hello world ", // plaintext body
+          };
+          mailOptions["html"] = `<h1>${eventContent["title"]}</h1>
+              <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
+          // send mail with defined transport object
+          req.transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              return console.log(error);
             }
-            return res.send("Success in finalise an event!");
-          }
-        );
+          });
+        }
       });
+      return res.send("Success in sending confirmation email!");
     });
   });
 });
