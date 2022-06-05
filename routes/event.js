@@ -79,9 +79,22 @@ router.post("/create-event", function (req, res, next) {
       duration,
       proposed_times,
     } = req.body;
-
+    // Get all data from request body and check for completeness
+    if (
+      !title ||
+      !description ||
+      !proposed_date ||
+      !street_number ||
+      !street_name ||
+      !state ||
+      !country ||
+      !postcode ||
+      !duration ||
+      !proposed_times
+    ) {
+      return res.status(400).send("Insufficient Data");
+    }
     var event_picture = `/images/events/${req.files[0].filename}`;
-
     var query =
       "INSERT INTO Events (title, description, created_by, proposed_date, street_number, street_name, suburb, state, country, postcode, event_picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     connection.query(
@@ -252,13 +265,13 @@ router.delete("/delete-event", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
     return res.status(401).send("Unauthorized Access!!");
   }
+  var { event_id } = req.body;
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
-    }
-    var { event_id } = req.body;
-    if (!event_id) {
-      return res.status(400).send("Insufficient Data");
     }
 
     let query = "SELECT * from Events WHERE event_id = ? and created_by = ?";
@@ -408,6 +421,12 @@ router.post(
     if (!userIsLoggedIn(req.session.user)) {
       return res.status(401).send("Unauthorized Access!!");
     }
+
+    var { email, event_id, proposed_event_time_id } = req.body;
+    if (!email || !event_id || !proposed_event_time_id) {
+      return res.status(400).send("Insufficient Data");
+    }
+
     // Make sure the user is the event creator
     req.pool.getConnection(function (err, connection) {
       if (err) {
@@ -481,11 +500,15 @@ router.post(
 );
 
 router.post("/send-confirmation-email", function (req, res, next) {
+  var { event_id } = req.body;
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return next(err);
     }
-    var { event_id } = req.body;
+
     var query = "select * from Events where event_id = ?;";
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {

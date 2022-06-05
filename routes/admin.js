@@ -410,25 +410,65 @@ router.post(
       country,
       email,
     } = req.body;
+    // Get all data from request body and check for completeness
+    if (
+      !first_name ||
+      !last_name ||
+      !birthday ||
+      !instagram_handle ||
+      !facebook_handle ||
+      !state ||
+      !country ||
+      !email
+    ) {
+      return res.status(400).send("Insufficient Data");
+    }
+
     // Get all data from request body
     req.pool.getConnection(function (err, connection) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
-      // Update data
-      var query =
-        "update User_Profile set first_name = ?, last_name = ?, birthday = ?, instagram_handle = ?, facebook_handle = ?, state = ?, country = ? where email = ?";
-      connection.query(
-        query,
-        [first_name, last_name, birthday, instagram_handle, facebook_handle, state, country, email],
-        function (err, rows, fields) {
-          connection.release();
-          if (err) {
-            return res.status(500).send("An interval server error occurred.");
-          }
-          return res.send("Admin successes in updating user profile!");
+
+      var {
+        first_name,
+        last_name,
+        birthday,
+        instagram_handle,
+        facebook_handle,
+        state,
+        country,
+        email,
+      } = req.body;
+      // Get all data from request body
+      req.pool.getConnection(function (err, connection) {
+        if (err) {
+          return res.status(500).send("An interval server error occurred.");
         }
-      );
+        // Update data
+        var query =
+          "update User_Profile set first_name = ?, last_name = ?, birthday = ?, instagram_handle = ?, facebook_handle = ?, state = ?, country = ? where email = ?";
+        connection.query(
+          query,
+          [
+            first_name,
+            last_name,
+            birthday,
+            instagram_handle,
+            facebook_handle,
+            state,
+            country,
+            email,
+          ],
+          function (err, rows, fields) {
+            connection.release();
+            if (err) {
+              return res.status(500).send("An interval server error occurred.");
+            }
+            return res.send("Admin successes in updating user profile!");
+          }
+        );
+      });
     });
   }
 );
@@ -494,6 +534,7 @@ router.post(
         if (err) {
           return res.status(500).send("An interval server error occurred.");
         }
+        console.log(rows);
         // check
         if (!rows && rows.length == 0) {
           return res.send("User not found!");
