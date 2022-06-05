@@ -39,6 +39,8 @@ var transporter = nodemailer.createTransport({
 router.post("/login", function (req, res, next) {
   let { email, password } = req.body;
 
+  console.log(req.body);
+
   // If we lack any of these data, we return err
   if (!email || !password) {
     return res.status(400).send("Insufficient Data");
