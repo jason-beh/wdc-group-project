@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sendAJAX(
           "POST",
           "/admin/get-profile",
-          JSON.stringify({ emailToSearch: this.currentEmail }),
+          JSON.stringify({ email: this.currentEmail }),
           function (err, res) {
             if (err) {
               console.log(err);

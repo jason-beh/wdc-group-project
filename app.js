@@ -96,9 +96,9 @@ app.use("/", profileRouter);
 app.use("/", eventRouter);
 app.use("/", availabilityRouter);
 app.use("/", searchRouter);
-app.use("/admin", adminRouter);
 app.use("/", attendanceRouter);
 app.use("/", settingsRouter);
+app.use("/admin", adminRouter);
 
 // catch 404
 app.use((req, res, next) => {
