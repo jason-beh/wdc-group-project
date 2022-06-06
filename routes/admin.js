@@ -2,10 +2,7 @@ var express = require("express");
 const { userIsAdmin } = require("../utils/auth");
 var argon2 = require("argon2");
 const { pathToHtml } = require("../utils/routes");
-<<<<<<< HEAD
-=======
 const { body, validationResult, check } = require("express-validator");
->>>>>>> c114863b358cda252f78ca380bc09f5ed6e7ed03
 var router = express.Router();
 
 // add multer library

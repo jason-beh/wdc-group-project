@@ -105,6 +105,7 @@
                 >
                   <img
                     v-bind:src="profile_picture"
+                    onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     class="navbar-profile-picture"
                     alt="profile picture"
                   />
@@ -165,9 +166,9 @@
 
       <!-- ========================================================================================== -->
 
-      <div class="container" id="container">
+      <div class="container" id="eventDetail">
         <!-- <h1 class="profileHeader">Event Details</h1> -->
-        <div class="detailMainContainer" id="eventDetail">
+        <div class="detailMainContainer">
           <div class="detailsContainer">
             <img
               class="detailImage"
@@ -183,10 +184,107 @@
               <h1>{{title}}</h1>
               <h6>by {{created_by}}</h6>
             </div>
-            <div class="detailAll">
-              <h5>Proposed Date</h5>
-              <p>{{proposed_date}}</p>
-              <button type="submit" class="inputs button1">Specify Availability</button>
+            <div v-if="isFinalise == null">
+              <div class="detailAll" v-if="isCreator">
+                <h5>Proposed Date</h5>
+                <p>{{proposed_date}}</p>
+                <button
+                  type="submit"
+                  class="inputs button-1"
+                  data-toggle="modal"
+                  data-target="#modalFinal"
+                  @click="finaliseTime"
+                >
+                  Finalise Time
+                </button>
+              </div>
+              <div class="detailAll" v-else>
+                <h5>Proposed Date</h5>
+                <p>{{proposed_date}}</p>
+                <a v-bind:href="'/specify-availability?event=' + event_id">
+                  <button type="submit" class="inputs button-1">Specify Availability</button>
+                </a>
+              </div>
+            </div>
+            <div v-else-if="isFinalise != null">
+              <div class="detailAll" v-if="isCreator">
+                <h5>Proposed Date</h5>
+                <p>{{proposed_date}}</p>
+                <p>{{final_proposed_times.start_date}} - {{final_proposed_times.end_date}}</p>
+                <h3>You are attending !</h3>
+              </div>
+              <div class="detailAll" v-else>
+                <h5>Proposed Date</h5>
+                <p>{{proposed_date}}</p>
+                <p>{{final_proposed_times.start_date}} - {{final_proposed_times.end_date}}</p>
+                <button
+                  type="submit"
+                  class="inputs button-1"
+                  @click="confirmAttendance"
+                  v-if="attendanceButton == true"
+                >
+                  Confirm Attendance
+                </button>
+                <h3 v-else="attendanceButton">You are attending !</h3>
+              </div>
+            </div>
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="modalFinal"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h2 class="modal-title" id="exampleModalLabel">Finalise Timing</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="inputs">
+                      <label>Choose timeslot</label>
+                      <div v-for="(proposed_time, index) in proposed_times">
+                        <input
+                          type="radio"
+                          name="selected_time"
+                          :value="proposed_time.proposed_event_time_id"
+                          @click="finalClick"
+                        />
+                        <span> {{proposed_time.start_date}} - {{proposed_time.end_date}} </span>
+                        <span> {{proposed_time["COUNT(*)"]}} responses </span>
+                      </div>
+                      <div>
+                        <button type="button" class="button-1" @click="finalising">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-dismiss="modal"
+                      id="dismiss-button3"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="dismiss-button"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="detailAll">
               <h5>Location</h5>
@@ -194,11 +292,10 @@
                 {{street_number}} {{street_name}},{{suburb}} <br />
                 {{state}},{{postcode}},{{country}}
               </p>
-              <img src="images/exampleLocation.png" class="detailMap" />
             </div>
             <div>
               <h5>Share Event</h5>
-              <button type="submit" class="inputs button1" onclick="copyClipboard()">
+              <button type="submit" class="inputs button-1" onclick="copyClipboard()">
                 Copy Event Link
               </button>
             </div>
