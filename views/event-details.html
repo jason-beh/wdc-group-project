@@ -241,7 +241,7 @@
                   class="inputs button-1"
                   data-toggle="modal"
                   data-target="#modalFinal"
-                  @click="finaliseTime"
+                  @click="loadProposedTime"
                 >
                   Finalise Time
                 </button>
@@ -305,7 +305,7 @@
                             type="radio"
                             name="selected_time"
                             :value="proposed_time.proposed_event_time_id"
-                            @click="finalClick"
+                            @click="chooseFinaliseTime"
                           />
                           <span> {{proposed_time.start_date}} - {{proposed_time.end_date}} </span>
                         </div>
@@ -318,7 +318,7 @@
                           id="submitButton"
                           type="button"
                           class="button-1"
-                          @click="finalising"
+                          @click="finaliseTimeSubmit"
                         >
                           Submit
                         </button>

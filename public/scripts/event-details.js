@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   let query = new URLSearchParams(window.location.search);
   let event_id = query.get("event");
-  console.log(event_id);
+
+  if (event_id === null) {
+    window.location.href = "/404";
+    return;
+  }
+
   var app = new Vue({
     el: "#eventDetail",
     data() {
@@ -35,31 +40,27 @@ document.addEventListener("DOMContentLoaded", function () {
           alertBar.style.display = "none";
         }
       },
-      finaliseTime() {
+      loadProposedTime() {
         sendAJAX(
           "POST",
           "/get-proposed-time",
           JSON.stringify({ event_id: event_id }),
           function (err, res) {
             if (err) {
-              console.log(err);
+              document.getElementById("alert-error-text").innerText = err.message;
+              document.getElementById("alert-error").style.display = "block";
             }
 
             proposed_time = JSON.parse(res);
             for (let proposed_timing of proposed_time) {
-              proposed_timing.start_date =
-                proposed_timing.start_date !== null
-                  ? proposed_timing.start_date.substring(11, 19)
-                  : "";
-              proposed_timing.end_date =
-                proposed_timing.end_date !== null ? proposed_timing.end_date.substring(11, 19) : "";
+              proposed_timing.start_date = getTime(proposed_timing.start_date);
+              proposed_timing.end_date = getTime(proposed_timing.end_date);
             }
             app.proposed_times = proposed_time;
-            console.log(app.proposed_times);
           }
         );
       },
-      finalClick(e) {
+      chooseFinaliseTime(e) {
         let currentElem = e.target;
         let radioContainers = document.getElementsByClassName("event-input-box");
         for (let radioContainer of radioContainers) {
@@ -67,11 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         let finalSelectedTimeID = e.target.value;
         app.final_selected_time_id = finalSelectedTimeID;
-        console.log(app.final_selected_time_id);
         currentElem.parentElement.classList.add("selected");
       },
-      finalising(e) {
-        console.log(app.final_selected_time_id);
+      finaliseTimeSubmit(e) {
         if (this.final_selected_time_id == "") {
           return;
         }
@@ -86,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
           }),
           function (err, finaliseRes) {
             if (err) {
-              console.log(err);
               document.getElementById("alert-error-text").innerText = err.message;
               document.getElementById("alert-error").style.display = "block";
             } else {
@@ -94,25 +92,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Successfully finalised the time!";
               document.getElementById("alert-success-final").style.display = "block";
               app.isFinalise = 1;
-              console.log("final time = " + app.final_selected_time_id);
               sendAJAX(
                 "POST",
                 "/get-finalise-time",
                 JSON.stringify({ finalise_event_time_id: app.final_selected_time_id }),
                 function (err, finaltimeRes) {
                   if (err) {
-                    console.log(err);
+                    document.getElementById("alert-error-text").innerText = err.message;
+                    document.getElementById("alert-error").style.display = "block";
                   } else {
-                    console.log(JSON.parse(finaltimeRes));
                     final_proposed_time = JSON.parse(finaltimeRes);
-                    final_proposed_time[0].start_date =
-                      final_proposed_time[0].start_date !== null
-                        ? final_proposed_time[0].start_date.substring(11, 19)
-                        : "";
-                    final_proposed_time[0].end_date =
-                      final_proposed_time[0].end_date !== null
-                        ? final_proposed_time[0].end_date.substring(11, 19)
-                        : "";
+                    final_proposed_time[0].start_date = getTime(final_proposed_time[0].start_date);
+                    final_proposed_time[0].end_date = getTime(final_proposed_time[0].end_date);
                     app.final_proposed_times = final_proposed_time[0];
                     // console.log("finalfinal == " + app.final_proposed_times.start_date);
                   }
@@ -130,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
           JSON.stringify({ user_email: app.userEmail, event_id: app.event_id }),
           function (err, attendRes) {
             if (err) {
-              console.log(err);
               document.getElementById("alert-error-text").innerText = err.message;
               document.getElementById("alert-error").style.display = "block";
             } else {
@@ -139,30 +129,22 @@ document.addEventListener("DOMContentLoaded", function () {
               document.getElementById("alert-success-attend").style.display = "block";
             }
             app.attendanceButton = false;
-            console.log(attendRes);
-            console.log(app.attendanceButton);
           }
         );
       },
     },
   });
 
-  if (event_id === null) {
-    alert("invalid event id");
-    window.location.href = "/";
-    return;
-  }
-
   // Get event
   sendAJAX("GET", `/events/${event_id}`, null, function (err, res) {
     if (err) {
       // do something
-      console.log(err);
+      document.getElementById("alert-error-text").innerText = err.message;
+      document.getElementById("alert-error").style.display = "block";
       return;
     }
 
     res = JSON.parse(res);
-    console.log(res);
     res.proposed_date = res.proposed_date !== null ? res.proposed_date.substring(0, 10) : "";
     app.title = res.title;
     app.created_by = res.created_by;
@@ -177,43 +159,36 @@ document.addEventListener("DOMContentLoaded", function () {
     app.event_picture = res.event_picture;
     app.description = res.description;
     app.isFinalise = res.finalized_event_time_id;
-    console.log("finalised = " + app.isFinalise);
-    console.log(app.title);
     sendAJAX("GET", "/get-session", null, function (err, userRes) {
       if (err) {
         //do something
-        console.log(err);
+        document.getElementById("alert-error-text").innerText = err.message;
+        document.getElementById("alert-error").style.display = "block";
         return;
       }
 
       app.userEmail = JSON.parse(userRes).email;
-      console.log(app.userEmail);
 
       if (app.userEmail === res.created_by) {
         app.isCreator = true;
-        console.log("creator = " + app.isCreator);
       } else {
         app.isCreator = false;
-        console.log("creator = " + app.isCreator);
       }
-      console.log(app.userEmail);
       sendAJAX(
         "POST",
         "/get-attendance",
         JSON.stringify({ user_email: app.userEmail, event_id: app.event_id }),
         function (err, attendanceRes) {
           if (err) {
-            console.log(err);
+            document.getElementById("alert-error-text").innerText = err.message;
+            document.getElementById("alert-error").style.display = "block";
           }
           var attendanceRes = JSON.parse(attendanceRes);
-          console.log(attendanceRes);
-          console.log(attendanceRes.length);
           if (attendanceRes.length == 0) {
             app.attendanceButton = true;
           } else {
             app.attendanceButton = false;
           }
-          console.log(app.attendanceButton);
         }
       );
     });
@@ -224,18 +199,12 @@ document.addEventListener("DOMContentLoaded", function () {
         JSON.stringify({ finalise_event_time_id: app.isFinalise }),
         function (err, finaltimeRes) {
           if (err) {
-            console.log(err);
+            document.getElementById("alert-error-text").innerText = err.message;
+            document.getElementById("alert-error").style.display = "block";
           } else {
-            console.log(JSON.parse(finaltimeRes));
             final_proposed_time = JSON.parse(finaltimeRes);
-            final_proposed_time[0].start_date =
-              final_proposed_time[0].start_date !== null
-                ? final_proposed_time[0].start_date.substring(11, 19)
-                : "";
-            final_proposed_time[0].end_date =
-              final_proposed_time[0].end_date !== null
-                ? final_proposed_time[0].end_date.substring(11, 19)
-                : "";
+            final_proposed_time[0].start_date = getTime(final_proposed_time[0].start_date);
+            final_proposed_time[0].end_date = getTime(final_proposed_time[0].end_date);
             app.final_proposed_times = final_proposed_time[0];
             // console.log("finalfinal == " + app.final_proposed_times.start_date);
           }
@@ -244,6 +213,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// get time from given date
+function getTime(datetime) {
+  if (datetime !== null) {
+    return datetime.substring(11, 19);
+  }
+
+  return "";
+}
 
 // Copy link to clipboard
 function copyClipboard() {

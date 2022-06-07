@@ -9,25 +9,6 @@ const { body, validationResult, check } = require("express-validator");
 
 var router = express.Router();
 
-var nodemailer = require("nodemailer");
-
-// Create the transporter with the required configuration for Outlook
-var transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email", // hostname
-  secureConnection: false, // TLS requires secureConnection to be false
-  secure: false,
-  port: 587, // port for secure SMTP,
-  pool: true,
-  maxConnections: 5,
-  tls: {
-    ciphers: "SSLv3",
-  },
-  auth: {
-    user: "hy7tjayeu3f3ganq@ethereal.email",
-    pass: "kGSvXP3g4974KTHGgW",
-  },
-});
-
 // add multer library
 var multer = require("multer");
 var storage = multer.diskStorage({
@@ -734,11 +715,7 @@ router.get("/edit-event", function (req, res, next) {
   res.sendFile(pathToHtml("edit-event.html"));
 });
 
-// Test
 router.get("/event-details", function (req, res, next) {
-  if (!userIsLoggedIn(req.session.user)) {
-    res.redirect("/login");
-  }
   res.sendFile(pathToHtml("event-details.html"));
 });
 
