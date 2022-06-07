@@ -243,19 +243,25 @@
             v-if="attendedEvents.length > 0 && currentView === 'attendedEvents'"
             class="event-horizontal-container"
           >
-            <div class="event-horizontal" v-for="event in attendedEvents">
-              <img
-                class="event-horizontal-image"
-                v-bind:src="event.event_picture"
-                alt="event image"
-              />
-              <div class="event-horizontal-content">
-                <p class="event-horizontal-date">
-                  {{new Date(`${event.proposed_date}`).toDateString()}}
-                </p>
-                <h3 class="event-horizontal-title">{{event.title}}</h3>
-                <p class="event-horizontal-street-name">{{event.street_name}}</p>
-              </div>
+            <div v-for="event in attendedEvents">
+              <a
+                v-bind:href="'/event-details?event=' + event.event_id"
+                class="event-horizontal"
+                id="detailsHREF"
+              >
+                <img
+                  class="event-horizontal-image"
+                  v-bind:src="event.event_picture"
+                  alt="event image"
+                />
+                <div class="event-horizontal-content">
+                  <p class="event-horizontal-date">
+                    {{new Date(`${event.proposed_date}`).toDateString()}}
+                  </p>
+                  <h3 class="event-horizontal-title">{{event.title}}</h3>
+                  <p class="event-horizontal-street-name">{{event.street_name}}</p>
+                </div>
+              </a>
             </div>
           </div>
           <p
@@ -269,28 +275,34 @@
             v-if="organizedEvents.length > 0 && currentView === 'organizedEvents'"
             class="event-horizontal-container"
           >
-            <div class="event-horizontal" v-for="event in organizedEvents">
-              <img
-                class="event-horizontal-image"
-                v-bind:src="event.event_picture"
-                alt="event image"
-              />
-              <div class="event-horizontal-content">
-                <ion-icon
-                  name="trash"
-                  alt="delete icon"
-                  data-toggle="modal"
-                  data-target="#Modal"
-                  @click="setToDelete"
-                  v-bind:data-eventid="event.event_id"
-                  class="trash-icon delete-event-button"
-                ></ion-icon>
-                <p class="event-horizontal-date">
-                  {{new Date(`${event.proposed_date}`).toDateString()}}
-                </p>
-                <h3 class="event-horizontal-title">{{event.title}}</h3>
-                <p class="event-horizontal-street-name">{{event.street_name}}</p>
-              </div>
+            <div v-for="event in organizedEvents">
+              <a
+                v-bind:href="'/event-details?event=' + event.event_id"
+                class="event-horizontal"
+                id="detailsHREF"
+              >
+                <img
+                  class="event-horizontal-image"
+                  v-bind:src="event.event_picture"
+                  alt="event image"
+                />
+                <div class="event-horizontal-content">
+                  <ion-icon
+                    name="trash"
+                    alt="delete icon"
+                    data-toggle="modal"
+                    data-target="#Modal"
+                    @click="setToDelete"
+                    v-bind:data-eventid="event.event_id"
+                    class="trash-icon delete-event-button"
+                  ></ion-icon>
+                  <p class="event-horizontal-date">
+                    {{new Date(`${event.proposed_date}`).toDateString()}}
+                  </p>
+                  <h3 class="event-horizontal-title">{{event.title}}</h3>
+                  <p class="event-horizontal-street-name">{{event.street_name}}</p>
+                </div>
+              </a>
             </div>
           </div>
           <p

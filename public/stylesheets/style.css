@@ -571,16 +571,20 @@ p.description {
 .event-p-2 {
   font-size: 1.4em;
   font-weight: 600;
+  color: black;
 }
 
 .event-p-3 {
   font-size: 0.86em;
   margin-top: 6%;
+  color: black;
 }
 
 .event-p-4 {
   margin-top: 6%;
+  color: black;
 }
+
 .event-container {
   display: flex;
   flex-direction: column;
@@ -622,6 +626,7 @@ p.description {
 .event-horizontal-content {
   width: 100%;
   padding: 12px 30px;
+  color: black;
 }
 
 .event-horizontal-title {
@@ -1037,6 +1042,7 @@ p.description {
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   margin: 0 2% 2% 5%;
+  width: 50%;
 }
 
 .detailList h1,
@@ -1077,4 +1083,39 @@ p.description {
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+}
+
+.event-input-box {
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  width: 50%;
+  padding: 5px 0px 5px 15px;
+  margin: 5px 0 5px 0;
+  box-sizing: border-box;
+  font-weight: 400;
+  display: inline-block;
+}
+
+.event-input-box.selected {
+  background-color: #0d184f;
+  color: white;
+}
+
+@media only screen and (max-width: 992px) {
+  .detailMainContainer {
+    flex-direction: column;
+  }
+  .detailList {
+    flex-direction: column;
+    width: 100%;
+    margin: 30px 0 0;
+  }
+  .detailContainer {
+    flex-direction: column;
+    width: 100%;
+    /* margin: 10px 20px; */
+  }
+  .detailAll {
+    padding: 0 0 10px 0;
+  }
 }

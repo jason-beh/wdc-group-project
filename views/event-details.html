@@ -167,6 +167,59 @@
       <!-- ========================================================================================== -->
 
       <div class="container" id="eventDetail">
+        <div id="alert-container-final">
+          <div
+            class="alert alert-success alert-bar"
+            id="alert-success-final"
+            @click="closeAlert"
+            role="alert"
+          >
+            <span id="alert-success-text-final">You have finalised the time for the event !</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
+            <span id="alert-danger-text">Error occurred</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        <div id="alert-container-attend">
+          <div
+            class="alert alert-success alert-bar"
+            id="alert-success-attend"
+            @click="closeAlert"
+            role="alert"
+          >
+            <span id="alert-success-text-attend"
+              >You have confirmed your attendance for this event !</span
+            >
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
+            <span id="alert-danger-text">Error occurred</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        <div id="alert-container-copy">
+          <div
+            class="alert alert-success alert-bar"
+            id="alert-success-copy"
+            @click="closeAlert"
+            role="alert"
+          >
+            <span id="alert-success-text-copy">Copied to clipboard !</span>
+            <button class="close alert-close" @click="closeAlert">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
         <!-- <h1 class="profileHeader">Event Details</h1> -->
         <div class="detailMainContainer">
           <div class="detailsContainer">
@@ -179,7 +232,7 @@
             <label for="eventDescription" class="detailsDescription">Description</label>
             <p id="eventDescription" class="detailsDescriptionList">{{description}}</p>
           </div>
-          <div class="detailList">
+          <div class="detailList right">
             <div class="detailAll">
               <h1>{{title}}</h1>
               <h6>by {{created_by}}</h6>
@@ -210,12 +263,13 @@
               <div class="detailAll" v-if="isCreator">
                 <h5>Proposed Date</h5>
                 <p>{{proposed_date}}</p>
+                <h5>Finalised Time</h5>
                 <p>{{final_proposed_times.start_date}} - {{final_proposed_times.end_date}}</p>
-                <h3>You are attending !</h3>
               </div>
               <div class="detailAll" v-else>
                 <h5>Proposed Date</h5>
                 <p>{{proposed_date}}</p>
+                <h5>Finalised Time</h5>
                 <p>{{final_proposed_times.start_date}} - {{final_proposed_times.end_date}}</p>
                 <button
                   type="submit"
@@ -225,7 +279,6 @@
                 >
                   Confirm Attendance
                 </button>
-                <h3 v-else="attendanceButton">You are attending !</h3>
               </div>
             </div>
             <!-- Modal -->
@@ -248,18 +301,32 @@
                   <div class="modal-body">
                     <div class="inputs">
                       <label>Choose timeslot</label>
-                      <div v-for="(proposed_time, index) in proposed_times">
-                        <input
-                          type="radio"
-                          name="selected_time"
+                      <div v-for="(proposed_time) in proposed_times">
+                        <div
+                          class="checkmark-container event-input-box"
                           :value="proposed_time.proposed_event_time_id"
-                          @click="finalClick"
-                        />
-                        <span> {{proposed_time.start_date}} - {{proposed_time.end_date}} </span>
-                        <span> {{proposed_time["COUNT(*)"]}} responses </span>
+                        >
+                          <input
+                            type="radio"
+                            name="selected_time"
+                            :value="proposed_time.proposed_event_time_id"
+                            @click="finalClick"
+                          />
+                          <span> {{proposed_time.start_date}} - {{proposed_time.end_date}} </span>
+                        </div>
+                        <span style="color: #0d184f; display: inline-block">
+                          {{proposed_time["COUNT(*)"]}} responses
+                        </span>
                       </div>
                       <div>
-                        <button type="button" class="button-1" @click="finalising">Submit</button>
+                        <button
+                          id="submitButton"
+                          type="button"
+                          class="button-1"
+                          @click="finalising"
+                        >
+                          Submit
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -273,16 +340,6 @@
                       Close
                     </button>
                   </div>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    id="dismiss-button"
-                    data-dismiss="modal"
-                  >
-                    Close
-                  </button>
                 </div>
               </div>
             </div>

@@ -202,13 +202,13 @@
             id="detailsHREF"
           >
             <img v-bind:src="event.event_picture" alt="Event Picture" class="event-picture" />
+            <div class="event-details">
+              <p class="event-p-1">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
+              <p class="event-p-2">{{event.title}}</p>
+              <p class="event-p-3">Created by : {{event.created_by}}</p>
+              <p class="event-p-4">{{event.street_name}}</p>
+            </div>
           </a>
-          <div class="event-details">
-            <p class="event-p-1">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
-            <p class="event-p-2">{{event.title}}</p>
-            <p class="event-p-3">Created by : {{event.created_by}}</p>
-            <p class="event-p-4">{{event.street_name}}</p>
-          </div>
         </div>
       </div>
     </div>

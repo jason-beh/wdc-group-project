@@ -23,11 +23,18 @@ document.addEventListener("DOMContentLoaded", function () {
         final_proposed_times: [],
         isFinalise: "",
         userEmail: "",
-        final_selected_time: "",
+        final_selected_time_id: "",
         attendanceButton: "",
+        radioChecker: "",
       };
     },
     methods: {
+      closeAlert() {
+        let alertBars = document.getElementsByClassName("alert-bar");
+        for (let alertBar of alertBars) {
+          alertBar.style.display = "none";
+        }
+      },
       finaliseTime() {
         sendAJAX(
           "POST",
@@ -35,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
           JSON.stringify({ event_id: event_id }),
           function (err, res) {
             if (err) {
-              // something ?
               console.log(err);
             }
 
@@ -53,13 +59,23 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         );
       },
-
       finalClick(e) {
+        let currentElem = e.target;
+        let radioContainers = document.getElementsByClassName("event-input-box");
+        for (let radioContainer of radioContainers) {
+          radioContainer.classList.remove("selected");
+        }
         let finalSelectedTimeID = e.target.value;
         app.final_selected_time_id = finalSelectedTimeID;
         console.log(app.final_selected_time_id);
+        currentElem.parentElement.classList.add("selected");
       },
       finalising(e) {
+        console.log(app.final_selected_time_id);
+        if (this.final_selected_time_id == "") {
+          return;
+        }
+
         sendAJAX(
           "POST",
           "/finalise-event-time",
@@ -71,7 +87,12 @@ document.addEventListener("DOMContentLoaded", function () {
           function (err, finaliseRes) {
             if (err) {
               console.log(err);
+              document.getElementById("alert-error-text").innerText = err.message;
+              document.getElementById("alert-error").style.display = "block";
             } else {
+              document.getElementById("alert-success-text-final").innerText =
+                "Successfully finalised the time!";
+              document.getElementById("alert-success-final").style.display = "block";
               app.isFinalise = 1;
               console.log("final time = " + app.final_selected_time_id);
               sendAJAX(
@@ -95,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     app.final_proposed_times = final_proposed_time[0];
                     // console.log("finalfinal == " + app.final_proposed_times.start_date);
                   }
+                  document.getElementById("dismiss-button3").click();
                 }
               );
             }
@@ -109,6 +131,12 @@ document.addEventListener("DOMContentLoaded", function () {
           function (err, attendRes) {
             if (err) {
               console.log(err);
+              document.getElementById("alert-error-text").innerText = err.message;
+              document.getElementById("alert-error").style.display = "block";
+            } else {
+              document.getElementById("alert-success-text-attend").innerText =
+                "You have confirmed your attendance to this event !";
+              document.getElementById("alert-success-attend").style.display = "block";
             }
             app.attendanceButton = false;
             console.log(attendRes);
@@ -220,6 +248,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // Copy link to clipboard
 function copyClipboard() {
   navigator.clipboard.writeText(window.location.href);
-
-  alert("Copied URL to clipboard! ");
+  document.getElementById("alert-success-text-attend").innerText = "Copied to clipboard !";
+  document.getElementById("alert-success-attend").style.display = "block";
 }
