@@ -1029,10 +1029,11 @@ p.description {
 }
 
 .detailImage {
-  width: 100;
   display: block;
-  max-width: 100%;
-  height: 35%;
+  border-radius: 10px;
+  height: 400px;
+  width: 100%;
+  object-fit: cover;
 }
 
 .detailList {
@@ -1061,7 +1062,7 @@ p.description {
 .detailsContainer {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 75%;
   /* padding: 0 4% 0 4%; */
   /* margin: 4% 0; */
   box-sizing: border-box;
