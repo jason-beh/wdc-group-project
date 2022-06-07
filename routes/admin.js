@@ -237,6 +237,11 @@ router.delete(
       return res.status(400).send("Insufficient Data");
     }
 
+    // Edge case handling (Admin cannot delete himself / herself)
+    if (email == req.session.user.email) {
+      return res.status(405).send("You are not allowed to delete yourself.");
+    }
+
     req.pool.getConnection(function (err, connection) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
