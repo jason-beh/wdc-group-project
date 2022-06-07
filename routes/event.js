@@ -500,25 +500,44 @@ router.post(
                         text: "Hello world ", // plaintext body
                       };
                       // TODO: Add finalised time into message
-                      mailOptions["html"] = `<div
-                                              style="
-                                                display: flex;
-                                                flex-direction: column;
-                                                align-items: center;
-                                                text-align: center;
-                                                font-family: monospace;
-                                                margin-top: 5%;
-                                              "
-                                            >
-                                              <img
-                                                src="https://crate.typepad.com/.a/6a00e55210ddf58834022ad38f9c77200d-pi"
-                                                alt="Cancelled Event Image"
-                                                style="max-width: 200px; max-height: 200px"
-                                              />
-                                              <h1>We have good news !</h1>
-                                              <h2>An event that you were interested has finalised it's event time !</h2>
-                                              <h2>Event finalised: ${event["title"]}</h2>
-                                            </div>`;
+                      mailOptions["html"] = `  <div
+                                                  style="
+                                                    display: flex;
+                                                    flex-direction: column;
+                                                    align-items: center;
+                                                    text-align: center;
+                                                    font-family: monospace;
+                                                    margin-top: 5%;
+                                                  "
+                                                >
+                                                  <img
+                                                    src="https://cdn-icons-png.flaticon.com/512/4353/4353420.png"
+                                                    alt="Confetti Image"
+                                                    style="max-width: 200px; max-height: 200px"
+                                                  />
+                                                  <h1>An event that you were interested in has finalised it's event time</h1>
+                                                  <h2>Event finalised: ${event["title"]}</h2>
+
+                                                  <a
+                                                    style="
+                                                      padding: 10px;
+                                                      color: white;
+                                                      background-color: #0d184f;
+                                                      border-radius: 10px;
+                                                      border: none;
+                                                      margin: 30px auto 0 auto;
+                                                      display: flex;
+                                                      justify-content: center;
+                                                      align-items: center;
+                                                      box-sizing: border-box;
+                                                      height: 50px;
+                                                      text-decoration: none;
+                                                    "
+                                                    href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}"
+                                                  >
+                                                    Confirm Attendance
+                                                  </a>
+                                                </div>`;
                       // send mail with defined transport object
                       req.transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
