@@ -116,9 +116,9 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       confirmAttendance() {
         sendAJAX(
-          "POST",
-          "/confirm-attendance",
-          JSON.stringify({ user_email: app.userEmail, event_id: app.event_id }),
+          "GET",
+          `/confirm-attendance?email=${app.userEmail}&event_id=${app.event_id}`,
+          null,
           function (err, attendRes) {
             if (err) {
               document.getElementById("alert-error-text").innerText = err.message;
@@ -174,12 +174,15 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         app.isCreator = false;
       }
+
+      console.log(app.userEmail);
       sendAJAX(
         "POST",
         "/get-attendance",
         JSON.stringify({ user_email: app.userEmail, event_id: app.event_id }),
         function (err, attendanceRes) {
           if (err) {
+            console.log(err);
             document.getElementById("alert-error-text").innerText = err.message;
             document.getElementById("alert-error").style.display = "block";
           }
