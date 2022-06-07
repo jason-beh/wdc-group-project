@@ -38,8 +38,6 @@ router.put("/edit-settings", function (req, res, next) {
     return res.status(401).send("Unauthorized Access!!");
   }
 
-  console.log(req.body);
-
   let { is_event_cancelled, is_availability_confirmed, is_event_finalised } = req.body;
   if (
     is_event_cancelled === null ||

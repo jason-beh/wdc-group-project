@@ -1,6 +1,7 @@
 var express = require("express");
 const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
+const { body, validationResult, check } = require("express-validator");
 
 var router = express.Router();
 
@@ -47,6 +48,12 @@ router.post("/specify-availability", function (req, res, next) {
     if (!userIsLoggedIn(req.session.user)) {
       if (!req.body.email) {
         return res.status(400).send("Insufficient Data");
+      }
+      check(req.body.email).isEmail().withMessage("Email is invalid");
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        let error = errors.array()[0];
+        return res.status(400).send(error.msg);
       }
       baseQueryOptions = [req.body["email"]];
     } else {
