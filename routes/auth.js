@@ -248,13 +248,88 @@ router.get("/send-email", function (req, res, next) {
 
         // Populate based on action
         if (action == "reset-password") {
-          mailOptions[
-            "html"
-          ] = `<a href="http://localhost:3000/reset-password?email=${email}&token=${token}">Reset your password!</a>`;
+          mailOptions["subject"] = "Reset Your Password !";
+          mailOptions["html"] = `<div
+                                  style="
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+                                        text-align: center;
+                                        font-family: monospace;
+                                        margin-top : 5%;
+                                      
+                                      "
+                                >
+                                  <img
+                                    src="https://media.istockphoto.com/vectors/shocked-woman-stand-at-huge-laptop-with-padlock-and-stars-characters-vector-id1203575906?k=20&m=1203575906&s=612x612&w=0&h=ZB_-7XERc3wEWO_UGYmjN9dXR22b3_GgdsXumxORYGE="
+                                    alt="Forgot Password Image"
+                                    style="max-width: 200px; max-height: 200px"
+                                  />
+                                  <h1>Oops ! Forgot your password ?</h1>
+                                  <h2>Don't worry we can help you !</h2>
+
+                                  <a
+                                    style="  
+                                    padding: 10px;
+                                    color: white;
+                                    background-color: #0d184f;
+                                    border-radius: 10px;
+                                    border: none;
+                                    margin: 30px auto 0 auto;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    box-sizing: border-box;
+                                    height: 50px;
+                                    text-decoration: none;
+                                  "
+                                    href="http://localhost:3000/reset-password?email=${email}&token=${token}"
+                                  >
+                                    Click here to reset your password!
+                                  </a>
+                                </div>`;
         } else if (action == "verify-account") {
-          mailOptions[
-            "html"
-          ] = `<a href="http://localhost:3000/verify?email=${email}&token=${token}">Verify your account!</a>`;
+          mailOptions["subject"] = "Verify Your Account !";
+          mailOptions["html"] = `<div
+                                  style="
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+                                        text-align: center;
+                                        font-family: monospace;
+                                        margin-top : 5%;
+                                      
+                                      "
+                                >
+                                  <img
+                                    src="https://cdn-icons-png.flaticon.com/512/4353/4353420.png"
+                                    alt="Confetti Image"
+                                    style="max-width: 200px; max-height: 200px"
+                                  />
+                                  <h1>Congratulations on joining Socialah!</h1>
+                                  <h2>Just One More Step !</h2>
+
+                                  <a
+                                    style="  
+                                    padding: 10px;
+                                    color: white;
+                                    background-color: #0d184f;
+                                    border-radius: 10px;
+                                    border: none;
+                                    margin: 30px auto 0 auto;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    box-sizing: border-box;
+                                    height: 50px;
+                                    text-decoration: none;
+                                  "
+                                    href="http://localhost:3000/verify?email=${email}&token=${token}"
+                                  >
+                                    Click here to verify your account!
+                                  </a>
+                                </div>;
+                                `;
         } else {
           return res.status(500).send("An interval server error occurred.");
         }

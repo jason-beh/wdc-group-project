@@ -313,7 +313,28 @@ router.delete("/delete-event", function (req, res, next) {
                   subject: "Event cancelled", // Subject line
                   text: "Hello world ", // plaintext body
                 };
-                mailOptions["html"] = `<h1>Event cancelled: ${event["title"]}</h1>`;
+                mailOptions["html"] = `<div
+                                  style="
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: center;
+                                        text-align: center;
+                                        font-family: monospace;
+                                        margin-top : 5%;
+                                      
+                                      "
+                                >
+                                  <img
+                                    src="https://thumbs.dreamstime.com/b/bubble-handwriting-lettering-sorry-vintage-vector-engraving-speech-black-beige-illustration-poster-info-graphic-web-176397490.jpg"
+                                    alt="Cancelled Event Image"
+                                    style="max-width: 200px; max-height: 200px"
+                                  />
+                                  <h1>We are very sad to inform you that...</h1>
+                                  <h2>An event that you were interested in was cancelled !>
+                                  <h2>Event cancelled: ${event["title"]}</h2>
+
+                              
+                                </div>`;
                 // send mail with defined transport object
                 req.transporter.sendMail(mailOptions, function (error, info) {
                   if (error) {
@@ -468,7 +489,25 @@ router.post("/finalise-event-time", function (req, res, next) {
                       text: "Hello world ", // plaintext body
                     };
                     // TODO: Add finalised time into message
-                    mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
+                    mailOptions["html"] = `<div
+                                              style="
+                                                display: flex;
+                                                flex-direction: column;
+                                                align-items: center;
+                                                text-align: center;
+                                                font-family: monospace;
+                                                margin-top: 5%;
+                                              "
+                                            >
+                                              <img
+                                                src="https://crate.typepad.com/.a/6a00e55210ddf58834022ad38f9c77200d-pi"
+                                                alt="Cancelled Event Image"
+                                                style="max-width: 200px; max-height: 200px"
+                                              />
+                                              <h1>We have good news !</h1>
+                                              <h2>An event that you were interested has finalised it's event time !</h2>
+                                              <h2>Event finalised: ${event["title"]}</h2>
+                                            </div>`;
                     // send mail with defined transport object
                     req.transporter.sendMail(mailOptions, function (error, info) {
                       if (error) {
