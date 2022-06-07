@@ -430,7 +430,7 @@ router.post(
     // Make sure the user is the event creator
     req.pool.getConnection(function (err, connection) {
       if (err) {
-        return next(err);
+        return res.status(500).send("An interval server error occurred.");
       }
       var { email, event_id, proposed_event_time_id } = req.body;
       var query = "select * from Events where created_by = ? and event_id = ?;";
@@ -506,7 +506,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
   }
   req.pool.getConnection(function (err, connection) {
     if (err) {
-      return next(err);
+      return res.status(500).send("An interval server error occurred.");
     }
 
     var query = "select * from Events where event_id = ?;";
@@ -548,6 +548,121 @@ router.post("/send-confirmation-email", function (req, res, next) {
   });
 });
 
+router.post("/show-details", function (req, res, next) {
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
+    }
+    var { event_id } = req.body;
+    var query = "SELECT * FROM Events where event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      if (err) {
+        return next(err);
+      }
+      connection.release();
+    });
+  });
+});
+
+router.post("/get-proposed-time", function (req, res, next) {
+  var { event_id } = req.body;
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
+    }
+
+    var query =
+      "SELECT COUNT(*), pet.start_date, pet.end_date, pet.proposed_event_time_id, pet.event_id FROM Availability a INNER JOIN Proposed_Event_Time AS pet ON a.proposed_event_time_id = pet.proposed_event_time_id GROUP BY pet.proposed_event_time_id HAVING pet.event_id = ?;";
+    connection.query(query, [event_id], function (err, rows, field) {
+      connection.release();
+      if (err) {
+        return next(err);
+      }
+      res.send(rows);
+    });
+  });
+});
+
+router.post("/get-finalise-time", function (req, res, next) {
+  var { finalise_event_time_id } = req.body;
+  if (!finalise_event_time_id) {
+    return res.status(400).send("Insufficient Data");
+  }
+
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
+    }
+
+    var query = "SELECT * FROM proposed_event_time where proposed_event_time_id = ?;";
+    connection.query(query, [finalise_event_time_id], function (err, rows, field) {
+      connection.release();
+      if (err) {
+        return next(err);
+      }
+      res.send(rows);
+    });
+  });
+});
+
+// router.post("/confirm-attendance", function (req, res, next) {
+//   var { user_email, event_id } = req.body;
+//   if (!event_id || !user_email) {
+//     return res.status(400).send("Insufficient Data");
+//   }
+
+//   req.pool.getConnection(function (err, connection) {
+//     if (err) {
+//       return res.status(500).send("An interval server error occurred.");
+//     }
+
+//     var query = "INSERT INTO Attendance VALUES(?, ?);";
+//     connection.query(query, [user_email, event_id], function (err, rows, field) {
+//       connection.release();
+//       if (err) {
+//         return next(err);
+//       }
+//       return res.send("Success in confirming attendance !");
+//     });
+//   });
+// });
+
+router.post(
+  "/get-attendance",
+  check("user_email").isEmail().withMessage("Email is invalid"),
+  function (req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let error = errors.array()[0];
+      return res.status(400).send(error.msg);
+    }
+
+    var { user_email, event_id } = req.body;
+    if (!event_id || !user_email) {
+      return res.status(400).send("Insufficient Data");
+    }
+
+    req.pool.getConnection(function (err, connection) {
+      if (err) {
+        return res.status(500).send("An interval server error occurred.");
+      }
+
+      var query = "SELECT * FROM attendance where email = ? AND event_id = ?;";
+      connection.query(query, [user_email, event_id], function (err, rows, field) {
+        connection.release();
+        if (err) {
+          return next(err);
+        }
+        return res.send(rows);
+      });
+    });
+  }
+);
+
 // Rendering Pages
 router.get("/create-event", function (req, res, next) {
   if (!userIsLoggedIn(req.session.user)) {
@@ -561,6 +676,10 @@ router.get("/edit-event", function (req, res, next) {
     res.redirect("/login");
   }
   res.sendFile(pathToHtml("edit-event.html"));
+});
+
+router.get("/event-details", function (req, res, next) {
+  res.sendFile(pathToHtml("event-details.html"));
 });
 
 module.exports = router;

@@ -1,9 +1,9 @@
-var mysql = require('mysql');
+var mysql = require("mysql");
 var options = {
-    host: 'localhost',
-    user: 'root',
-    password: 'password',
-    database: 'social',
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "social",
 };
 
 var connectionPool = mysql.createPool(options);

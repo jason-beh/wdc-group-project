@@ -19,7 +19,6 @@ router.post("/get-availability", function (req, res, next) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
     }
-
     var query =
       "SELECT * from Availability INNER JOIN Proposed_Event_Time ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE event_id = ? AND email = ?;";
     connection.query(query, [event_id, req.session.user.email], function (err, rows, fields) {

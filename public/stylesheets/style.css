@@ -11,6 +11,7 @@
   9. Specify Availability
   10. Admin View
   11. My Events
+  12. Event Details
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;700&display=swap");
@@ -570,16 +571,20 @@ p.description {
 .event-p-2 {
   font-size: 1.4em;
   font-weight: 600;
+  color: black;
 }
 
 .event-p-3 {
   font-size: 0.86em;
   margin-top: 6%;
+  color: black;
 }
 
 .event-p-4 {
   margin-top: 6%;
+  color: black;
 }
+
 .event-container {
   display: flex;
   flex-direction: column;
@@ -621,6 +626,7 @@ p.description {
 .event-horizontal-content {
   width: 100%;
   padding: 12px 30px;
+  color: black;
 }
 
 .event-horizontal-title {
@@ -1012,5 +1018,105 @@ p.description {
 
   .events-type-row {
     justify-content: center;
+  }
+}
+
+/* 12. Event Details */
+.detailMainContainer {
+  display: flex;
+  flex-direction: row;
+  padding: 4% 0;
+}
+
+.detailImage {
+  display: block;
+  border-radius: 10px;
+  height: 400px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.detailList {
+  font-weight: 500;
+  padding: 0 2% 2%;
+  box-sizing: border-box;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin: 0 2% 2% 5%;
+  width: 50%;
+}
+
+.detailList h1,
+.detailList h5 {
+  font-weight: bold;
+}
+
+.detailAll {
+  padding: 0 0 10% 0;
+}
+
+.detailMap {
+  width: 100%;
+}
+
+.detailsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  /* padding: 0 4% 0 4%; */
+  /* margin: 4% 0; */
+  box-sizing: border-box;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.detailsDescription {
+  margin: 20px 20px 10px 20px;
+  font-weight: bold;
+}
+
+.detailsDescriptionList {
+  margin: 0 20px 20px;
+}
+
+.eventContainerHREF {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.event-input-box {
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  width: 50%;
+  padding: 5px 0px 5px 15px;
+  margin: 5px 0 5px 0;
+  box-sizing: border-box;
+  font-weight: 400;
+  display: inline-block;
+}
+
+.event-input-box.selected {
+  background-color: #0d184f;
+  color: white;
+}
+
+@media only screen and (max-width: 992px) {
+  .detailMainContainer {
+    flex-direction: column;
+  }
+  .detailList {
+    flex-direction: column;
+    width: 100%;
+    margin: 30px 0 0;
+  }
+  .detailsContainer {
+    flex-direction: column;
+    width: 100%;
+    /* margin: 10px 20px; */
+  }
+  .detailAll {
+    padding: 0 0 10px 0;
   }
 }
