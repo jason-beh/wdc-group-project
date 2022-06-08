@@ -104,9 +104,23 @@ router.post("/specify-availability", function (req, res, next) {
                     subject: "Specified Availability", // Subject line
                     text: "Hello world ", // plaintext body
                   };
-                  mailOptions[
-                    "html"
-                  ] = `<h1>${email} has specified their availability for ${event["title"]}</h1>`;
+                  mailOptions["html"] = `<div
+                                          style="
+                                            display: flex;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            text-align: center;
+                                            font-family: monospace;
+                                            margin-top: 5%;
+                                          "
+                                        >
+                                          <img
+                                            src="https://cdn-icons-png.flaticon.com/512/4353/4353420.png"
+                                            alt="Confetti Image"
+                                            style="max-width: 200px; max-height: 200px"
+                                          />
+                                          <h1>${email} has specified their availability for ${event["title"]}</h1>
+                                        </div>`;
                   // send mail with defined transport object
                   req.transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
