@@ -261,6 +261,7 @@ router.delete("/delete-event", function (req, res, next) {
 
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      console.log(err);
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
@@ -469,41 +470,31 @@ router.post(
   }
 );
 
-router.post(
-  "/get-event",
-  check("email").isEmail().withMessage("Email is invalid"),
-  function (req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      let error = errors.array()[0];
-      return res.status(400).send(error.msg);
-    }
+router.post("/get-event", function (req, res, next) {
+  let { event_id } = req.body;
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
 
-    let { email } = req.body;
-    if (!email) {
-      return res.status(400).send("Insufficient Data");
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      return res.status(500).send("An interval server error occurred.");
     }
-
-    req.pool.getConnection(function (err, connection) {
+    // Get data
+    var query = "select * from Events where event_id = ?";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      connection.release();
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
-      // Get data
-      var query = "select * from Events where event_id = ?";
-      connection.query(query, [email], function (err, rows, fields) {
-        connection.release();
-        if (err) {
-          return res.status(500).send("An interval server error occurred.");
-        }
-        // check
-        if (!rows && rows.length == 0) {
-          return res.send("Event not found!");
-        }
-        return res.send(rows[0]);
-      });
+      // check
+      if (!rows && rows.length == 0) {
+        return res.send("Event not found!");
+      }
+      return res.send(rows[0]);
     });
-  }
-);
+  });
+});
 
 router.post(
   "/get-profile",

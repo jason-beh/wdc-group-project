@@ -256,14 +256,13 @@
         id="Modal"
         tabindex="-1"
         role="dialog"
-        aria-labelledby="exampleModalLabel"
         aria-hidden="true"
         data-backdrop="static"
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Delete User</h2>
+              <h2 class="modal-title">Delete User</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -291,14 +290,13 @@
         id="Modal2"
         tabindex="-1"
         role="dialog"
-        aria-labelledby="exampleModalLabel"
         aria-hidden="true"
         data-backdrop="static"
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Update Profile</h2>
+              <h2 class="modal-title">Update Profile</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -391,9 +389,7 @@
                     required
                   />
                 </div>
-                <button type="submit" id="submit-button" class="inputs button-1">
-                  Update Profile
-                </button>
+                <button type="submit" class="inputs button-1">Update Profile</button>
               </form>
             </div>
             <!-- <div class="profile-picture">
@@ -429,18 +425,11 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
         </div>
       </div>
       <!-- Modal -->
-      <div
-        class="modal fade"
-        id="Modal3"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="Modal3" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Create System Admin</h2>
+              <h2 class="modal-title">Create System Admin</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -451,7 +440,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                   <label for="email">Email</label>
                   <input
                     class="input-box"
-                    id="userEmail"
+                    id="email"
                     name="userEmail"
                     value="userEmail"
                     v-model="userEmail"
@@ -471,9 +460,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     required
                   />
                 </div>
-                <button type="submit" id="submit-button" class="inputs button-1">
-                  Create System Admin
-                </button>
+                <button type="submit" class="inputs button-1">Create System Admin</button>
               </form>
             </div>
             <div class="modal-footer">
@@ -490,18 +477,11 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
         </div>
       </div>
       <!-- Modal -->
-      <div
-        class="modal fade"
-        id="Modal4"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="Modal4" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Create User</h2>
+              <h2 class="modal-title">Create User</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -512,7 +492,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                   <label for="email">Email</label>
                   <input
                     class="input-box"
-                    id="userEmail"
+                    id="email2"
                     name="userEmail"
                     value="userEmail"
                     v-model="userEmail"
@@ -521,10 +501,10 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                   />
                 </div>
                 <div class="inputs">
-                  <label for="userPassword">Password</label>
+                  <label for="userPassword1">Password</label>
                   <input
                     class="input-box"
-                    id="userPassword"
+                    id="userPassword1"
                     name="userPassword"
                     value="userPassword"
                     v-model="userPassword"
@@ -532,9 +512,7 @@ onerror="this.onerror=null; this.src='/user-profiles/defaultUserProfile.png'"
                     required
                   />
                 </div>
-                <button type="submit" id="submit-button" class="inputs button-1">
-                  Create User
-                </button>
+                <button type="submit" class="inputs button-1">Create User</button>
               </form>
             </div>
             <div class="modal-footer">

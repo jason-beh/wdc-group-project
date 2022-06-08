@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmDelete(e) {
         sendAJAX(
           "DELETE",
-          "/admin/delete-event",
-          JSON.stringify({ eventID: this.eventID }),
+          "/delete-event",
+          JSON.stringify({ event_id: this.eventID }),
           function (err, res) {
             app.closeAlert();
             window.scrollTo({
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
         this.eventID = e.target.dataset.eventid;
         sendAJAX(
           "POST",
-          "/admin/get-event",
+          "/get-event",
           JSON.stringify({ eventToSearch: this.eventID }),
           function (err, res) {
             if (err) {

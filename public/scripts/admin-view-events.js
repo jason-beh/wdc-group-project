@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sendAJAX(
           "POST",
           "/admin/get-event",
-          JSON.stringify({ eventToSearch: this.eventID }),
+          JSON.stringify({ event_id: this.eventID }),
           function (err, res) {
             if (err) {
               console.log(err);
