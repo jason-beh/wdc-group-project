@@ -200,7 +200,7 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
 
     <div class="container" id="app">
-      <h1 class="profile-header">Search Results for "{{query}}"</h1>
+      <h1 class="profile-header">Search Results for "{{truncate(query)}}"</h1>
       <div v-if="events.length > 0" class="event-horizontal-container">
         <div v-for="event in events">
           <a v-bind:href="'/event-details?event=' + event.event_id" class="event-horizontal">

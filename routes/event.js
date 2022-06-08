@@ -7,6 +7,7 @@ var router = express.Router();
 router.get("/get-events", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return next(err);
     }
     let query =
@@ -31,13 +32,15 @@ router.get("/events/:event_id", function (req, res, next) {
 
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
     var query =
-      "SELECT * FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by WHERE Events.event_id = ?";
+      "SELECT event_id, title, description, created_by, proposed_date, street_number, street_name, suburb, event_picture, finalized_event_time_id, Events.state, Events.country, Events.postcode,  User_profile.first_name, User_profile.last_name  FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by WHERE Events.event_id = ?";
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
       var info = rows[0];
@@ -48,10 +51,10 @@ router.get("/events/:event_id", function (req, res, next) {
       // Query another database
       query = "select * from Proposed_Event_Time where event_id = ?;";
       connection.query(query, [event_id], function (err, rows, fields) {
+        connection.release();
         if (err) {
           return res.status(500).send("An interval server error occurred.");
         }
-        connection.release();
         info["date"] = rows;
         return res.json(info);
       });
@@ -66,12 +69,14 @@ router.post("/send-confirmation-email", function (req, res, next) {
   }
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
 
     var query = "select * from Events where event_id = ?;";
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {
+        connection.release();
         return next(err);
       }
       // Get the event details
@@ -111,15 +116,16 @@ router.post("/send-confirmation-email", function (req, res, next) {
 router.post("/show-details", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     var { event_id } = req.body;
     var query = "SELECT * FROM Events where event_id = ?;";
     connection.query(query, [event_id], function (err, rows, fields) {
+      connection.release();
       if (err) {
         return next(err);
       }
-      connection.release();
     });
   });
 });
@@ -132,6 +138,7 @@ router.post("/get-proposed-time", function (req, res, next) {
 
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
 
@@ -155,6 +162,7 @@ router.post("/get-finalise-time", function (req, res, next) {
 
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
 
@@ -186,6 +194,7 @@ router.post(
 
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
 

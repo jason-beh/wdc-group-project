@@ -229,7 +229,6 @@ document.addEventListener("DOMContentLoaded", function () {
       this.viewEvents();
     },
   });
-  document.getElementById("add-start-time-button").click();
 });
 
 function truncate(str) {
