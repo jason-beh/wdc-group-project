@@ -7,6 +7,7 @@ var router = express.Router();
 router.get("/get-settings", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
 
@@ -39,6 +40,7 @@ router.put("/edit-settings", function (req, res, next) {
 
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
