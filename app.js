@@ -3,7 +3,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
-// var passport = require('passport');
 var session = require("express-session");
 // module1 for storing Session in MySQL Database
 var mysqlStore = require("express-mysql-session")(session);
@@ -32,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// configure Passport to manage the login session
+// configure session
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
@@ -43,7 +42,6 @@ app.use(
     store: sessionStore, // storing Session in MySQL Database
   })
 );
-// app.use(passport.authenticate('session'));
 
 app.use(bodyParser.json());
 app.use(
