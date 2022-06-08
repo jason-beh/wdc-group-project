@@ -87,6 +87,12 @@
                 <span class="sr-only">Browse Events</span>
               </a>
             </li>
+            <li v-if="isAdmin !== -1" class="nav-item">
+              <a class="nav-link" href="/create-event">
+                Create Events
+                <span class="sr-only">Create Events</span>
+              </a>
+            </li>
             <li v-if="isAdmin === 1" class="nav-item">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -153,6 +159,11 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
+            <li class="nav-item" v-if="isAdmin !== -1">
+              <a class="nav-link" href="/create-event"
+                >Create Events <span class="sr-only">Create Events</span></a
+              >
+            </li>
             <li class="nav-item" v-if="isAdmin === 1">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -210,7 +221,7 @@
           </button>
         </div>
         <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
-          <span id="alert-danger-text">Error in updating profile</span>
+          <span id="alert-danger-text">Error in specifying availability</span>
           <button class="close alert-close" @click="closeAlert">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -222,10 +233,10 @@
           <div class="profile-container">
             <form @submit="onSubmit" id="profile-form" class="form-1">
               <div class="inputs">
-                <label for="email">Email</label>
+                <label for="email-input">Email</label>
                 <input
                   class="input-box"
-                  id="email"
+                  id="email-input"
                   name="email"
                   v-model="email"
                   type="email"
@@ -247,8 +258,8 @@
                   />
                   <div class="checkmark-inner">
                     <span class="checkmark-icon"></span>
-                    {{`${new Date(proposed_date.start_date).toLocaleTimeString().substring(0,5)}`}}
-                    - {{`${new Date(proposed_date.end_date).toLocaleTimeString().substring(0,5)}`}}
+                    {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
+                    Date(proposed_date.end_date).toLocaleTimeString()}`}}
                   </div>
                 </div>
               </div>

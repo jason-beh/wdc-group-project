@@ -577,7 +577,7 @@ p.description {
 }
 
 .event-badge {
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .event-details .event-p-2 {
@@ -714,6 +714,13 @@ p.description {
   .event-container {
     margin: 6% auto;
     width: 80%;
+  }
+  .event-horizontal {
+    flex-direction: column;
+  }
+  .event-horizontal-image {
+    max-width: 100%;
+    border-radius: 10px 10px 0 0;
   }
 }
 
@@ -1144,7 +1151,7 @@ p.description {
   height: 100%;
 }
 
-.eventContainerHREF:hover {
+.event-container-HREF:hover {
   opacity: 0.85;
 }
 

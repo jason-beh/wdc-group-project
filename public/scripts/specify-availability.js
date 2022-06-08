@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
           email: "",
           selected_proposed_time_id: {},
           hasPreviouslySelected: false,
+          emptySelectionCheck: 0,
         };
       },
       methods: {
@@ -55,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
           for (let availability of availabilityRes) {
             let { proposed_event_time_id } = availability;
             this.selected_proposed_time_id[proposed_event_time_id] = proposed_event_time_id;
+            this.emptySelectionCheck++;
           }
 
           // Retrigger state change
@@ -69,13 +71,20 @@ document.addEventListener("DOMContentLoaded", function () {
           if (id in this.selected_proposed_time_id) {
             currentElem.parentElement.classList.remove("selected");
             delete this.selected_proposed_time_id[id];
+            this.emptySelectionCheck--;
           } else {
             currentElem.parentElement.classList.add("selected");
             this.selected_proposed_time_id[id] = id;
+            this.emptySelectionCheck++;
           }
         },
         onSubmit(e) {
           e.preventDefault();
+          if (this.emptySelectionCheck == 0) {
+            document.getElementById("alert-danger-text").innerText = "Please specify a time !";
+            document.getElementById("alert-error").style.display = "block";
+            return;
+          }
           var formData = {
             proposed_event_id: Object.values(this.selected_proposed_time_id),
             event_id: this.event.event_id,
@@ -93,8 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
               });
               if (err) {
                 console.log(err);
-                document.getElementById("alert-error-text").innerText = err.message;
-                document.getElementById("alert-error").style.display = "block";
+                document.getElementById("alert-danger-text").innerText = err.message;
+                document.getElementById("alert-danger").style.display = "block";
               } else {
                 document.getElementById("alert-success-text").innerText =
                   "Successfully specified availability";

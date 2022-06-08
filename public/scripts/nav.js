@@ -8,6 +8,7 @@ sendAJAX("GET", "/get-session", null, function (err, res) {
   } else {
     res = {
       profile_picture: null,
+      isAdmin: -1,
     };
   }
 
