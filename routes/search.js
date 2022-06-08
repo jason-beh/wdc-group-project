@@ -16,7 +16,10 @@ router.get("/search", function (req, res, next) {
       return next(err);
     }
 
-    var query = `SELECT * from Events WHERE title LIKE '%${q}%'`;
+    let splitQuery = q.split("'");
+    let parsedQuery = splitQuery.join("\\'");
+
+    var query = `SELECT * from Events WHERE title LIKE '%${parsedQuery}%'`;
     connection.query(query, function (err, rows, fields) {
       connection.release();
       if (err) {
