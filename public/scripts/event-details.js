@@ -140,10 +140,10 @@ document.addEventListener("DOMContentLoaded", function () {
   // Get event
   sendAJAX("GET", `/events/${event_id}`, null, function (err, res) {
     if (err) {
-      // do something
-      document.getElementById("alert-error-text").innerText = err.message;
-      document.getElementById("alert-error").style.display = "block";
-      return;
+      if (err) {
+        window.location.href = "/404";
+        return;
+      }
     }
 
     res = JSON.parse(res);
