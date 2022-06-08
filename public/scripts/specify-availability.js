@@ -146,12 +146,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("authorize_button").addEventListener("click", function () {
-      tokenClient.callback = async (resp) => {
+      tokenClient.callback = (resp) => {
         if (resp.error !== undefined) {
           throw resp;
         }
         document.getElementById("authorize_button").innerText = "Sync Again";
-        await listUpcomingEvents(res.proposed_date);
+        listUpcomingEvents(res.proposed_date);
       };
 
       if (gapi.client.getToken() === null) {

@@ -230,7 +230,11 @@
                 <label for="email-input">Email</label>
                 <input
                   class="input-box"
+<<<<<<< HEAD
                   id="email-input"
+=======
+                  id="email"
+>>>>>>> 0ed25bf0b6cea8c32615eeeb762d29da9b30d105
                   name="email"
                   v-model="email"
                   type="email"
@@ -238,9 +242,7 @@
                 />
               </div>
               <div class="inputs" id="proposed_times">
-                <label for="instagram_handle"
-                  >Choose timeslots for {{event.proposed_date.substring(0,10)}}</label
-                >
+                <span> Choose timeslots for {{event.proposed_date.substring(0,10)}} </span>
                 <div
                   v-for="(proposed_date, index) in proposed_date_timeslots"
                   :key="index"

@@ -613,6 +613,7 @@ p.description {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
   border: 1px solid #eee;
   border-radius: 10px;
+  flex: 1;
 }
 
 .event-details p {
@@ -637,8 +638,20 @@ p.description {
   color: black;
 }
 
+.event-horizontal-content a {
+  color: inherit;
+}
+
+.event-horizontal-content .delete-event-button:hover {
+  opacity: 0.6;
+}
+
 .event-horizontal-title {
   font-weight: bold;
+}
+
+.event-horizontal-title a {
+  color: black;
 }
 
 .event-horizontal-image {
@@ -649,6 +662,10 @@ p.description {
   max-height: 160px;
   display: block;
   object-fit: cover;
+}
+
+.event-horizontal-image:hover {
+  opacity: 0.85;
 }
 
 .event-horizontal-date {
@@ -669,13 +686,25 @@ p.description {
   min-height: 100px;
 }
 
+@media only screen and (max-width: 1200px) {
+  .event-container {
+    width: 30%;
+  }
+}
+
 @media only screen and (max-width: 992px) {
+  .event-container {
+    width: 45%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
   #events-list {
     flex-direction: column !important;
   }
   .event-container {
-    margin: 0 3% 6% 3%;
-    width: 100%;
+    margin: 6% auto;
+    width: 80%;
   }
 }
 
@@ -772,6 +801,10 @@ p.description {
   display: block;
   margin-right: 10px;
   position: relative;
+}
+
+#proposed_times span {
+  margin-bottom: 0.5rem;
 }
 
 .checkmark-inner {
@@ -931,6 +964,7 @@ p.description {
 
 .delete-event-button {
   float: right;
+  cursor: pointer;
 }
 .cta-row {
   display: flex;
@@ -1098,6 +1132,7 @@ p.description {
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+  height: 100%;
 }
 
 .eventContainerHREF:hover {

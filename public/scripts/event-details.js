@@ -198,7 +198,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       );
     });
-    if (app.isFinalise != null) {
+    if (app.isFinalise !== null) {
       sendAJAX(
         "POST",
         "/get-finalise-time",
