@@ -200,7 +200,7 @@
             <img v-bind:src="event.event_picture" alt="Event Picture" class="event-picture" />
             <div class="event-details">
               <span
-                v-if="event.finalized_event_time_id === null"
+                v-if="event.finalized_event_time_id !== null"
                 class="badge badge-warning event-badge"
                 >Event Time Confirmed</span
               >
