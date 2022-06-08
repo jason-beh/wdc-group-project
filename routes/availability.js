@@ -30,6 +30,8 @@ router.post("/specify-availability", function (req, res, next) {
           .send("You cannot specify availability after the event is finalized.");
       }
 
+      let email = "";
+
       let baseQueryOptions;
 
       if (!userIsLoggedIn(req.session.user)) {
@@ -42,8 +44,10 @@ router.post("/specify-availability", function (req, res, next) {
           let error = errors.array()[0];
           return res.status(400).send(error.msg);
         }
+        email = req.body["email"];
         baseQueryOptions = [req.body["email"]];
       } else {
+        email = req.session.user.email;
         baseQueryOptions = [req.session.user.email];
       }
 
@@ -59,13 +63,51 @@ router.post("/specify-availability", function (req, res, next) {
         // insert new availability
         for (let index = 0; index < proposed_event_id.length; index++) {
           let queryOptions = [...baseQueryOptions, proposed_event_id[index]];
-          console.log(queryOptions);
-          let query = "INSERT INTO Availability VALUES (?, ?);";
+
+          query = "INSERT INTO Availability VALUES (?, ?);";
           connection.query(query, queryOptions, function (err, rows, fields) {
             if (err) {
               console.log(err);
               return res.status(500).send("An interval server error occurred.");
             }
+
+            // Send email to the event creator
+            query = "SELECT * FROM Events WHERE event_id = ?";
+            connection.query(query, [event_id], function (err, rows, fields) {
+              if (err) {
+                return res.status(500).send("An interval server error occurred.");
+              }
+
+              let event = rows[0];
+
+              query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+              connection.query(query, [event["created_by"]], function (err, settingsRows, fields) {
+                if (err) {
+                  return res.status(500).send("An interval server error occurred.");
+                }
+
+                // Send an email if they enable notifications
+                if (settingsRows[0]["is_availability_confirmed"] === 1) {
+                  var mailOptions = {
+                    from: "socialah@outlook.com", // sender address (who sends)
+                    to: settingsRows[0]["email"],
+                    subject: "Specified Availability", // Subject line
+                    text: "Hello world ", // plaintext body
+                  };
+                  mailOptions[
+                    "html"
+                  ] = `<h1>${email} has specified their availability for ${event["title"]}</h1>`;
+                  // send mail with defined transport object
+                  req.transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                      return console.log(error);
+                    }
+                  });
+                }
+              });
+
+              return res.status(200).end();
+            });
           });
         }
         connection.release();

@@ -272,13 +272,28 @@
             class="event-horizontal-container"
           >
             <div v-for="event in organizedEvents">
-              <a v-bind:href="'/event-details?event=' + event.event_id" class="event-horizontal">
-                <img
+              <div class="event-horizontal">
+                <a
                   class="event-horizontal-image"
-                  v-bind:src="event.event_picture"
-                  alt="event image"
-                />
+                  v-bind:href="'/event-details?event=' + event.event_id"
+                >
+                  <img
+                    class="event-horizontal-image"
+                    v-bind:src="event.event_picture"
+                    alt="event image"
+                  />
+                </a>
+
                 <div class="event-horizontal-content">
+                  <a v-bind:href="'/edit-event?event=' + event.event_id">
+                    <ion-icon
+                      name="pencil"
+                      alt="delete icon"
+                      class="trash-icon delete-event-button"
+                      @click="setToDelete"
+                      v-bind:data-eventid="event.event_id"
+                    ></ion-icon>
+                  </a>
                   <ion-icon
                     name="trash"
                     alt="delete icon"
@@ -291,10 +306,12 @@
                   <p class="event-horizontal-date">
                     {{new Date(`${event.proposed_date}`).toDateString()}}
                   </p>
-                  <h3 class="event-horizontal-title">{{event.title}}</h3>
+                  <h3 class="event-horizontal-title">
+                    <a v-bind:href="'/event-details?event=' + event.event_id"> {{event.title}} </a>
+                  </h3>
                   <p class="event-horizontal-street-name">{{event.street_name}}</p>
                 </div>
-              </a>
+              </div>
             </div>
           </div>
           <p
