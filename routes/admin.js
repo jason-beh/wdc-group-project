@@ -4,6 +4,7 @@ var argon2 = require("argon2");
 const { pathToHtml } = require("../utils/routes");
 const { body, validationResult, check } = require("express-validator");
 var router = express.Router();
+const fs = require("fs");
 
 // add multer library
 var multer = require("multer");
