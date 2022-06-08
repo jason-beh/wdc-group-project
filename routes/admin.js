@@ -31,15 +31,6 @@ var upload = multer({
   },
 });
 
-// Middleware to ensure the admin is logged in
-router.use(function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.redirect("/404");
-  } else {
-    next();
-  }
-});
-
 router.get("/view-events", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {

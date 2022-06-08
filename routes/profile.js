@@ -1,8 +1,4 @@
 var express = require("express");
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
-var argon2 = require("argon2");
-const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 const { body, validationResult, check } = require("express-validator");
 
@@ -47,10 +43,7 @@ router.put(
       let error = errors.array()[0];
       return res.status(400).send(error.msg);
     }
-    // Ensure the user is logged in
-    if (!userIsLoggedIn(req.session.user)) {
-      return res.status(401).send("Unauthorized Access!!");
-    }
+
     // Get all data from request body
     req.pool.getConnection(function (err, connection) {
       if (err) {
@@ -153,9 +146,6 @@ router.put(
 );
 
 router.get("/get-profile", function (req, res, next) {
-  if (!userIsLoggedIn(req.session.user)) {
-    return res.status(401).send("Unauthorized Access !!");
-  }
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -178,9 +168,6 @@ router.get("/get-profile", function (req, res, next) {
 
 // Rendering Pages
 router.get("/profile", function (req, res, next) {
-  if (!userIsLoggedIn(req.session.user)) {
-    res.redirect("/");
-  }
   res.sendFile(pathToHtml("profile.html"));
 });
 

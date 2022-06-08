@@ -5,11 +5,6 @@ const { pathToHtml } = require("../utils/routes");
 var router = express.Router();
 
 router.get("/get-settings", function (req, res, next) {
-  // Ensure an user is logged in
-  if (!userIsLoggedIn(req.session.user)) {
-    return res.status(401).send("Unauthorized Access!!");
-  }
-
   req.pool.getConnection(function (err, connection) {
     if (err) {
       return res.status(500).send("An interval server error occurred.");
@@ -33,11 +28,6 @@ router.get("/get-settings", function (req, res, next) {
 });
 
 router.put("/edit-settings", function (req, res, next) {
-  // Ensure an user is logged in
-  if (!userIsLoggedIn(req.session.user)) {
-    return res.status(401).send("Unauthorized Access!!");
-  }
-
   let { is_event_cancelled, is_availability_confirmed, is_event_finalised } = req.body;
   if (
     is_event_cancelled === null ||
@@ -71,10 +61,6 @@ router.put("/edit-settings", function (req, res, next) {
 
 // Rendering Pages
 router.get("/settings", function (req, res, next) {
-  if (!userIsLoggedIn(req.session.user)) {
-    return res.status(401).send("Unauthorized Access!!");
-  }
-
   res.sendFile(pathToHtml("settings.html"));
 });
 
