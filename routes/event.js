@@ -37,7 +37,7 @@ router.get("/events/:event_id", function (req, res, next) {
     }
     // Query the database
     var query =
-      "SELECT * FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by WHERE Events.event_id = ?";
+      "SELECT event_id, title, description, created_by, proposed_date, street_number, street_name, suburb, event_picture, Events.state, Events.country, Events.postcode,  User_profile.first_name, User_profile.last_name  FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by WHERE Events.event_id = ?";
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {
         connection.release();

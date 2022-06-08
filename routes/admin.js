@@ -192,7 +192,7 @@ router.post(
           .then(function (hashedPassword) {
             // Insert new system admin into database
             query =
-              "INSERT INTO Authentication (email, password, isAdmin, isVerified) VALUES (?, ?, 1, 0)";
+              "INSERT INTO Authentication (email, password, isAdmin, isVerified) VALUES (?, ?, 0, 1)";
             connection.query(query, [email, hashedPassword], function (err) {
               if (err) {
                 connection.release();

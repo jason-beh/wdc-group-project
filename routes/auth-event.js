@@ -102,7 +102,10 @@ router.post("/create-event", function (req, res, next) {
 
         proposed_times = proposed_times.split(",");
 
-        for (let proposed_time of proposed_times) {
+        let unique_proposed_times_set = new Set(proposed_times);
+        let unique_proposed_times = [...unique_proposed_times_set];
+
+        for (let proposed_time of unique_proposed_times) {
           let start_date = createDate(proposed_date, proposed_time);
           let end_date = addHours(start_date, duration);
 
@@ -411,8 +414,9 @@ router.post(
                       connection.release();
                       return res.status(500).send("An interval server error occurred.");
                     }
+
                     // Send an email if they enable notifications
-                    if (settingsRows[0]["is_event_finalised"] === 1) {
+                    if (settingsRows.length !== 0 && settingsRows[0]["is_event_finalised"] === 1) {
                       var mailOptions = {
                         from: "socialah@outlook.com", // sender address (who sends)
                         to: rows[0]["email"],

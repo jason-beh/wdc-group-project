@@ -19,8 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     res = JSON.parse(res);
 
+    console.log(res);
+
     var app = new Vue({
-      el: "#edit-form",
+      el: "#wrapper",
       data() {
         return {
           title: res.title,
@@ -72,6 +74,9 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
               document.getElementById("alert-success-text").innerText = "Successfully edited event";
               document.getElementById("alert-success").style.display = "block";
+              // setTimeout(function () {
+              //   window.location.href = `/event-details?event=${app.event_id}`;
+              // }, 1500);
             }
           });
         },

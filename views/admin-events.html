@@ -188,7 +188,7 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="admin-table-events">
       <div id="alert-container">
-        <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+        <div class="alert alert-success alert-bar" id="alert-success">
           <span id="alert-success-text">Success</span>
           <button class="close alert-close" @click="closeAlert">
             <span aria-hidden="true">&times;</span>
@@ -225,7 +225,11 @@
           <th>Actions</th>
         </tr>
         <tr v-for="event in events">
-          <td>{{truncate(event.title)}}</td>
+          <td>
+            <a v-bind:href="'/event-details?event=' + event.event_id">
+              {{truncate(event.title)}}
+            </a>
+          </td>
           <td>{{truncate(event.created_by)}}</td>
           <td>{{truncate(event.proposed_date)}}</td>
           <td>{{truncate(event.street_name)}}</td>
