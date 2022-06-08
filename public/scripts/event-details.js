@@ -81,12 +81,13 @@ document.addEventListener("DOMContentLoaded", function () {
           "POST",
           "/finalise-event-time",
           JSON.stringify({
-            email: this.userEmail,
-            event_id: this.event_id,
-            proposed_event_time_id: this.final_selected_time_id,
+            email: app.userEmail,
+            event_id: app.event_id,
+            proposed_event_time_id: app.final_selected_time_id,
           }),
           function (err, finaliseRes) {
             if (err) {
+              console.log(err);
               document.getElementById("alert-error-text").innerText = err.message;
               document.getElementById("alert-error").style.display = "block";
             } else {
@@ -185,8 +186,8 @@ document.addEventListener("DOMContentLoaded", function () {
         function (err, attendanceRes) {
           if (err) {
             console.log(err);
-            document.getElementById("alert-error-text").innerText = err.message;
-            document.getElementById("alert-error").style.display = "block";
+            document.getElementById("alert-error-text-attend").innerText = err.message;
+            document.getElementById("alert-error-attend").style.display = "block";
           }
           attendanceRes = JSON.parse(attendanceRes);
           if (attendanceRes.length == 0) {

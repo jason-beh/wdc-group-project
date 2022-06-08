@@ -191,15 +191,21 @@
     <div class="container" id="app">
       <h1 class="profile-header">Search Results for "{{query}}"</h1>
       <div v-if="events.length > 0" class="event-horizontal-container">
-        <div class="event-horizontal" v-for="event in events">
-          <img class="event-horizontal-image" v-bind:src="event.event_picture" alt="event image" />
-          <div class="event-horizontal-content">
-            <p class="event-horizontal-date">
-              {{new Date(`${event.proposed_date}`).toDateString()}}
-            </p>
-            <h3 class="event-horizontal-title">{{event.title}}</h3>
-            <p class="event-horizontal-street-name">{{event.street_name}}</p>
-          </div>
+        <div v-for="event in events">
+          <a v-bind:href="'/event-details?event=' + event.event_id" class="event-horizontal">
+            <img
+              class="event-horizontal-image"
+              v-bind:src="event.event_picture"
+              alt="event image"
+            />
+            <div class="event-horizontal-content">
+              <p class="event-horizontal-date">
+                {{new Date(`${event.proposed_date}`).toDateString()}}
+              </p>
+              <h3 class="event-horizontal-title">{{event.title}}</h3>
+              <p class="event-horizontal-street-name">{{event.street_name}}</p>
+            </div>
+          </a>
         </div>
       </div>
       <p v-if="events.length === 0">No events found.</p>
