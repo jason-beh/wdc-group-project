@@ -10,6 +10,7 @@ router.post("/get-availability", function (req, res, next) {
   }
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     var query =

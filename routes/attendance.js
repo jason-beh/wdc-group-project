@@ -16,23 +16,28 @@ router.get(
     req.pool.getConnection(function (err, connection) {
       if (err) {
         console.log(err);
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
       var { email, event_id } = req.query;
       if (!email || !event_id) {
+        connection.release();
         return res.status(500).send("Insufficient Data");
       }
       // Edge case handling (Confirm attendance cannot be done before the event is finalized)
       var query = "select * from Events where event_id = ?;";
       connection.query(query, [event_id], function (err, rows, fields) {
         if (err) {
+          connection.release();
           return res.status(500).send("An interval server error occurred.");
         }
 
         if (!rows || rows.length === 0) {
+          connection.release();
           return res.status(405).send("The event does not exist.");
         }
         if (!rows[0]["finalized_event_time_id"]) {
+          connection.release();
           return res
             .status(405)
             .send("You cannot confirm attendance before the event is finalized.");
@@ -41,10 +46,12 @@ router.get(
         connection.query(query, [email, event_id], function (err, rows, fields) {
           if (err) {
             console.log(err);
+            connection.release();
             return res.status(500).send("An interval server error occurred.");
           }
 
           if (rows && rows.length > 0) {
+            connection.release();
             return res.status(500).send("Availability has been previously specified");
           }
 

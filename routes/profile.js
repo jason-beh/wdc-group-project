@@ -47,6 +47,7 @@ router.put(
     // Get all data from request body
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
 
@@ -63,14 +64,15 @@ router.put(
         !state ||
         !country
       ) {
+        connection.release();
         return res.status(400).send("Insufficient Data");
       }
 
       if (req.files != null && req.files.length > 0) {
         let query = "select profile_picture from User_Profile where email = ?";
         connection.query(query, [req.session.user.email], function (err, rows, fields) {
-          connection.release();
           if (err) {
+            connection.release();
             return res.status(500).send("An interval server error occurred.");
           }
           let previousPath = rows[0]["profile_picture"];
@@ -103,6 +105,7 @@ router.put(
                 req.session.user.email,
               ],
               function (err, rows, fields) {
+                connection.release();
                 if (err) {
                   return res.status(500).send("An interval server error occurred.");
                 }
@@ -148,6 +151,7 @@ router.put(
 router.get("/get-profile", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     // Get data
