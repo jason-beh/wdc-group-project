@@ -52,6 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             proposed_time = JSON.parse(res);
+            console.log(proposed_time);
+
+            if (proposed_time.length == 0) {
+              return;
+            }
+
             for (let proposed_timing of proposed_time) {
               proposed_timing.start_date = getTime(proposed_timing.start_date);
               proposed_timing.end_date = getTime(proposed_timing.end_date);
@@ -75,16 +81,20 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
+        // console.log(app.userEmail);
+        // console.log(app.event_id);
+        // console.log(app.final_selected_time_id);
         sendAJAX(
           "POST",
           "/finalise-event-time",
           JSON.stringify({
-            email: this.userEmail,
-            event_id: this.event_id,
-            proposed_event_time_id: this.final_selected_time_id,
+            email: app.userEmail,
+            event_id: app.event_id,
+            proposed_event_time_id: app.final_selected_time_id,
           }),
           function (err, finaliseRes) {
             if (err) {
+              console.log(err);
               document.getElementById("alert-error-text").innerText = err.message;
               document.getElementById("alert-error").style.display = "block";
             } else {
@@ -183,8 +193,8 @@ document.addEventListener("DOMContentLoaded", function () {
         function (err, attendanceRes) {
           if (err) {
             console.log(err);
-            document.getElementById("alert-error-text").innerText = err.message;
-            document.getElementById("alert-error").style.display = "block";
+            document.getElementById("alert-error-text-attend").innerText = err.message;
+            document.getElementById("alert-error-attend").style.display = "block";
           }
           var attendanceRes = JSON.parse(attendanceRes);
           if (attendanceRes.length == 0) {

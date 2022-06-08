@@ -1022,13 +1022,13 @@ p.description {
 }
 
 /* 12. Event Details */
-.detailMainContainer {
+.detail-main-container {
   display: flex;
   flex-direction: row;
   padding: 4% 0;
 }
 
-.detailImage {
+.detail-image {
   display: block;
   border-radius: 10px;
   height: 400px;
@@ -1036,7 +1036,7 @@ p.description {
   object-fit: cover;
 }
 
-.detailList {
+.detail-list {
   font-weight: 500;
   padding: 0 2% 2%;
   box-sizing: border-box;
@@ -1046,20 +1046,20 @@ p.description {
   width: 50%;
 }
 
-.detailList h1,
-.detailList h5 {
+.detail-list h1,
+.detail-list h5 {
   font-weight: bold;
 }
 
-.detailAll {
+.detail-all {
   padding: 0 0 10% 0;
 }
 
-.detailMap {
+.detail-map {
   width: 100%;
 }
 
-.detailsContainer {
+.details-container {
   display: flex;
   flex-direction: column;
   width: 75%;
@@ -1070,16 +1070,16 @@ p.description {
   border-radius: 10px;
 }
 
-.detailsDescription {
+.details-description {
   margin: 20px 20px 10px 20px;
   font-weight: bold;
 }
 
-.detailsDescriptionList {
+.details-description-list {
   margin: 0 20px 20px;
 }
 
-.eventContainerHREF {
+.event-container-HREF {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -1103,20 +1103,20 @@ p.description {
 }
 
 @media only screen and (max-width: 992px) {
-  .detailMainContainer {
+  .detail-main-container {
     flex-direction: column;
   }
-  .detailList {
+  .detail-list {
     flex-direction: column;
     width: 100%;
     margin: 30px 0 0;
   }
-  .detailsContainer {
+  .details-container {
     flex-direction: column;
     width: 100%;
     /* margin: 10px 20px; */
   }
-  .detailAll {
+  .detail-all {
     padding: 0 0 10px 0;
   }
 }

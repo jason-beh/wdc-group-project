@@ -445,7 +445,7 @@ router.post(
           "select * from Proposed_Event_Time where proposed_event_time_id = ? and event_id = ?;";
         connection.query(query, [proposed_event_time_id, event_id], function (err, rows, fields) {
           if (err) {
-            return next(err);
+            return res.status(500).send("An interval server error occurred.");
           }
           query = "update Events set finalized_event_time_id = ? where event_id = ?;";
           connection.query(
@@ -453,25 +453,27 @@ router.post(
             [rows[0]["proposed_event_time_id"], rows[0]["event_id"]],
             function (err, rows, field) {
               if (err) {
-                return next(err);
+                return res.status(500).send("An interval server error occurred.");
               }
 
               // Send email to all users who previously specified availability
               query =
-                "SELECT * from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
+                "SELECT DISTINCT Availability.email from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
               connection.query(query, [event_id], function (err, rows, fields) {
                 if (err) {
                   return res.status(500).send("An interval server error occurred.");
                 }
 
                 for (let row of rows) {
+                  console.log(row.email);
                   query = "SELECT * FROM Notifications_Setting WHERE email = ?";
                   connection.query(query, [row["email"]], function (err, settingsRows, fields) {
                     if (err) {
                       return res.status(500).send("An interval server error occurred.");
                     }
+
                     // Send an email if they enable notifications
-                    if (settingsRows[0]["is_event_finalised"] === 1) {
+                    if (settingsRows.length != 0 && settingsRows[0]["is_event_finalised"] === 1) {
                       var mailOptions = {
                         from: "socialah@outlook.com", // sender address (who sends)
                         to: rows[0]["email"],
