@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  var proposed_date = "";
+
   // Get event
   sendAJAX("GET", `/events/${event_id}`, null, function (err, res) {
     if (err) {
@@ -16,6 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     res = JSON.parse(res);
+
+    proposed_date = res.proposed_date;
 
     var app = new Vue({
       el: "#app",
@@ -33,8 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
             country: res.country,
             postcode: res.postcode,
             event_picture: res.event_picture,
-            proposed_date: res.date,
           },
+          proposed_date_timeslots: res.date,
           email: "",
           selected_proposed_time_id: {},
           hasPreviouslySelected: false,
@@ -107,6 +111,10 @@ document.addEventListener("DOMContentLoaded", function () {
       if (err) {
         // do something
         console.log(err);
+        return;
+      }
+
+      if (userRes == "") {
         return;
       }
 
@@ -226,16 +234,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const events = response.result.items;
     if (!events || events.length == 0) {
       document.getElementById("content").innerText = "No events found.";
-      return;
+    } else {
+      document.getElementById("content").innerText = `${events.length} events found.`;
     }
-    // Flatten to string to display
-    const output = events.reduce(
-      (str, event) =>
-        `${str}${event.summary}: ${event.start.dateTime || event.start.date} - ${
-          event.end.dateTime || event.end.date
-        }\n`,
-      `Finding all events based on the event's proposed date, ${today}: \n`
-    );
-    document.getElementById("content").innerText = output;
+
+    let calendarEvents = [];
+    events.forEach((event) => {
+      calendarEvents.push({
+        title: event.summary,
+        start: event.start.dateTime,
+        end: event.end.dateTime,
+      });
+    });
+
+    let calendarEl = document.getElementById("calendar");
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+      timeZone: "local",
+      eventDisplay: "block",
+      themeSystem: "bootstrap",
+      initialView: "timeGridDay",
+      events: calendarEvents,
+      height: window.innerHeight * 0.6,
+    });
+
+    calendar.gotoDate(proposed_date);
+
+    calendar.render();
   }
 });
