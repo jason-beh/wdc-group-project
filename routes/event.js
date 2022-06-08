@@ -43,12 +43,14 @@ router.get("/get-events", function (req, res, next) {
     if (err) {
       return next(err);
     }
-    var query = "SELECT * FROM Events";
+    let query =
+      "SELECT * FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by";
     connection.query(query, [], function (err, rows, fields) {
       connection.release();
       if (err) {
-        return next(err);
+        return res.status(500).send("An interval server error occurred.");
       }
+
       return res.send(rows);
     });
   });
@@ -384,7 +386,8 @@ router.get("/events/:event_id", function (req, res, next) {
       return res.status(500).send("An interval server error occurred.");
     }
     // Query the database
-    var query = "SELECT * FROM Events WHERE event_id = ?;";
+    var query =
+      "SELECT * FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by WHERE Events.event_id = ?";
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {
         return res.status(500).send("An interval server error occurred.");
