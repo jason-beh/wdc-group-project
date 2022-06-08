@@ -230,11 +230,7 @@
                 <label for="email-input">Email</label>
                 <input
                   class="input-box"
-<<<<<<< HEAD
                   id="email-input"
-=======
-                  id="email"
->>>>>>> 0ed25bf0b6cea8c32615eeeb762d29da9b30d105
                   name="email"
                   v-model="email"
                   type="email"
@@ -256,8 +252,8 @@
                   />
                   <div class="checkmark-inner">
                     <span class="checkmark-icon"></span>
-                    {{`${new Date(proposed_date.start_date).toLocaleTimeString().substring(0,5)}`}}
-                    - {{`${new Date(proposed_date.end_date).toLocaleTimeString().substring(0,5)}`}}
+                    {{`${new Date(proposed_date.start_date).toLocaleTimeString()}`}} - {{`${new
+                    Date(proposed_date.end_date).toLocaleTimeString()}`}}
                   </div>
                 </div>
               </div>

@@ -199,15 +199,15 @@
           <a v-bind:href="'/event-details?event=' + event.event_id" class="event-container-HREF">
             <img v-bind:src="event.event_picture" alt="Event Picture" class="event-picture" />
             <div class="event-details">
+              <p class="event-p-1">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
+              <p class="event-p-2">{{event.title}}</p>
+              <p class="event-p-3">{{event.first_name}} {{event.last_name}}</p>
+              <p class="event-p-4">{{event.street_name}}</p>
               <span
                 v-if="event.finalized_event_time_id !== null"
                 class="badge badge-warning event-badge"
                 >Event Time Confirmed</span
               >
-              <p class="event-p-1">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
-              <p class="event-p-2">{{event.title}}</p>
-              <p class="event-p-3">{{event.first_name}} {{event.last_name}}</p>
-              <p class="event-p-4">{{event.street_name}}</p>
             </div>
           </a>
         </div>

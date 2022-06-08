@@ -568,7 +568,7 @@ p.description {
 }
 
 .event-badge {
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .event-details .event-p-2 {
@@ -1135,7 +1135,7 @@ p.description {
   height: 100%;
 }
 
-.eventContainerHREF:hover {
+.event-container-HREF:hover {
   opacity: 0.85;
 }
 
