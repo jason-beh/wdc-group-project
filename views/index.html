@@ -196,12 +196,21 @@
     <div class="container">
       <div id="events-list">
         <div v-for="(event, index) in events" :key="index" class="event-container">
+<<<<<<< HEAD
           <a v-bind:href="'/event-details?event=' + event.event_id" class="event-container-HREF">
+=======
+          <a v-bind:href="'/event-details?event=' + event.event_id" class="eventContainerHREF">
+>>>>>>> c10ae36da38a27d06a1e2d331c09e412a66cee18
             <img v-bind:src="event.event_picture" alt="Event Picture" class="event-picture" />
             <div class="event-details">
+              <span
+                v-if="event.finalized_event_time_id === null"
+                class="badge badge-warning event-badge"
+                >Event Time Confirmed</span
+              >
               <p class="event-p-1">{{new Date(`${event.proposed_date}`).toDateString()}}</p>
               <p class="event-p-2">{{event.title}}</p>
-              <p class="event-p-3">Created by : {{event.created_by}}</p>
+              <p class="event-p-3">{{event.first_name}} {{event.last_name}}</p>
               <p class="event-p-4">{{event.street_name}}</p>
             </div>
           </a>

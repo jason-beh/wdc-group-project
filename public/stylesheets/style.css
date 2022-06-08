@@ -333,11 +333,9 @@ p.description {
 }
 .profile-image {
   border-radius: 50%;
-  width: 100%;
-  max-width: 150px;
+  width: 150px;
   margin-bottom: 10px;
-  height: 100%;
-  max-height: 150px;
+  height: 150px;
   object-fit: cover;
   display: block;
 }
@@ -564,25 +562,31 @@ p.description {
   align-items: center;
 }
 
-.event-p-1 {
-  color: #d9b11f;
+.event-details .event-p-1 {
+  color: #1255aa;
+  font-size: 0.9rem;
 }
 
-.event-p-2 {
+.event-badge {
+  margin-bottom: 10px;
+}
+
+.event-details .event-p-2 {
   font-size: 1.4em;
   font-weight: 600;
   color: black;
 }
 
-.event-p-3 {
+.event-details .event-p-3 {
   font-size: 0.86em;
   margin-top: 6%;
   color: black;
 }
 
-.event-p-4 {
+.event-details .event-p-4 {
   margin-top: 6%;
   color: black;
+  font-size: 0.9em;
 }
 
 .event-container {
@@ -598,6 +602,8 @@ p.description {
   flex-wrap: wrap;
 
   margin-top: 4%;
+
+  margin-bottom: 100px;
 }
 
 .event-details {
@@ -605,6 +611,7 @@ p.description {
   padding: 4%;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eee;
   border-radius: 10px;
 }
 
@@ -620,6 +627,7 @@ p.description {
   display: flex;
   border-radius: 10px 10px 10px 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.12);
+  border: 1px solid #eee;
   margin-top: 30px;
 }
 
@@ -735,6 +743,7 @@ p.description {
 
 .specify-pre {
   white-space: pre-wrap;
+  margin-top: 10px;
 }
 .checkmark-container.selected {
   background: #0d184f;
@@ -768,6 +777,7 @@ p.description {
 .checkmark-inner {
   display: flex;
   align-items: center;
+  padding: 4px 0;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -838,6 +848,7 @@ p.description {
 .admin-table {
   width: 100%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eee;
   border-radius: 10px;
   margin-top: 20px;
 }
@@ -867,6 +878,7 @@ p.description {
 
 .admin-dashboard-button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eee;
   border-radius: 10px;
   padding: 50px 80px;
   display: flex;
@@ -1038,12 +1050,13 @@ p.description {
 
 .detail-list {
   font-weight: 500;
-  padding: 0 2% 2%;
+  padding: 5% 4% 4%;
   box-sizing: border-box;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   margin: 0 2% 2% 5%;
   width: 50%;
+  border: 1px solid #eee;
 }
 
 .detail-list h1,
@@ -1067,6 +1080,7 @@ p.description {
   /* margin: 4% 0; */
   box-sizing: border-box;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eee;
   border-radius: 10px;
 }
 
@@ -1084,6 +1098,10 @@ p.description {
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+}
+
+.eventContainerHREF:hover {
+  opacity: 0.85;
 }
 
 .event-input-box {

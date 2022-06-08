@@ -31,15 +31,6 @@ var upload = multer({
   },
 });
 
-// Middleware to ensure the admin is logged in
-router.use(function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.redirect("/404");
-  } else {
-    next();
-  }
-});
-
 router.get("/view-events", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
@@ -235,6 +226,11 @@ router.delete(
     // If we lack any of these data, we return err
     if (!email) {
       return res.status(400).send("Insufficient Data");
+    }
+
+    // Edge case handling (Admin cannot delete himself / herself)
+    if (email == req.session.user.email) {
+      return res.status(405).send("You are not allowed to delete yourself.");
     }
 
     req.pool.getConnection(function (err, connection) {

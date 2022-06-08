@@ -3,7 +3,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var bodyParser = require("body-parser");
-// var passport = require('passport');
 var session = require("express-session");
 // module1 for storing Session in MySQL Database
 var mysqlStore = require("express-mysql-session")(session);
@@ -13,7 +12,9 @@ var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth");
 var profileRouter = require("./routes/profile");
 var eventRouter = require("./routes/event");
+var authEventRouter = require("./routes/auth-event");
 var availabilityRouter = require("./routes/availability");
+var authAvailabilityRouter = require("./routes/auth-availability");
 var searchRouter = require("./routes/search");
 var adminRouter = require("./routes/admin");
 var attendanceRouter = require("./routes/attendance");
@@ -30,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// configure Passport to manage the login session
+// configure session
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
@@ -41,7 +42,6 @@ app.use(
     store: sessionStore, // storing Session in MySQL Database
   })
 );
-// app.use(passport.authenticate('session'));
 
 app.use(bodyParser.json());
 app.use(
@@ -51,6 +51,7 @@ app.use(
 );
 
 var nodemailer = require("nodemailer");
+const { userIsAdmin, userIsLoggedIn } = require("./utils/auth");
 
 var transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email", // hostname
@@ -90,14 +91,37 @@ function fileFilter(req, file, cb) {
   }
 }
 
+// Public routes
 app.use("/", indexRouter);
 app.use("/", authRouter);
-app.use("/", profileRouter);
 app.use("/", eventRouter);
 app.use("/", availabilityRouter);
 app.use("/", searchRouter);
 app.use("/", attendanceRouter);
+
+// User authenticated routes
+app.use(function (req, res, next) {
+  if (!userIsLoggedIn(req.session.user)) {
+    return res.redirect("/404");
+  } else {
+    next();
+  }
+});
+
+app.use("/", authEventRouter);
+app.use("/", authAvailabilityRouter);
+app.use("/", profileRouter);
 app.use("/", settingsRouter);
+
+// Admin authenticated routes
+app.use(function (req, res, next) {
+  if (!userIsAdmin(req.session.user)) {
+    return res.redirect("/404");
+  } else {
+    next();
+  }
+});
+
 app.use("/admin", adminRouter);
 
 // catch 404

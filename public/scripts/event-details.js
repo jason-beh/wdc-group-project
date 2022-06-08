@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
         postcode: "",
         event_picture: "",
         description: "",
+        first_name: "",
+        last_name: "",
         proposed_times: [],
         final_proposed_times: [],
         isFinalise: "",
@@ -51,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
               document.getElementById("alert-error").style.display = "block";
             }
 
+<<<<<<< HEAD
             proposed_time = JSON.parse(res);
             console.log(proposed_time);
 
@@ -58,6 +61,9 @@ document.addEventListener("DOMContentLoaded", function () {
               return;
             }
 
+=======
+            let proposed_time = JSON.parse(res);
+>>>>>>> c10ae36da38a27d06a1e2d331c09e412a66cee18
             for (let proposed_timing of proposed_time) {
               proposed_timing.start_date = getTime(proposed_timing.start_date);
               proposed_timing.end_date = getTime(proposed_timing.end_date);
@@ -111,11 +117,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById("alert-error-text").innerText = err.message;
                     document.getElementById("alert-error").style.display = "block";
                   } else {
-                    final_proposed_time = JSON.parse(finaltimeRes);
+                    let final_proposed_time = JSON.parse(finaltimeRes);
                     final_proposed_time[0].start_date = getTime(final_proposed_time[0].start_date);
                     final_proposed_time[0].end_date = getTime(final_proposed_time[0].end_date);
                     app.final_proposed_times = final_proposed_time[0];
-                    // console.log("finalfinal == " + app.final_proposed_times.start_date);
                   }
                   document.getElementById("dismiss-button3").click();
                 }
@@ -169,6 +174,8 @@ document.addEventListener("DOMContentLoaded", function () {
     app.event_picture = res.event_picture;
     app.description = res.description;
     app.isFinalise = res.finalized_event_time_id;
+    app.first_name = res.first_name;
+    app.last_name = res.last_name;
     sendAJAX("GET", "/get-session", null, function (err, userRes) {
       if (err) {
         //do something
@@ -185,7 +192,6 @@ document.addEventListener("DOMContentLoaded", function () {
         app.isCreator = false;
       }
 
-      console.log(app.userEmail);
       sendAJAX(
         "POST",
         "/get-attendance",
@@ -196,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("alert-error-text-attend").innerText = err.message;
             document.getElementById("alert-error-attend").style.display = "block";
           }
-          var attendanceRes = JSON.parse(attendanceRes);
+          attendanceRes = JSON.parse(attendanceRes);
           if (attendanceRes.length == 0) {
             app.attendanceButton = true;
           } else {
@@ -215,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("alert-error-text").innerText = err.message;
             document.getElementById("alert-error").style.display = "block";
           } else {
-            final_proposed_time = JSON.parse(finaltimeRes);
+            let final_proposed_time = JSON.parse(finaltimeRes);
             final_proposed_time[0].start_date = getTime(final_proposed_time[0].start_date);
             final_proposed_time[0].end_date = getTime(final_proposed_time[0].end_date);
             app.final_proposed_times = final_proposed_time[0];
