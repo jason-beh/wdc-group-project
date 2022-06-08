@@ -24,3 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+function truncate(str) {
+  if (str !== null && str.length > 20) {
+    return str.substring(0, 20).concat("...");
+  }
+
+  return str;
+}

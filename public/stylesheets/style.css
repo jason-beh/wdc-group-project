@@ -44,6 +44,15 @@ input:disabled {
   display: none !important;
 }
 
+td a {
+  color: #1255aa;
+}
+
+td a:hover {
+  color: #1255aa;
+  text-decoration: underline;
+}
+
 .alert-bar {
   margin-top: 40px;
   display: none;

@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // disable the input if we are logged in and check for existing availability
       if (app.email != null) {
-        document.getElementById("email-input").disabled = true;
+        document.getElementById("email").disabled = true;
 
         // Get current availability
         sendAJAX(
