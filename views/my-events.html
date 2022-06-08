@@ -244,11 +244,7 @@
             class="event-horizontal-container"
           >
             <div v-for="event in attendedEvents">
-              <a
-                v-bind:href="'/event-details?event=' + event.event_id"
-                class="event-horizontal"
-                id="detailsHREF"
-              >
+              <a v-bind:href="'/event-details?event=' + event.event_id" class="event-horizontal">
                 <img
                   class="event-horizontal-image"
                   v-bind:src="event.event_picture"
@@ -276,11 +272,7 @@
             class="event-horizontal-container"
           >
             <div v-for="event in organizedEvents">
-              <a
-                v-bind:href="'/event-details?event=' + event.event_id"
-                class="event-horizontal"
-                id="detailsHREF"
-              >
+              <a v-bind:href="'/event-details?event=' + event.event_id" class="event-horizontal">
                 <img
                   class="event-horizontal-image"
                   v-bind:src="event.event_picture"
