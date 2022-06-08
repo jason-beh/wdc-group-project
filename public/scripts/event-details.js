@@ -53,17 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
               document.getElementById("alert-error").style.display = "block";
             }
 
-<<<<<<< HEAD
-            proposed_time = JSON.parse(res);
-            console.log(proposed_time);
-
-            if (proposed_time.length == 0) {
-              return;
-            }
-
-=======
             let proposed_time = JSON.parse(res);
->>>>>>> c10ae36da38a27d06a1e2d331c09e412a66cee18
             for (let proposed_timing of proposed_time) {
               proposed_timing.start_date = getTime(proposed_timing.start_date);
               proposed_timing.end_date = getTime(proposed_timing.end_date);
@@ -87,9 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        // console.log(app.userEmail);
-        // console.log(app.event_id);
-        // console.log(app.final_selected_time_id);
         sendAJAX(
           "POST",
           "/finalise-event-time",
