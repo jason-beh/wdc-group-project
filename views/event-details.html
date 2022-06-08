@@ -11,6 +11,13 @@
     />
     <meta name="google-signin-plugin_name" content="APP" />
 
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
     <link rel="shortcut icon" href="/images/custom-favicon.png" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
 
@@ -191,7 +198,12 @@
 
       <div class="container" id="eventDetail">
         <div id="alert-container-final">
-          <div class="alert alert-success alert-bar" id="alert-success-event" role="alert">
+          <div
+            class="alert alert-success alert-bar"
+            id="alert-success-event"
+            @click="closeAlert"
+            role="alert"
+          >
             <span id="alert-success-text-event">You have finalised the time for the event !</span>
             <button class="close alert-close" @click="closeAlert">
               <span aria-hidden="true">&times;</span>
