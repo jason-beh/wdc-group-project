@@ -389,7 +389,7 @@ router.post(
                       return res.status(500).send("An interval server error occurred.");
                     }
                     // Send an email if they enable notifications
-                    if (settingsRows[0]["is_event_finalised"] === 1) {
+                    if (settingsRows.length !== 0 && settingsRows[0]["is_event_finalised"] === 1) {
                       var mailOptions = {
                         from: "socialah@outlook.com", // sender address (who sends)
                         to: rows[0]["email"],

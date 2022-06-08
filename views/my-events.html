@@ -254,7 +254,7 @@
                   <p class="event-horizontal-date">
                     {{new Date(`${event.proposed_date}`).toDateString()}}
                   </p>
-                  <h3 class="event-horizontal-title">{{event.title}}</h3>
+                  <h3 class="event-horizontal-title shrink">{{event.title}}</h3>
                   <p class="event-horizontal-street-name">{{event.street_name}}</p>
                 </div>
               </a>
@@ -303,13 +303,17 @@
                     v-bind:data-eventid="event.event_id"
                     class="trash-icon delete-event-button"
                   ></ion-icon>
-                  <p class="event-horizontal-date">
-                    {{new Date(`${event.proposed_date}`).toDateString()}}
-                  </p>
-                  <h3 class="event-horizontal-title">
-                    <a v-bind:href="'/event-details?event=' + event.event_id"> {{event.title}} </a>
-                  </h3>
-                  <p class="event-horizontal-street-name">{{event.street_name}}</p>
+                  <div>
+                    <p class="event-horizontal-date">
+                      {{new Date(`${event.proposed_date}`).toDateString()}}
+                    </p>
+                    <h3 class="event-horizontal-title">
+                      <a v-bind:href="'/event-details?event=' + event.event_id">
+                        {{truncate(event.title)}}
+                      </a>
+                    </h3>
+                    <p class="event-horizontal-street-name">{{truncate(event.street_name)}}</p>
+                  </div>
                 </div>
               </div>
             </div>

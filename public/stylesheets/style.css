@@ -706,6 +706,13 @@ p.description {
     margin: 6% auto;
     width: 80%;
   }
+  .event-horizontal {
+    flex-direction: column;
+  }
+  .event-horizontal-image {
+    max-width: 100%;
+    border-radius: 10px 10px 0 0;
+  }
 }
 
 /* 8. Verify Account */
