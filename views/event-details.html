@@ -224,7 +224,7 @@
         <div class="detail-main-container">
           <div class="details-container">
             <img class="detail-image" v-bind:src="event_picture" alt="event picture" />
-            <label for="event-description" class="details-description">Description</label>
+            <span class="details-description">Description</span>
             <p id="event-description" class="details-description-list">{{description}}</p>
           </div>
           <div class="detail-list right">
@@ -277,18 +277,11 @@
               </div>
             </div>
             <!-- Modal -->
-            <div
-              class="modal fade"
-              id="modalFinal"
-              tabindex="-1"
-              role="dialog"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
+            <div class="modal fade" id="modalFinal" tabindex="-1" role="dialog" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h2 class="modal-title" id="exampleModalLabel">Finalise Timing</h2>
+                    <h2 class="modal-title">Finalise Timing</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>

@@ -803,6 +803,10 @@ p.description {
   position: relative;
 }
 
+#proposed_times span {
+  margin-bottom: 0.5rem;
+}
+
 .checkmark-inner {
   display: flex;
   align-items: center;

@@ -176,8 +176,7 @@
                   <input
                     type="text"
                     class="form-control navbar-searchbar"
-                    placeholder="Search
-                  Events..."
+                    placeholder="Search Events..."
                     aria-label="Search Events..."
                     v-model="query"
                     name="query"
@@ -314,7 +313,7 @@
             <div class="inputs">
               <label for="image">Cover Photo</label>
               <img v-bind:src="event_picture" class="event-image" alt="dummy event pic" />
-              <input type="file" name="file" class="profile-image-file" />
+              <input type="file" id="image" name="file" class="profile-image-file" />
               <!-- <form
                 @submit="changeEventPicture"
                 method="post"

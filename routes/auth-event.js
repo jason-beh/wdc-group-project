@@ -243,9 +243,8 @@ router.delete("/delete-event", function (req, res, next) {
     }
 
     let query = "SELECT * from Events WHERE event_id = ? and created_by = ?";
-    connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
+    connection.query(query, [event_id, req.session.user.email], function (err, rows, fields) {
       if (err) {
-        console.log(err);
         return res.status(500).send("An interval server error occurred.");
       }
 
@@ -255,10 +254,9 @@ router.delete("/delete-event", function (req, res, next) {
 
       let event = rows[0];
 
-      query = "DELETE * from Events where event_id = ? and created_by = ?";
-      connection.query(query, [event_id, req.session.user], function (err, rows, fields) {
+      query = "DELETE FROM Events WHERE event_id = ? and created_by = ?";
+      connection.query(query, [event_id, req.session.user.email], function (err, rows, fields) {
         if (err) {
-          console.log(err);
           return res.status(500).send("An interval server error occurred.");
         }
 
