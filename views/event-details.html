@@ -200,8 +200,8 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
-            <span id="alert-danger-text">Error occurred</span>
+          <div class="alert alert-danger alert-bar" id="alert-error-attend" role="alert">
+            <span id="alert-danger-text-attend">Error occurred</span>
             <button class="close alert-close" @click="closeAlert">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -221,19 +221,19 @@
           </div>
         </div>
         <!-- <h1 class="profileHeader">Event Details</h1> -->
-        <div class="detailMainContainer">
-          <div class="detailsContainer">
-            <img class="detailImage" v-bind:src="event_picture" alt="event picture" />
-            <label for="eventDescription" class="detailsDescription">Description</label>
-            <p id="eventDescription" class="detailsDescriptionList">{{description}}</p>
+        <div class="detail-main-container">
+          <div class="details-container">
+            <img class="detail-image" v-bind:src="event_picture" alt="event picture" />
+            <label for="event-description" class="details-description">Description</label>
+            <p id="event-description" class="details-description-list">{{description}}</p>
           </div>
-          <div class="detailList right">
-            <div class="detailAll">
+          <div class="detail-list right">
+            <div class="detail-all">
               <h1>{{title}}</h1>
               <h6>by {{first_name}} {{last_name}}</h6>
             </div>
             <div v-if="isFinalise == null">
-              <div class="detailAll" v-if="isCreator">
+              <div class="detail-all" v-if="isCreator">
                 <h5>Proposed Date</h5>
                 <p>{{proposed_date}}</p>
                 <button
@@ -246,7 +246,7 @@
                   Finalise Time
                 </button>
               </div>
-              <div class="detailAll" v-else>
+              <div class="detail-all" v-else>
                 <h5>Proposed Date</h5>
                 <p>{{proposed_date}}</p>
                 <a v-bind:href="'/specify-availability?event=' + event_id">
@@ -255,13 +255,13 @@
               </div>
             </div>
             <div v-else-if="isFinalise != null">
-              <div class="detailAll" v-if="isCreator">
+              <div class="detail-all" v-if="isCreator">
                 <h5>Proposed Date</h5>
                 <p>{{proposed_date}}</p>
                 <h5>Finalised Time</h5>
                 <p>{{final_proposed_times.start_date}} - {{final_proposed_times.end_date}}</p>
               </div>
-              <div class="detailAll" v-else>
+              <div class="detail-all" v-else>
                 <h5>Proposed Date</h5>
                 <p>{{proposed_date}}</p>
                 <h5>Finalised Time</h5>
@@ -295,33 +295,38 @@
                   </div>
                   <div class="modal-body">
                     <div class="inputs">
-                      <label>Choose timeslot</label>
-                      <div v-for="(proposed_time) in proposed_times">
-                        <div
-                          class="checkmark-container event-input-box"
-                          :value="proposed_time.proposed_event_time_id"
-                        >
-                          <input
-                            type="radio"
-                            name="selected_time"
+                      <h5 v-if="!proposed_times.length" style="color: #0d184f">
+                        Oops, there are currently no votes yet !
+                      </h5>
+                      <div v-if="proposed_times.length">
+                        <label>Choose timeslot</label>
+                        <div v-for="(proposed_time) in proposed_times">
+                          <div
+                            class="checkmark-container event-input-box"
                             :value="proposed_time.proposed_event_time_id"
-                            @click="chooseFinaliseTime"
-                          />
-                          <span> {{proposed_time.start_date}} - {{proposed_time.end_date}} </span>
+                          >
+                            <input
+                              type="radio"
+                              name="selected_time"
+                              :value="proposed_time.proposed_event_time_id"
+                              @click="chooseFinaliseTime"
+                            />
+                            <span> {{proposed_time.start_date}} - {{proposed_time.end_date}} </span>
+                          </div>
+                          <span style="color: #0d184f; display: inline-block">
+                            {{proposed_time["COUNT(*)"]}} responses
+                          </span>
                         </div>
-                        <span style="color: #0d184f; display: inline-block">
-                          {{proposed_time["COUNT(*)"]}} responses
-                        </span>
-                      </div>
-                      <div>
-                        <button
-                          id="submitButton"
-                          type="button"
-                          class="button-1"
-                          @click="finaliseTimeSubmit"
-                        >
-                          Submit
-                        </button>
+                        <div>
+                          <button
+                            id="submitButton"
+                            type="button"
+                            class="button-1"
+                            @click="finaliseTimeSubmit"
+                          >
+                            Submit
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
