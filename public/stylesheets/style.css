@@ -735,6 +735,7 @@ p.description {
 
 .specify-pre {
   white-space: pre-wrap;
+  margin-top: 10px;
 }
 .checkmark-container.selected {
   background: #0d184f;
@@ -768,6 +769,7 @@ p.description {
 .checkmark-inner {
   display: flex;
   align-items: center;
+  padding: 4px 0;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
