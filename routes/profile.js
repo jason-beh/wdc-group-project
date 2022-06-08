@@ -1,8 +1,4 @@
 var express = require("express");
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
-var argon2 = require("argon2");
-const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 const { body, validationResult, check } = require("express-validator");
 

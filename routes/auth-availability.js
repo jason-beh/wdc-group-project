@@ -1,7 +1,4 @@
 var express = require("express");
-const { userIsLoggedIn } = require("../utils/auth");
-const { pathToHtml } = require("../utils/routes");
-const { body, validationResult, check } = require("express-validator");
 
 var router = express.Router();
 
