@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="fix">
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="google-signin-client_id"
+      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
+    />
+    <meta name="google-signin-plugin_name" content="APP" />
+    <meta name="theme-color" content="#0D184F" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -9,6 +18,7 @@
     />
     <link rel="shortcut icon" href="/images/custom-favicon.png" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
+
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -28,16 +38,6 @@
     <script src="https://apis.google.com/js/platform.js"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/login.js"></script>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="google-signin-client_id"
-      content="1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com"
-    />
-    <meta name="google-signin-plugin_name" content="APP" />
-    <meta name="theme-color" content="#0D184F" />
     <title>Socialah - Login</title>
   </head>
   <body>
@@ -48,10 +48,12 @@
         </div>
       </div>
       <div class="login-container">
-        <img src="/images/blueLogo.png" alt="App logo" />
+        <a href="/">
+          <img src="/images/blueLogo.png" alt="App logo" />
+        </a>
         <h1>Login</h1>
         <div id="alert-container">
-          <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+          <div class="alert alert-success alert-bar" id="alert-success">
             <span id="alert-success-text">Login Success</span>
             <button class="close alert-close" @click="closeAlert">
               <span aria-hidden="true">&times;</span>
@@ -101,8 +103,7 @@
             data-longtitle="true"
           ></div>
           <div class="n-account">
-            <p>Don't have an account?</p>
-            &nbsp
+            <p>Don't have an account?&nbsp;</p>
             <a href="/signup" class="links">Sign Up</a>
           </div>
         </form>

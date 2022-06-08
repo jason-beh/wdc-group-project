@@ -79,6 +79,12 @@
                 <span class="sr-only">Browse Events</span>
               </a>
             </li>
+            <li v-if="isAdmin !== -1" class="nav-item">
+              <a class="nav-link" href="/create-event">
+                Create Events
+                <span class="sr-only">Create Events</span>
+              </a>
+            </li>
             <li v-if="isAdmin === 1" class="nav-item">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -145,6 +151,11 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
+            <li class="nav-item" v-if="isAdmin !== -1">
+              <a class="nav-link" href="/create-event"
+                >Create Events <span class="sr-only">Create Events</span></a
+              >
+            </li>
             <li class="nav-item" v-if="isAdmin === 1">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -188,7 +199,7 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="admin-table-events">
       <div id="alert-container">
-        <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+        <div class="alert alert-success alert-bar" id="alert-success">
           <span id="alert-success-text">Success</span>
           <button class="close alert-close" @click="closeAlert">
             <span aria-hidden="true">&times;</span>
@@ -225,7 +236,11 @@
           <th>Actions</th>
         </tr>
         <tr v-for="event in events">
-          <td>{{truncate(event.title)}}</td>
+          <td>
+            <a v-bind:href="'/event-details?event=' + event.event_id">
+              {{truncate(event.title)}}
+            </a>
+          </td>
           <td>{{truncate(event.created_by)}}</td>
           <td>{{truncate(event.proposed_date)}}</td>
           <td>{{truncate(event.street_name)}}</td>
@@ -255,17 +270,16 @@
       <!-- Modal -->
       <div
         class="modal fade"
-        id="Modal"
+        id="Modal1"
         tabindex="-1"
         role="dialog"
-        aria-labelledby="exampleModalLabel"
         aria-hidden="true"
         data-backdrop="static"
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Delete Event</h2>
+              <h2 class="modal-title">Delete Event</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -286,18 +300,11 @@
         </div>
       </div>
       <!-- Modal -->
-      <div
-        class="modal fade"
-        id="Modal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Delete Event</h2>
+              <h2 class="modal-title">Delete Event</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -318,18 +325,11 @@
         </div>
       </div>
       <!-- Modal 2 -->
-      <div
-        class="modal fade"
-        id="Modal2"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h2 class="modal-title" id="exampleModalLabel">Create Event</h2>
+              <h2 class="modal-title">Create Event</h2>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -343,9 +343,9 @@
               >
                 <div class="create-event-div admin-view-left">
                   <div class="inputs">
-                    <label for="title">Title</label>
+                    <label for="title1">Title</label>
                     <input
-                      id="title"
+                      id="title1"
                       name="title"
                       type="text"
                       v-model="title"
@@ -354,9 +354,9 @@
                     />
                   </div>
                   <div class="inputs">
-                    <label for="description">Description</label>
+                    <label for="description1">Description</label>
                     <textarea
-                      id="description"
+                      id="description1"
                       name="description"
                       rows="10"
                       required
@@ -365,9 +365,9 @@
                     ></textarea>
                   </div>
                   <div class="inputs">
-                    <label for="proposed_date">Proposed Date</label>
+                    <label for="proposed_date1">Proposed Date</label>
                     <input
-                      id="proposed_date"
+                      id="proposed_date1"
                       name="proposed_date"
                       type="date"
                       v-model="proposed_date"
@@ -377,9 +377,9 @@
                     />
                   </div>
                   <div class="inputs">
-                    <label for="street_number">Street Number</label>
+                    <label for="street_number1">Street Number</label>
                     <input
-                      id="street_number"
+                      id="street_number1"
                       name="street_number"
                       type="text"
                       v-model="street_number"
@@ -388,9 +388,9 @@
                     />
                   </div>
                   <div class="inputs">
-                    <label for="street_name">Street Name</label>
+                    <label for="street_name1">Street Name</label>
                     <input
-                      id="street_name"
+                      id="street_name1"
                       name="street_name"
                       type="text"
                       v-model="street_name"
@@ -399,9 +399,9 @@
                     />
                   </div>
                   <div class="inputs">
-                    <label for="suburb">Suburb</label>
+                    <label for="suburb1">Suburb</label>
                     <input
-                      id="suburb"
+                      id="suburb1"
                       name="suburb"
                       type="text"
                       v-model="suburb"
@@ -410,9 +410,9 @@
                     />
                   </div>
                   <div class="inputs">
-                    <label for="state">State</label>
+                    <label for="state1">State</label>
                     <input
-                      id="state"
+                      id="state1"
                       name="state"
                       type="text"
                       v-model="state"
@@ -421,9 +421,9 @@
                     />
                   </div>
                   <div class="inputs">
-                    <label for="country">Country</label>
+                    <label for="country1">Country</label>
                     <input
-                      id="country"
+                      id="country1"
                       name="country"
                       type="text"
                       v-model="country"
@@ -432,9 +432,9 @@
                     />
                   </div>
                   <div class="inputs">
-                    <label for="postcode">Postcode</label>
+                    <label for="postcode1">Postcode</label>
                     <input
-                      id="postcode"
+                      id="postcode1"
                       name="postcode"
                       type="text"
                       v-model="postcode"
@@ -451,9 +451,9 @@
                     <input id="image" name="file" type="file" required autofocus />
                   </div>
                   <div class="inputs">
-                    <label for="duration">Event Duration (Hours) </label>
+                    <label for="duration1">Event Duration (Hours) </label>
                     <input
-                      id="duration"
+                      id="duration1"
                       name="duration"
                       type="number"
                       v-model="duration"
@@ -615,17 +615,7 @@
                       alt="dummy event pic"
                     />
                     <input type="file" name="file" class="profile-image-file" />
-                    <!-- <form
-                @submit="changeEventPicture"
-                method="post"
-                id="changeEventPicture"
-                enctype="multipart/form-data"
-              >
-                <input type="file" name="file" class="profile-image-file" />
-                <button type="submit" class="inputs button-1">Update Image</button>
-              </form> -->
                   </div>
-                  <ul id="times" class="create-event-time"></ul>
                 </div>
               </form>
             </div>

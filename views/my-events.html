@@ -78,6 +78,12 @@
                 <span class="sr-only">Browse Events</span>
               </a>
             </li>
+            <li v-if="isAdmin !== -1" class="nav-item">
+              <a class="nav-link" href="/create-event">
+                Create Events
+                <span class="sr-only">Create Events</span>
+              </a>
+            </li>
             <li v-if="isAdmin === 1" class="nav-item">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -144,6 +150,11 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
+            <li class="nav-item" v-if="isAdmin !== -1">
+              <a class="nav-link" href="/create-event"
+                >Create Events <span class="sr-only">Create Events</span></a
+              >
+            </li>
             <li class="nav-item" v-if="isAdmin === 1">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -193,7 +204,7 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container" id="app">
       <div id="alert-container">
-        <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+        <div class="alert alert-success alert-bar" id="alert-success">
           <span id="alert-success-text">Success</span>
           <button class="close alert-close" @click="closeAlert">
             <span aria-hidden="true">&times;</span>
@@ -244,11 +255,7 @@
             class="event-horizontal-container"
           >
             <div v-for="event in attendedEvents">
-              <a
-                v-bind:href="'/event-details?event=' + event.event_id"
-                class="event-horizontal"
-                id="detailsHREF"
-              >
+              <a v-bind:href="'/event-details?event=' + event.event_id" class="event-horizontal">
                 <img
                   class="event-horizontal-image"
                   v-bind:src="event.event_picture"
@@ -258,7 +265,7 @@
                   <p class="event-horizontal-date">
                     {{new Date(`${event.proposed_date}`).toDateString()}}
                   </p>
-                  <h3 class="event-horizontal-title">{{event.title}}</h3>
+                  <h3 class="event-horizontal-title shrink">{{event.title}}</h3>
                   <p class="event-horizontal-street-name">{{event.street_name}}</p>
                 </div>
               </a>
@@ -276,17 +283,28 @@
             class="event-horizontal-container"
           >
             <div v-for="event in organizedEvents">
-              <a
-                v-bind:href="'/event-details?event=' + event.event_id"
-                class="event-horizontal"
-                id="detailsHREF"
-              >
-                <img
+              <div class="event-horizontal">
+                <a
                   class="event-horizontal-image"
-                  v-bind:src="event.event_picture"
-                  alt="event image"
-                />
+                  v-bind:href="'/event-details?event=' + event.event_id"
+                >
+                  <img
+                    class="event-horizontal-image"
+                    v-bind:src="event.event_picture"
+                    alt="event image"
+                  />
+                </a>
+
                 <div class="event-horizontal-content">
+                  <a v-bind:href="'/edit-event?event=' + event.event_id">
+                    <ion-icon
+                      name="pencil"
+                      alt="delete icon"
+                      class="trash-icon delete-event-button"
+                      @click="setToDelete"
+                      v-bind:data-eventid="event.event_id"
+                    ></ion-icon>
+                  </a>
                   <ion-icon
                     name="trash"
                     alt="delete icon"
@@ -296,13 +314,19 @@
                     v-bind:data-eventid="event.event_id"
                     class="trash-icon delete-event-button"
                   ></ion-icon>
-                  <p class="event-horizontal-date">
-                    {{new Date(`${event.proposed_date}`).toDateString()}}
-                  </p>
-                  <h3 class="event-horizontal-title">{{event.title}}</h3>
-                  <p class="event-horizontal-street-name">{{event.street_name}}</p>
+                  <div>
+                    <p class="event-horizontal-date">
+                      {{new Date(`${event.proposed_date}`).toDateString()}}
+                    </p>
+                    <h3 class="event-horizontal-title">
+                      <a v-bind:href="'/event-details?event=' + event.event_id">
+                        {{truncate(event.title)}}
+                      </a>
+                    </h3>
+                    <p class="event-horizontal-street-name">{{truncate(event.street_name)}}</p>
+                  </div>
                 </div>
-              </a>
+              </div>
             </div>
           </div>
           <p
@@ -326,14 +350,13 @@
           id="Modal"
           tabindex="-1"
           role="dialog"
-          aria-labelledby="exampleModalLabel"
           aria-hidden="true"
           data-backdrop="static"
         >
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h2 class="modal-title" id="exampleModalLabel">Delete Event</h2>
+                <h2 class="modal-title">Delete Event</h2>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>

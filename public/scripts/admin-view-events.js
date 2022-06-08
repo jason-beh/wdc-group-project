@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
         sendAJAX(
           "POST",
           "/admin/get-event",
-          JSON.stringify({ eventToSearch: this.eventID }),
+          JSON.stringify({ event_id: this.eventID }),
           function (err, res) {
             if (err) {
               console.log(err);
@@ -229,11 +229,10 @@ document.addEventListener("DOMContentLoaded", function () {
       this.viewEvents();
     },
   });
-  document.getElementById("add-start-time-button").click();
 });
 
 function truncate(str) {
-  if (str != null && str.length > 20) {
+  if (str !== null && str.length > 20) {
     return str.substring(0, 20).concat("...");
   }
 

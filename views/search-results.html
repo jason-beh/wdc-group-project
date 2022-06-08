@@ -74,6 +74,12 @@
                 <span class="sr-only">Browse Events</span>
               </a>
             </li>
+            <li v-if="isAdmin !== -1" class="nav-item">
+              <a class="nav-link" href="/create-event">
+                Create Events
+                <span class="sr-only">Create Events</span>
+              </a>
+            </li>
             <li v-if="isAdmin === 1" class="nav-item">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -140,6 +146,11 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
+            <li class="nav-item" v-if="isAdmin !== -1">
+              <a class="nav-link" href="/create-event"
+                >Create Events <span class="sr-only">Create Events</span></a
+              >
+            </li>
             <li class="nav-item" v-if="isAdmin === 1">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -189,17 +200,23 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
 
     <div class="container" id="app">
-      <h1 class="profile-header">Search Results for "{{query}}"</h1>
+      <h1 class="profile-header">Search Results for "{{truncate(query)}}"</h1>
       <div v-if="events.length > 0" class="event-horizontal-container">
-        <div class="event-horizontal" v-for="event in events">
-          <img class="event-horizontal-image" v-bind:src="event.event_picture" alt="event image" />
-          <div class="event-horizontal-content">
-            <p class="event-horizontal-date">
-              {{new Date(`${event.proposed_date}`).toDateString()}}
-            </p>
-            <h3 class="event-horizontal-title">{{event.title}}</h3>
-            <p class="event-horizontal-street-name">{{event.street_name}}</p>
-          </div>
+        <div v-for="event in events">
+          <a v-bind:href="'/event-details?event=' + event.event_id" class="event-horizontal">
+            <img
+              class="event-horizontal-image"
+              v-bind:src="event.event_picture"
+              alt="event image"
+            />
+            <div class="event-horizontal-content">
+              <p class="event-horizontal-date">
+                {{new Date(`${event.proposed_date}`).toDateString()}}
+              </p>
+              <h3 class="event-horizontal-title">{{event.title}}</h3>
+              <p class="event-horizontal-street-name">{{event.street_name}}</p>
+            </div>
+          </a>
         </div>
       </div>
       <p v-if="events.length === 0">No events found.</p>

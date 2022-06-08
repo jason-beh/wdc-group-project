@@ -1,8 +1,4 @@
 var express = require("express");
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
-var argon2 = require("argon2");
-const { userIsLoggedIn } = require("../utils/auth");
 const { pathToHtml } = require("../utils/routes");
 const { body, validationResult, check } = require("express-validator");
 
@@ -47,13 +43,11 @@ router.put(
       let error = errors.array()[0];
       return res.status(400).send(error.msg);
     }
-    // Ensure the user is logged in
-    if (!userIsLoggedIn(req.session.user)) {
-      return res.status(401).send("Unauthorized Access!!");
-    }
+
     // Get all data from request body
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
 
@@ -70,14 +64,15 @@ router.put(
         !state ||
         !country
       ) {
+        connection.release();
         return res.status(400).send("Insufficient Data");
       }
 
       if (req.files != null && req.files.length > 0) {
         let query = "select profile_picture from User_Profile where email = ?";
         connection.query(query, [req.session.user.email], function (err, rows, fields) {
-          connection.release();
           if (err) {
+            connection.release();
             return res.status(500).send("An interval server error occurred.");
           }
           let previousPath = rows[0]["profile_picture"];
@@ -110,6 +105,7 @@ router.put(
                 req.session.user.email,
               ],
               function (err, rows, fields) {
+                connection.release();
                 if (err) {
                   return res.status(500).send("An interval server error occurred.");
                 }
@@ -153,11 +149,9 @@ router.put(
 );
 
 router.get("/get-profile", function (req, res, next) {
-  if (!userIsLoggedIn(req.session.user)) {
-    return res.status(401).send("Unauthorized Access !!");
-  }
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     // Get data
@@ -178,9 +172,6 @@ router.get("/get-profile", function (req, res, next) {
 
 // Rendering Pages
 router.get("/profile", function (req, res, next) {
-  if (!userIsLoggedIn(req.session.user)) {
-    res.redirect("/");
-  }
   res.sendFile(pathToHtml("profile.html"));
 });
 

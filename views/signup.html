@@ -49,10 +49,12 @@
         </div>
       </div>
       <div class="login-container">
-        <img src="/images/blueLogo.png" alt="App logo" />
+        <a href="/">
+          <img src="/images/blueLogo.png" alt="App logo" />
+        </a>
         <h1>Sign up</h1>
         <div id="alert-container">
-          <div class="alert alert-success alert-bar" id="alert-success" @click="closeAlert">
+          <div class="alert alert-success alert-bar" id="alert-success">
             <span id="alert-success-text">Signup success</span>
             <button class="close alert-close" @click="closeAlert">
               <span aria-hidden="true">&times;</span>
@@ -112,8 +114,7 @@
             data-longtitle="true"
           ></div>
           <div class="n-account">
-            <p>Have an account?</p>
-            &nbsp
+            <p>Have an account?&nbsp;</p>
             <a href="/login" class="links">Login</a>
           </div>
         </form>

@@ -12,6 +12,7 @@ router.get("/search", function (req, res, next) {
 
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return next(err);
     }
 

@@ -4,6 +4,7 @@ var argon2 = require("argon2");
 const { pathToHtml } = require("../utils/routes");
 const { body, validationResult, check } = require("express-validator");
 var router = express.Router();
+const fs = require("fs");
 
 // add multer library
 var multer = require("multer");
@@ -31,18 +32,10 @@ var upload = multer({
   },
 });
 
-// Middleware to ensure the admin is logged in
-router.use(function (req, res, next) {
-  if (!userIsAdmin(req.session.user)) {
-    return res.redirect("/404");
-  } else {
-    next();
-  }
-});
-
 router.get("/view-events", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     var query = "SELECT * from Events";
@@ -59,6 +52,7 @@ router.get("/view-events", function (req, res, next) {
 router.get("/view-users", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     var query = "SELECT * from User_Profile";
@@ -96,17 +90,20 @@ router.post(
 
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
       // Query the database
       var query = "SELECT * FROM Authentication WHERE email = ?";
       connection.query(query, [email], function (err, rows, fields) {
         if (err) {
+          connection.release();
           return res.status(500).send("An interval server error occurred.");
         }
 
         // If the email already exist, we return 401
         if (rows && rows.length == 1) {
+          connection.release();
           return res.status(401).send("The account already exists");
         }
 
@@ -119,6 +116,7 @@ router.post(
               "INSERT INTO Authentication (email, password, isAdmin, isVerified) VALUES (?, ?, 1, 1)";
             connection.query(query, [email, hashedPassword], function (err) {
               if (err) {
+                connection.release();
                 return res.status(500).send("An interval server error occurred.");
               }
 
@@ -139,6 +137,7 @@ router.post(
             });
           })
           .catch(function (err) {
+            connection.release();
             return res.status(500).send("An interval server error occurred.");
           });
       });
@@ -170,17 +169,20 @@ router.post(
 
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
       // Query the database
       var query = "SELECT * FROM Authentication WHERE email = ?";
       connection.query(query, [email], function (err, rows, fields) {
         if (err) {
+          connection.release();
           return res.status(500).send("An interval server error occurred.");
         }
 
         // If the email already exist, we return 401
         if (rows && rows.length == 1) {
+          connection.release();
           return res.status(401).send("The account already exists");
         }
 
@@ -190,9 +192,10 @@ router.post(
           .then(function (hashedPassword) {
             // Insert new system admin into database
             query =
-              "INSERT INTO Authentication (email, password, isAdmin, isVerified) VALUES (?, ?, 1, 0)";
+              "INSERT INTO Authentication (email, password, isAdmin, isVerified) VALUES (?, ?, 0, 1)";
             connection.query(query, [email, hashedPassword], function (err) {
               if (err) {
+                connection.release();
                 return res.status(500).send("An interval server error occurred.");
               }
 
@@ -213,6 +216,7 @@ router.post(
             });
           })
           .catch(function (err) {
+            connection.release();
             return res.status(500).send("An interval server error occurred.");
           });
       });
@@ -244,18 +248,20 @@ router.delete(
 
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
-      // Query the database
-      var query = "delete from Authentication where email = ?;";
-      connection.query(query, [email], function (err, rows, fields) {
-        connection.release();
-        if (err) {
-          console.log(err);
-          return res.status(500).send("An interval server error occurred.");
-        }
-        return res.send("Success in deleting a user!");
-      });
+      
+        // Query the database
+        var query = "delete from Authentication where email = ?;";
+        connection.query(query, [email], function (err, rows, fields) {
+          connection.release();
+          if (err) {
+            console.log(err);
+            return res.status(500).send("An interval server error occurred.");
+          }
+          return res.send("Success in deleting a user!");
+        });
     });
   }
 );
@@ -270,14 +276,13 @@ router.delete("/delete-event", function (req, res, next) {
 
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
-    // Query the database
     var query = "delete from Events where event_id = ?;";
     connection.query(query, [eventID], function (err, rows, fields) {
       connection.release();
       if (err) {
-        console.log(err);
         return res.status(500).send("An interval server error occurred.");
       }
       return res.send("Successfully deleted event !");
@@ -317,15 +322,18 @@ router.post("/edit-event", function (req, res, next) {
   // Remove the previous file
   req.pool.getConnection(function (err, connection) {
     if (err) {
+      connection.release();
       return res.status(500).send("An interval server error occurred.");
     }
     var query = "select * from Events where event_id = ?;";
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
 
       if (!rows || rows.length === 0) {
+        connection.release();
         return res.status(500).send("Event could not be found");
       }
 
@@ -348,6 +356,7 @@ router.post("/edit-event", function (req, res, next) {
             event_id,
           ],
           function (err, rows, fields) {
+            connection.release();
             if (err) {
               return next(err);
             }
@@ -383,6 +392,7 @@ router.post("/edit-event", function (req, res, next) {
               req.session.user.email,
             ],
             function (err, rows, fields) {
+              connection.release();
               if (err) {
                 return next(err);
               }
@@ -432,6 +442,7 @@ router.post(
     // Get all data from request body
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
 
@@ -448,6 +459,7 @@ router.post(
       // Get all data from request body
       req.pool.getConnection(function (err, connection) {
         if (err) {
+          connection.release();
           return res.status(500).send("An interval server error occurred.");
         }
         // Update data
@@ -478,41 +490,32 @@ router.post(
   }
 );
 
-router.post(
-  "/get-event",
-  check("email").isEmail().withMessage("Email is invalid"),
-  function (req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      let error = errors.array()[0];
-      return res.status(400).send(error.msg);
-    }
+router.post("/get-event", function (req, res, next) {
+  let { event_id } = req.body;
+  if (!event_id) {
+    return res.status(400).send("Insufficient Data");
+  }
 
-    let { email } = req.body;
-    if (!email) {
-      return res.status(400).send("Insufficient Data");
+  req.pool.getConnection(function (err, connection) {
+    if (err) {
+      connection.release();
+      return res.status(500).send("An interval server error occurred.");
     }
-
-    req.pool.getConnection(function (err, connection) {
+    // Get data
+    var query = "select * from Events where event_id = ?";
+    connection.query(query, [event_id], function (err, rows, fields) {
+      connection.release();
       if (err) {
         return res.status(500).send("An interval server error occurred.");
       }
-      // Get data
-      var query = "select * from Events where event_id = ?";
-      connection.query(query, [email], function (err, rows, fields) {
-        connection.release();
-        if (err) {
-          return res.status(500).send("An interval server error occurred.");
-        }
-        // check
-        if (!rows && rows.length == 0) {
-          return res.send("Event not found!");
-        }
-        return res.send(rows[0]);
-      });
+      // check
+      if (!rows && rows.length == 0) {
+        return res.send("Event not found!");
+      }
+      return res.send(rows[0]);
     });
-  }
-);
+  });
+});
 
 router.post(
   "/get-profile",
@@ -530,6 +533,7 @@ router.post(
 
     req.pool.getConnection(function (err, connection) {
       if (err) {
+        connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
       // Get data

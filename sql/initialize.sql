@@ -53,7 +53,7 @@ CREATE TABLE Events (
     postcode VARCHAR(255) NOT NULL,
     event_picture VARCHAR(255),
     PRIMARY KEY (event_id),
-    FOREIGN KEY (created_by) REFERENCES Authentication(email)
+    FOREIGN KEY (created_by) REFERENCES Authentication(email) ON DELETE CASCADE
 );
 
 CREATE TABLE Attendance (
@@ -74,7 +74,7 @@ CREATE TABLE Proposed_Event_Time (
 
 -- We manually add foreign key, otherwise, we would face circular reference dependency error.
 alter table Events add finalized_event_time_id INT;
-alter table Events add constraint finalized_event_time_id foreign key (finalized_event_time_id) REFERENCES Proposed_Event_Time(proposed_event_time_id);
+alter table Events add constraint finalized_event_time_id foreign key (finalized_event_time_id) REFERENCES Proposed_Event_Time(proposed_event_time_id) ON DELETE CASCADE;
 
 CREATE TABLE Availability (
     email VARCHAR(255),

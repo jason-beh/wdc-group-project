@@ -74,6 +74,12 @@
                 <span class="sr-only">Browse Events</span>
               </a>
             </li>
+            <li v-if="isAdmin !== -1" class="nav-item">
+              <a class="nav-link" href="/create-event">
+                Create Events
+                <span class="sr-only">Create Events</span>
+              </a>
+            </li>
             <li v-if="isAdmin === 1" class="nav-item">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -140,6 +146,11 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
+            <li class="nav-item" v-if="isAdmin !== -1">
+              <a class="nav-link" href="/create-event"
+                >Create Events <span class="sr-only">Create Events</span></a
+              >
+            </li>
             <li class="nav-item" v-if="isAdmin === 1">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -189,12 +200,7 @@
     <div class="g-signin2 display-none" data-onsuccess="onSignIn"></div>
     <div class="container">
       <div id="alert-container">
-        <div
-          class="alert alert-success alert-bar"
-          id="alert-success"
-          @click="closeAlert"
-          role="alert"
-        >
+        <div class="alert alert-success alert-bar" id="alert-success" role="alert">
           <span id="alert-success-text">Password changed successfully</span>
           <button class="close alert-close" @click="closeAlert">
             <span aria-hidden="true">&times;</span>

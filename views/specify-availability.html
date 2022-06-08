@@ -17,8 +17,14 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css"
+      rel="stylesheet"
+    />
     <link rel="shortcut icon" href="/images/custom-favicon.png" />
     <link rel="stylesheet" href="/stylesheets/style.css" />
+
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -44,6 +50,8 @@
 
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="https://accounts.google.com/gsi/client"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 
     <script src="/scripts/ajax.js"></script>
     <script src="/scripts/nav.js"></script>
@@ -77,6 +85,12 @@
               <a class="nav-link" href="/">
                 Browse Events
                 <span class="sr-only">Browse Events</span>
+              </a>
+            </li>
+            <li v-if="isAdmin !== -1" class="nav-item">
+              <a class="nav-link" href="/create-event">
+                Create Events
+                <span class="sr-only">Create Events</span>
               </a>
             </li>
             <li v-if="isAdmin === 1" class="nav-item">
@@ -145,6 +159,11 @@
                 >Browse Events <span class="sr-only">Browse Events</span></a
               >
             </li>
+            <li class="nav-item" v-if="isAdmin !== -1">
+              <a class="nav-link" href="/create-event"
+                >Create Events <span class="sr-only">Create Events</span></a
+              >
+            </li>
             <li class="nav-item" v-if="isAdmin === 1">
               <a class="nav-link" href="/admin">
                 Admin Dashboard
@@ -195,19 +214,14 @@
 
     <div class="container" id="app">
       <div id="alert-container">
-        <div
-          class="alert alert-success alert-bar"
-          id="alert-success"
-          @click="closeAlert"
-          role="alert"
-        >
+        <div class="alert alert-success alert-bar" id="alert-success" role="alert">
           <span id="alert-success-text">Success in updating notifications</span>
           <button class="close alert-close" @click="closeAlert">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="alert alert-danger alert-bar" id="alert-error" role="alert">
-          <span id="alert-danger-text">Error in updating profile</span>
+          <span id="alert-danger-text">Error in specifying availability</span>
           <button class="close alert-close" @click="closeAlert">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -219,11 +233,10 @@
           <div class="profile-container">
             <form @submit="onSubmit" id="profile-form" class="form-1">
               <div class="inputs">
-                <label for="email">Email</label>
+                <label for="email-input">Email</label>
                 <input
                   class="input-box"
                   id="email-input"
-                  id="email"
                   name="email"
                   v-model="email"
                   type="email"
@@ -231,9 +244,9 @@
                 />
               </div>
               <div class="inputs" id="proposed_times">
-                <label for="instagram_handle">Choose timeslots</label>
+                <span> Choose timeslots for {{event.proposed_date.substring(0,10)}} </span>
                 <div
-                  v-for="(proposed_date, index) in event.proposed_date"
+                  v-for="(proposed_date, index) in proposed_date_timeslots"
                   :key="index"
                   v-bind:class="proposed_date.proposed_event_time_id in selected_proposed_time_id ? 'checkmark-container input-box selected' : 'checkmark-container input-box'"
                 >
@@ -258,6 +271,8 @@
           <h1 class="profile-header">Calendar Data</h1>
           <!--Add buttons to initiate auth sequence and sign out-->
           <button class="btn btn-secondary" id="authorize_button">Sync Calendar</button>
+
+          <div id="calendar"></div>
 
           <!-- TODO: Style calendar and swap API key -->
           <pre id="content" class="specify-pre"></pre>

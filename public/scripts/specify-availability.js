@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  var proposed_date = "";
+
   // Get event
   sendAJAX("GET", `/events/${event_id}`, null, function (err, res) {
     if (err) {
@@ -16,6 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     res = JSON.parse(res);
+
+    proposed_date = res.proposed_date;
 
     var app = new Vue({
       el: "#app",
@@ -33,11 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
             country: res.country,
             postcode: res.postcode,
             event_picture: res.event_picture,
-            proposed_date: res.date,
           },
+          proposed_date_timeslots: res.date,
           email: "",
           selected_proposed_time_id: {},
           hasPreviouslySelected: false,
+          emptySelectionCheck: 0,
         };
       },
       methods: {
@@ -51,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
           for (let availability of availabilityRes) {
             let { proposed_event_time_id } = availability;
             this.selected_proposed_time_id[proposed_event_time_id] = proposed_event_time_id;
+            this.emptySelectionCheck++;
           }
 
           // Retrigger state change
@@ -65,13 +71,20 @@ document.addEventListener("DOMContentLoaded", function () {
           if (id in this.selected_proposed_time_id) {
             currentElem.parentElement.classList.remove("selected");
             delete this.selected_proposed_time_id[id];
+            this.emptySelectionCheck--;
           } else {
             currentElem.parentElement.classList.add("selected");
             this.selected_proposed_time_id[id] = id;
+            this.emptySelectionCheck++;
           }
         },
         onSubmit(e) {
           e.preventDefault();
+          if (this.emptySelectionCheck == 0) {
+            document.getElementById("alert-danger-text").innerText = "Please specify a time !";
+            document.getElementById("alert-error").style.display = "block";
+            return;
+          }
           var formData = {
             proposed_event_id: Object.values(this.selected_proposed_time_id),
             event_id: this.event.event_id,
@@ -89,8 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
               });
               if (err) {
                 console.log(err);
-                document.getElementById("alert-error-text").innerText = err.message;
-                document.getElementById("alert-error").style.display = "block";
+                document.getElementById("alert-danger-text").innerText = err.message;
+                document.getElementById("alert-danger").style.display = "block";
               } else {
                 document.getElementById("alert-success-text").innerText =
                   "Successfully specified availability";
@@ -110,12 +123,16 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      if (userRes == "") {
+        return;
+      }
+
       userRes = JSON.parse(userRes);
       app.email = userRes.email;
 
       // disable the input if we are logged in and check for existing availability
       if (app.email != null) {
-        document.getElementById("email-input").disabled = true;
+        document.getElementById("email").disabled = true;
 
         // Get current availability
         sendAJAX(
@@ -138,12 +155,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.getElementById("authorize_button").addEventListener("click", function () {
-      tokenClient.callback = async (resp) => {
+      tokenClient.callback = (resp) => {
         if (resp.error !== undefined) {
           throw resp;
         }
         document.getElementById("authorize_button").innerText = "Sync Again";
-        await listUpcomingEvents(res.proposed_date);
+        listUpcomingEvents(res.proposed_date);
       };
 
       if (gapi.client.getToken() === null) {
@@ -158,8 +175,8 @@ document.addEventListener("DOMContentLoaded", function () {
     Sync Calendar Stuff
   */
 
-  const CLIENT_ID = "507332350115-9kj93omegbtgu5hipcueuvpak2g7hm6g.apps.googleusercontent.com";
-  const API_KEY = "AIzaSyAy3YteMve4LqH2DITNYS83zPsLGn5IFv4";
+  const CLIENT_ID = "1067781733084-s7ifha851qrqvg6tldgs1qqccm0vrpi6.apps.googleusercontent.com";
+  const API_KEY = "AIzaSyDciekl72PdtJl6KTH5mmdF3joEUPLaSwM";
   const DISCOVERY_DOC = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
   const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
@@ -226,16 +243,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const events = response.result.items;
     if (!events || events.length == 0) {
       document.getElementById("content").innerText = "No events found.";
-      return;
+    } else {
+      document.getElementById("content").innerText = `${events.length} events found.`;
     }
-    // Flatten to string to display
-    const output = events.reduce(
-      (str, event) =>
-        `${str}${event.summary}: ${event.start.dateTime || event.start.date} - ${
-          event.end.dateTime || event.end.date
-        }\n`,
-      `Finding all events based on the event's proposed date, ${today}: \n`
-    );
-    document.getElementById("content").innerText = output;
+
+    let calendarEvents = [];
+    events.forEach((event) => {
+      calendarEvents.push({
+        title: event.summary,
+        start: event.start.dateTime,
+        end: event.end.dateTime,
+      });
+    });
+
+    let calendarEl = document.getElementById("calendar");
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+      timeZone: "local",
+      eventDisplay: "block",
+      themeSystem: "bootstrap",
+      initialView: "timeGridDay",
+      events: calendarEvents,
+      height: window.innerHeight * 0.6,
+    });
+
+    calendar.gotoDate(proposed_date);
+
+    calendar.render();
   }
 });
