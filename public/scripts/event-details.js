@@ -152,7 +152,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     res = JSON.parse(res);
     console.log(res);
-    res.proposed_date = res.proposed_date !== null ? res.proposed_date.substring(0, 10) : "";
     app.title = res.title;
     app.created_by = res.created_by;
     app.event_id = res.event_id;

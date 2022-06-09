@@ -786,6 +786,14 @@ p.description {
   user-select: none;
 }
 
+#authorize_button {
+  margin-bottom: 40px;
+}
+
+.fc-toolbar-chunk:nth-child(3) {
+  display: none;
+}
+
 .specify-pre {
   white-space: pre-wrap;
   margin-top: 10px;
