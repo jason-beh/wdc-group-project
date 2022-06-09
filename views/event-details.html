@@ -80,6 +80,12 @@
                   <span class="sr-only">Browse Events</span>
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/create-event">
+                  Create Events
+                  <span class="sr-only">Create Events</span>
+                </a>
+              </li>
               <li v-if="isAdmin === 1" class="nav-item">
                 <a class="nav-link" href="/admin">
                   Admin Dashboard
@@ -144,6 +150,11 @@
               <li class="nav-item">
                 <a class="nav-link" href="/"
                   >Browse Events <span class="sr-only">Browse Events</span></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/create-event"
+                  >Create Events <span class="sr-only">Create Events</span></a
                 >
               </li>
               <li class="nav-item" v-if="isAdmin === 1">
@@ -226,7 +237,7 @@
             <div v-if="isFinalise == null">
               <div class="detail-all" v-if="isCreator">
                 <h5>Proposed Date</h5>
-                <p>{{proposed_date}}</p>
+                <p>{{new Date(`${proposed_date}`).toDateString()}}</p>
                 <button
                   type="submit"
                   class="inputs button-1"
@@ -239,7 +250,7 @@
               </div>
               <div class="detail-all" v-else>
                 <h5>Proposed Date</h5>
-                <p>{{proposed_date}}</p>
+                <p>{{new Date(`${proposed_date}`).toDateString()}}</p>
                 <a v-bind:href="'/specify-availability?event=' + event_id">
                   <button type="submit" class="inputs button-1">Specify Availability</button>
                 </a>
@@ -248,13 +259,13 @@
             <div v-else-if="isFinalise != null">
               <div class="detail-all" v-if="isCreator">
                 <h5>Proposed Date</h5>
-                <p>{{proposed_date}}</p>
+                <p>{{new Date(`${proposed_date}`).toDateString()}}</p>
                 <h5>Finalised Time</h5>
                 <p>{{final_proposed_times.start_date}} - {{final_proposed_times.end_date}}</p>
               </div>
               <div class="detail-all" v-else>
                 <h5>Proposed Date</h5>
-                <p>{{proposed_date}}</p>
+                <p>{{new Date(`${proposed_date}`).toDateString()}}</p>
                 <h5>Finalised Time</h5>
                 <p>{{final_proposed_times.start_date}} - {{final_proposed_times.end_date}}</p>
                 <button

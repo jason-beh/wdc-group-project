@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
               document.getElementById("alert-success").style.display = "block";
               setTimeout(function () {
                 window.location.href = `/event-details?event=${app.event_id}`;
-              }, 1500);
+              }, 1000);
             }
           });
         },
