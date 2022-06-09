@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
   let query = new URLSearchParams(window.location.search);
-  console.log(query);
   let event_id = query.get("event");
 
   if (event_id === null) {
