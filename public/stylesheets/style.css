@@ -1092,7 +1092,7 @@ p.description {
 
 .detail-image {
   display: block;
-  border-radius: 10px;
+  border-radius: 10px 10px 0 0;
   height: 400px;
   width: 100%;
   object-fit: cover;
