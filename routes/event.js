@@ -62,6 +62,8 @@ router.get("/events/:event_id", function (req, res, next) {
   });
 });
 
+// Deprecated
+
 router.post("/send-confirmation-email", function (req, res, next) {
   var { event_id } = req.body;
   if (!event_id) {

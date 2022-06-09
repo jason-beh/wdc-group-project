@@ -63,7 +63,7 @@ router.get(
               return res.status(500).send("An interval server error occurred.");
             }
 
-            return res.status(200).end();
+            return res.redirect("/");
           });
         });
       });

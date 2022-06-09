@@ -267,49 +267,68 @@ router.delete("/delete-event", function (req, res, next) {
 
       let event = rows[0];
 
-        var query = "DELETE FROM Events WHERE event_id = ? and created_by = ?";
-        connection.query(query, [event_id, req.session.user.email], function (err, rows, fields) {
+      var query = "DELETE FROM Events WHERE event_id = ? and created_by = ?";
+      connection.query(query, [event_id, req.session.user.email], function (err, rows, fields) {
+        if (err) {
+          connection.release();
+          return res.status(500).send("An interval server error occurred.");
+        }
+
+        // Send email to all confirmed attendance
+        query = "SELECT email FROM Attendance WHERE event_id = ?";
+        connection.query(query, [event_id], function (err, rows, fields) {
           if (err) {
             connection.release();
             return res.status(500).send("An interval server error occurred.");
           }
-
-          // Send email to all confirmed attendance
-          query = "SELECT email FROM Attendance WHERE event_id = ?";
-          connection.query(query, [event_id], function (err, rows, fields) {
-            if (err) {
-              connection.release();
-              return res.status(500).send("An interval server error occurred.");
-            }
-            for (let row of rows) {
-              query = "SELECT * FROM Notifications_Setting WHERE email = ?";
-              connection.query(query, [row["email"]], function (err, settingsRows, fields) {
-                if (err) {
-                  connection.release();
-                  return res.status(500).send("An interval server error occurred.");
-                }
-                // Send an email if they enable notifications
-                if (settingsRows[0]["is_event_cancelled"] === 1) {
-                  var mailOptions = {
-                    from: "socialah@outlook.com", // sender address (who sends)
-                    to: rows[0]["email"],
-                    subject: "Event cancelled", // Subject line
-                    text: "Hello world ", // plaintext body
-                  };
-                  mailOptions["html"] = `<h1>Event cancelled: ${event["title"]}</h1>`;
-                  // send mail with defined transport object
-                  req.transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                      connection.release();
-                      return console.log(error);
-                    }
-                  });
-                }
-              });
-            }
-            connection.release();
-            return res.send("Success in deleting an event!");
-          });
+          for (let row of rows) {
+            query = "SELECT * FROM Notifications_Setting WHERE email = ?";
+            connection.query(query, [row["email"]], function (err, settingsRows, fields) {
+              if (err) {
+                connection.release();
+                return res.status(500).send("An interval server error occurred.");
+              }
+              // Send an email if they enable notifications
+              if (settingsRows[0]["is_event_cancelled"] === 1) {
+                var mailOptions = {
+                  from: "socialah@outlook.com", // sender address (who sends)
+                  to: rows[0]["email"],
+                  subject: "Event cancelled", // Subject line
+                  text: "Hello world ", // plaintext body
+                };
+                mailOptions["html"] = `<div
+                                        style="
+                                          display: flex;
+                                          flex-direction: column;
+                                          align-items: center;
+                                          text-align: center;
+                                          font-family: monospace;
+                                          margin-top: 5%;
+                                        "
+                                      >
+                                        <img
+                                          src="https://thumbs.dreamstime.com/b/bubble-handwriting-lettering-sorry-vintage-vector-engraving-speech-black-beige-illustration-poster-info-graphic-web-176397490.jpg"
+                                          alt="Cancelled Event Image"
+                                          style="max-width: 200px; max-height: 200px"
+                                        />
+                                        <h1>We are very sad to inform you that...</h1>
+                                        <h2>An event that you were interested in was cancelled !></h2>
+                                        <h2>Event cancelled: ${event["title"]}</h2>
+                                      </div>
+                                      `;
+                // send mail with defined transport object
+                req.transporter.sendMail(mailOptions, function (error, info) {
+                  if (error) {
+                    connection.release();
+                    return console.log(error);
+                  }
+                });
+              }
+            });
+          }
+          connection.release();
+          return res.send("Success in deleting an event!");
+        });
       });
     });
   });
@@ -414,7 +433,7 @@ router.post(
                       connection.release();
                       return res.status(500).send("An interval server error occurred.");
                     }
-
+                    console.log(settingsRows);
                     // Send an email if they enable notifications
                     if (settingsRows.length !== 0 && settingsRows[0]["is_event_finalised"] === 1) {
                       var mailOptions = {
@@ -424,7 +443,44 @@ router.post(
                         text: "Hello world ", // plaintext body
                       };
                       // TODO: Add finalised time into message
-                      mailOptions["html"] = `<h1>Event finalised: ${event["title"]}</h1>`;
+                      mailOptions["html"] = `<div
+                                              style="
+                                                display: flex;
+                                                flex-direction: column;
+                                                align-items: center;
+                                                text-align: center;
+                                                font-family: monospace;
+                                                margin-top: 5%;
+                                              "
+                                            >
+                                              <img
+                                                src="https://cdn-icons-png.flaticon.com/512/4353/4353420.png"
+                                                alt="Confetti Image"
+                                                style="max-width: 200px; max-height: 200px"
+                                              />
+                                              <h1>An event that you were interested in has finalised it's event time</h1>
+                                              <h2>Event finalised: ${event["title"]}</h2>
+
+                                              <a
+                                                style="
+                                                  padding: 10px;
+                                                  color: white;
+                                                  background-color: #0d184f;
+                                                  border-radius: 10px;
+                                                  border: none;
+                                                  margin: 30px auto 0 auto;
+                                                  display: flex;
+                                                  justify-content: center;
+                                                  align-items: center;
+                                                  box-sizing: border-box;
+                                                  height: 50px;
+                                                  text-decoration: none;
+                                                "
+                                                href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}"
+                                              >
+                                                Confirm Attendance
+                                              </a>
+                                            </div>`;
                       // send mail with defined transport object
                       req.transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
