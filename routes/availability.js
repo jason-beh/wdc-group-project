@@ -74,7 +74,6 @@ router.post("/specify-availability", function (req, res, next) {
           query = "INSERT INTO Availability VALUES (?, ?);";
           connection.query(query, queryOptions, function (err, rows, fields) {
             if (err) {
-              console.log(err);
               connection.release();
               return res.status(500).send("An interval server error occurred.");
             }
@@ -125,7 +124,7 @@ router.post("/specify-availability", function (req, res, next) {
                   req.transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
                       connection.release();
-                      return console.log(error);
+                      return;
                     }
                   });
                 }

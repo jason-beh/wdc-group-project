@@ -30,8 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Load profile
         sendAJAX("GET", "/admin/view-events", null, function (err, res) {
           if (err) {
-            // do something
-            console.log(err);
+            return;
           }
 
           res = JSON.parse(res);
@@ -59,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
               behavior: "smooth",
             });
             if (err) {
-              console.log(err);
               document.getElementById("alert-error-text").innerText = "Error deleting event";
               document.getElementById("alert-error").style.display = "block";
             } else {
@@ -91,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
           JSON.stringify({ event_id: this.eventID }),
           function (err, res) {
             if (err) {
-              console.log(err);
+              return;
             }
             res = JSON.parse(res);
             app.title = res.title;
@@ -134,7 +132,6 @@ document.addEventListener("DOMContentLoaded", function () {
             behavior: "smooth",
           });
           if (err) {
-            console.log(err);
             document.getElementById("alert-error-text").innerText = "Error updating event";
             document.getElementById("alert-error").style.display = "block";
           } else {
@@ -174,7 +171,6 @@ document.addEventListener("DOMContentLoaded", function () {
             behavior: "smooth",
           });
           if (err) {
-            console.log(err);
             document.getElementById("alert-error-text").innerText = "Error creating event";
             document.getElementById("alert-error").style.display = "block";
           } else {

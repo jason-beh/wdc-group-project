@@ -8,7 +8,7 @@ router.get("/get-events", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
       connection.release();
-      return next(err);
+      return res.status(500).send("An interval server error occurred.");
     }
     let query =
       "select * FROM Events INNER JOIN User_Profile ON User_Profile.email = Events.created_by";
@@ -79,7 +79,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {
         connection.release();
-        return next(err);
+        return res.status(500).send("An interval server error occurred.");
       }
       // Get the event details
       var eventContent = rows[0];
@@ -89,7 +89,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
       connection.query(query, [event_id], function (err, rows, fields) {
         connection.release();
         if (err) {
-          return next(err);
+          return res.status(500).send("An interval server error occurred.");
         }
 
         for (var index = 0; index < rows.length; index++) {
@@ -105,7 +105,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
           // send mail with defined transport object
           req.transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-              return console.log(error);
+              return;
             }
           });
         }
@@ -126,7 +126,7 @@ router.post("/show-details", function (req, res, next) {
     connection.query(query, [event_id], function (err, rows, fields) {
       connection.release();
       if (err) {
-        return next(err);
+        return res.status(500).send("An interval server error occurred.");
       }
     });
   });
@@ -149,7 +149,7 @@ router.post("/get-proposed-time", function (req, res, next) {
     connection.query(query, [event_id], function (err, rows, field) {
       connection.release();
       if (err) {
-        return next(err);
+        return res.status(500).send("An interval server error occurred.");
       }
       res.send(rows);
     });
@@ -172,7 +172,7 @@ router.post("/get-finalise-time", function (req, res, next) {
     connection.query(query, [finalise_event_time_id], function (err, rows, field) {
       connection.release();
       if (err) {
-        return next(err);
+        return res.status(500).send("An interval server error occurred.");
       }
       res.send(rows);
     });
@@ -204,7 +204,7 @@ router.post(
       connection.query(query, [user_email, event_id], function (err, rows, field) {
         connection.release();
         if (err) {
-          return next(err);
+          return res.status(500).send("An interval server error occurred.");
         }
         return res.send(rows);
       });

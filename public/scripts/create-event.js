@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         sendFileAJAX("POST", "/create-event", formData, function (err, res) {
           if (err) {
-            console.log(err);
             document.getElementById("alert-error-text").innerText = "Error in creating event";
             document.getElementById("alert-error").style.display = "block";
             return;

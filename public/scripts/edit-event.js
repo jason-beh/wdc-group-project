@@ -11,15 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // Load profile
   sendAJAX("GET", `/events/${event_id}`, null, function (err, res) {
     if (err) {
-      // do something
-      console.log(err);
+      return;
     }
 
     // TODO: Check if it is valid event id and its editable by the current user
 
     res = JSON.parse(res);
-
-    console.log(res);
 
     var app = new Vue({
       el: "#wrapper",
@@ -68,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
               behavior: "smooth",
             });
             if (err) {
-              console.log(err);
               document.getElementById("alert-error-text").innerText = err.message;
               document.getElementById("alert-error").style.display = "block";
             } else {

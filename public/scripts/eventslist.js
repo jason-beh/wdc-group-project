@@ -2,8 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Load profile
   sendAJAX("GET", "/get-events", null, function (err, res) {
     if (err) {
-      // do something
-      console.log(err);
+      return;
     }
 
     res = JSON.parse(res);
