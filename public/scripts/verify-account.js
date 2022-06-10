@@ -8,7 +8,7 @@ if (email === null) {
 function resend() {
   sendAJAX("GET", `/send-email?email=${email}&action=verify-account`, null, function (err, res) {
     if (err) {
-      console.log(err);
+      return;
     }
   });
 }

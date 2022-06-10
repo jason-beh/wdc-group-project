@@ -105,7 +105,7 @@ router.post("/send-confirmation-email", function (req, res, next) {
           // send mail with defined transport object
           req.transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-              return console.log(error);
+              return;
             }
           });
         }

@@ -257,7 +257,6 @@ router.delete(
       connection.query(query, [email], function (err, rows, fields) {
         connection.release();
         if (err) {
-          console.log(err);
           return res.status(500).send("An interval server error occurred.");
         }
         return res.send("Success in deleting a user!");
@@ -366,9 +365,7 @@ router.post("/edit-event", function (req, res, next) {
       } else {
         try {
           fs.unlinkSync("public" + previousPath);
-        } catch (err) {
-          console.error(err);
-        }
+        } catch (err) {}
 
         req.files.forEach(function (file) {
           // Sends path name back to database
@@ -543,7 +540,7 @@ router.post(
         if (err) {
           return res.status(500).send("An interval server error occurred.");
         }
-        console.log(rows);
+
         // check
         if (!rows && rows.length == 0) {
           return res.send("User not found!");

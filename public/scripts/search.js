@@ -5,13 +5,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   sendAJAX("GET", `/search?q=${query}`, null, function (err, res) {
     if (err) {
-      // do something
-      console.log(err);
+      return;
     }
 
     res = JSON.parse(res);
-
-    console.log(res);
 
     var app = new Vue({
       el: "#app",

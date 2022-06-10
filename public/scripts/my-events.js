@@ -19,13 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
       loadAttendedEvents() {
         sendAJAX("GET", "/my-events/attended", null, function (err, res) {
           if (err) {
-            // do something
-            console.log(err);
+            return;
           }
 
           res = JSON.parse(res);
-
-          console.log(res);
 
           app.attendedEvents = res;
         });
@@ -33,13 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
       loadOrganisedEvents() {
         sendAJAX("GET", "/my-events/organized", null, function (err, res) {
           if (err) {
-            // do something
-            console.log(err);
+            return;
           }
 
           res = JSON.parse(res);
-
-          console.log(res);
 
           app.organizedEvents = res;
         });
@@ -62,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function () {
               behavior: "smooth",
             });
             if (err) {
-              console.log(err);
               document.getElementById("alert-error-text").innerText = "Error deleting event";
               document.getElementById("alert-error").style.display = "block";
             } else {
@@ -95,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
           JSON.stringify({ eventToSearch: this.eventID }),
           function (err, res) {
             if (err) {
-              console.log(err);
+              return;
             }
             res = JSON.parse(res);
             app.title = res.title;

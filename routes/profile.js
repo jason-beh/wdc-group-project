@@ -80,9 +80,7 @@ router.put(
           if (previousPath !== "/user-profiles/defaultUserProfile.png") {
             try {
               fs.unlinkSync("public" + previousPath);
-            } catch (err) {
-              console.error(err);
-            }
+            } catch (err) {}
           }
 
           req.files.forEach(function (file) {

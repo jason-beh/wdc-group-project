@@ -15,7 +15,6 @@ router.get(
 
     req.pool.getConnection(function (err, connection) {
       if (err) {
-        console.log(err);
         connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
@@ -45,7 +44,6 @@ router.get(
         query = "SELECT * from Attendance where email = ? and event_id = ?;";
         connection.query(query, [email, event_id], function (err, rows, fields) {
           if (err) {
-            console.log(err);
             connection.release();
             return res.status(500).send("An interval server error occurred.");
           }
@@ -59,7 +57,6 @@ router.get(
           connection.query(query, [email, event_id], function (err, rows, fields) {
             connection.release();
             if (err) {
-              console.log(err);
               return res.status(500).send("An interval server error occurred.");
             }
 

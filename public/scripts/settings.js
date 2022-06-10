@@ -2,8 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Load Notifications Settings
   sendAJAX("GET", "/get-settings", null, function (err, res) {
     if (err) {
-      // do something
-      console.log(err);
+      return;
     }
 
     res = JSON.parse(res);
@@ -38,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
               behavior: "smooth",
             });
             if (err) {
-              console.log(err);
               document.getElementById("alert-error").style.display = "block";
               return;
             }

@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
           }),
           function (err, finaliseRes) {
             if (err) {
-              console.log(err);
               document.getElementById("alert-danger-text-event").innerText = err.message;
               document.getElementById("alert-danger-event").style.display = "block";
             } else {
@@ -151,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     res = JSON.parse(res);
-    console.log(res);
+
     app.title = res.title;
     app.created_by = res.created_by;
     app.event_id = res.event_id;
@@ -189,7 +188,6 @@ document.addEventListener("DOMContentLoaded", function () {
         JSON.stringify({ user_email: app.userEmail, event_id: app.event_id }),
         function (err, attendanceRes) {
           if (err) {
-            console.log(err);
             document.getElementById("alert-danger-text-event").innerText = err.message;
             document.getElementById("alert-danger-event").style.display = "block";
           }

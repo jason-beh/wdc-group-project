@@ -203,9 +203,7 @@ router.post("/edit-event", function (req, res, next) {
       } else {
         try {
           fs.unlinkSync("public" + previousPath);
-        } catch (err) {
-          console.error(err);
-        }
+        } catch (err) {}
 
         req.files.forEach(function (file) {
           // Sends path name back to database
@@ -320,7 +318,7 @@ router.delete("/delete-event", function (req, res, next) {
                 req.transporter.sendMail(mailOptions, function (error, info) {
                   if (error) {
                     connection.release();
-                    return console.log(error);
+                    return;
                   }
                 });
               }
@@ -433,7 +431,7 @@ router.post(
                       connection.release();
                       return res.status(500).send("An interval server error occurred.");
                     }
-                    console.log(settingsRows);
+
                     // Send an email if they enable notifications
                     if (settingsRows.length !== 0 && settingsRows[0]["is_event_finalised"] === 1) {
                       var mailOptions = {
@@ -485,7 +483,7 @@ router.post(
                       req.transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                           connection.release();
-                          return console.log(error);
+                          return;
                         }
                       });
                     }

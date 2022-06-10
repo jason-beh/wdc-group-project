@@ -1,7 +1,6 @@
 sendAJAX("GET", "/get-session", null, function (err, res) {
   if (err) {
-    // do something
-    console.log(err);
+    return;
   }
   if (res !== "") {
     res = JSON.parse(res);
@@ -32,8 +31,7 @@ function signOut() {
   // Delete session in backend
   sendAJAX("GET", "/logout", null, function (err, res) {
     if (err) {
-      // do something
-      console.log(err);
+      return;
     }
 
     // Log user out from google

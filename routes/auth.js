@@ -30,7 +30,6 @@ router.post(
 
     req.pool.getConnection(function (err, connection) {
       if (err) {
-        console.log(err);
         connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
@@ -38,7 +37,6 @@ router.post(
       var query = "SELECT * FROM Authentication WHERE email = ?";
       connection.query(query, [email], function (err, rows, fields) {
         if (err) {
-          console.log(err);
           connection.release();
           return res.status(500).send("An interval server error occurred.");
         }
@@ -86,10 +84,9 @@ router.post(
               connection.query(query, [user.email], function (err, rows, fields) {
                 connection.release();
                 if (err) {
-                  console.log(err);
                   return res.status(500).send("An interval server error occurred.");
                 }
-                console.log(rows[0]);
+
                 // Add profile image to the session if we are able to find it
                 if (rows && rows[0]["profile_picture"] !== null) {
                   userSession["profile_picture"] = rows[0]["profile_picture"];
@@ -107,7 +104,6 @@ router.post(
             }
           })
           .catch(function (err) {
-            console.log(err);
             connection.release();
             return res.status(500).send("An interval server error occurred.");
           });

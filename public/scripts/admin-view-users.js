@@ -28,8 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Load profile
         sendAJAX("GET", "/admin/view-users", null, function (err, res) {
           if (err) {
-            // do something
-            console.log(err);
+            return;
           }
 
           res = JSON.parse(res);
@@ -58,7 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
               behavior: "smooth",
             });
             if (err) {
-              console.log(err);
               document.getElementById("alert-error-text").innerText = err.message;
               document.getElementById("alert-error").style.display = "block";
             } else {
@@ -77,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
           JSON.stringify({ email: this.currentEmail }),
           function (err, res) {
             if (err) {
-              console.log(err);
+              return;
             }
             res = JSON.parse(res);
             app.first_name = res.first_name;
@@ -111,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
             behavior: "smooth",
           });
           if (err) {
-            console.log(err);
             document.getElementById("alert-error-text").innerText = err.message;
             document.getElementById("alert-error").style.display = "block";
           } else {
@@ -136,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
             behavior: "smooth",
           });
           if (err) {
-            console.log(err);
             document.getElementById("alert-error-text").innerText = err.message;
             document.getElementById("alert-error").style.display = "block";
           } else {
@@ -163,7 +159,6 @@ document.addEventListener("DOMContentLoaded", function () {
             behavior: "smooth",
           });
           if (err) {
-            console.log(err);
             document.getElementById("alert-error-text").innerText = err.message;
             document.getElementById("alert-error").style.display = "block";
           } else {

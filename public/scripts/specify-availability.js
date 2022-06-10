@@ -101,7 +101,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 behavior: "smooth",
               });
               if (err) {
-                console.log(err);
                 document.getElementById("alert-danger-text").innerText = err.message;
                 document.getElementById("alert-danger").style.display = "block";
               } else {
@@ -118,8 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Check if user is logged in
     sendAJAX("GET", `/get-session`, null, function (err, userRes) {
       if (err) {
-        // do something
-        console.log(err);
         return;
       }
 
@@ -141,8 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
           JSON.stringify({ event_id: app.event.event_id }),
           function (err, availabilityRes) {
             if (err) {
-              // do something
-              console.log(err);
               return;
             }
 
