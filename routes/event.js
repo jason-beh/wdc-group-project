@@ -100,8 +100,9 @@ router.post("/send-confirmation-email", function (req, res, next) {
             subject: "Confirm my attendance!", // Subject line
             text: "Hello world ", // plaintext body
           };
+          let fullUrl = req.protocol + "://" + req.get("host");
           mailOptions["html"] = `<h1>${eventContent["title"]}</h1>
-              <a href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
+              <a href="${fullUrl}/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}">Confirm my attendance!</a>`;
           // send mail with defined transport object
           req.transporter.sendMail(mailOptions, function (error, info) {
             if (error) {

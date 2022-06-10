@@ -256,6 +256,8 @@ router.get("/send-email", function (req, res, next) {
           text: "Hello world ", // plaintext body
         };
 
+        let fullUrl = req.protocol + "://" + req.get("host");
+
         // Populate based on action
         if (action == "reset-password") {
           mailOptions["subject"] = "Reset Your Password !";
@@ -293,7 +295,7 @@ router.get("/send-email", function (req, res, next) {
                                     height: 50px;
                                     text-decoration: none;
                                   "
-                                    href="http://localhost:3000/reset-password?email=${email}&token=${token}"
+                                    href="${fullUrl}/reset-password?email=${email}&token=${token}"
                                   >
                                     Click here to reset your password!
                                   </a>
@@ -334,7 +336,7 @@ router.get("/send-email", function (req, res, next) {
                                     height: 50px;
                                     text-decoration: none;
                                   "
-                                    href="http://localhost:3000/verify?email=${email}&token=${token}"
+                                    href="${fullUrl}/verify?email=${email}&token=${token}"
                                   >
                                     Click here to verify your account!
                                   </a>
