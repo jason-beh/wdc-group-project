@@ -11,7 +11,7 @@ router.get("/get-events", function (req, res, next) {
       return next(err);
     }
     let query =
-      "SELECT * FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by";
+      "select * FROM Events INNER JOIN User_Profile ON User_Profile.email = Events.created_by";
     connection.query(query, [], function (err, rows, fields) {
       connection.release();
       if (err) {
@@ -37,7 +37,7 @@ router.get("/events/:event_id", function (req, res, next) {
     }
     // Query the database
     var query =
-      "SELECT event_id, title, description, created_by, proposed_date, street_number, street_name, suburb, event_picture, finalized_event_time_id, Events.state, Events.country, Events.postcode,  User_profile.first_name, User_profile.last_name  FROM Events INNER JOIN User_Profile ON USER_PROFILE.email = Events.created_by WHERE Events.event_id = ?";
+      "SELECT event_id, title, description, created_by, proposed_date, street_number, street_name, suburb, event_picture, finalized_event_time_id, Events.state, Events.country, Events.postcode,  User_Profile.first_name, User_Profile.last_name  FROM Events INNER JOIN User_Profile ON User_Profile.email = Events.created_by WHERE Events.event_id = ?";
     connection.query(query, [event_id], function (err, rows, fields) {
       if (err) {
         connection.release();
@@ -168,7 +168,7 @@ router.post("/get-finalise-time", function (req, res, next) {
       return res.status(500).send("An interval server error occurred.");
     }
 
-    var query = "SELECT * FROM proposed_event_time where proposed_event_time_id = ?;";
+    var query = "SELECT * FROM Proposed_Event_Time where proposed_event_time_id = ?;";
     connection.query(query, [finalise_event_time_id], function (err, rows, field) {
       connection.release();
       if (err) {
@@ -200,7 +200,7 @@ router.post(
         return res.status(500).send("An interval server error occurred.");
       }
 
-      var query = "SELECT * FROM attendance where email = ? AND event_id = ?;";
+      var query = "SELECT * FROM Attendance where email = ? AND event_id = ?;";
       connection.query(query, [user_email, event_id], function (err, rows, field) {
         connection.release();
         if (err) {

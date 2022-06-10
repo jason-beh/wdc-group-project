@@ -149,8 +149,8 @@ CREATE TABLE `events` (
   PRIMARY KEY (`event_id`),
   KEY `created_by` (`created_by`),
   KEY `finalized_event_time_id` (`finalized_event_time_id`),
-  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `authentication` (`email`),
-  CONSTRAINT `finalized_event_time_id` FOREIGN KEY (`finalized_event_time_id`) REFERENCES `proposed_event_time` (`proposed_event_time_id`)
+  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `authentication` (`email`) ON DELETE CASCADE,
+  CONSTRAINT `finalized_event_time_id` FOREIGN KEY (`finalized_event_time_id`) REFERENCES `proposed_event_time` (`proposed_event_time_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

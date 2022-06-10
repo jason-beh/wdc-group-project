@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   var app = new Vue({
-    el: "#wrapper",
+    el: "#eventDetail",
     data() {
       return {
         isCreator: "",
