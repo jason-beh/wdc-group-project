@@ -419,7 +419,7 @@ router.post(
 
               // Send email to all users who previously specified availability
               query =
-                "SELECT * from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
+                "SELECT distinct email from Proposed_Event_Time INNER JOIN Availability ON Availability.proposed_event_time_id = Proposed_Event_Time.proposed_event_time_id WHERE Proposed_Event_Time.event_id = ?;";
               connection.query(query, [event_id], function (err, rows, fields) {
                 if (err) {
                   connection.release();
@@ -438,7 +438,7 @@ router.post(
                     if (settingsRows.length !== 0 && settingsRows[0]["is_event_finalised"] === 1) {
                       var mailOptions = {
                         from: "socialah@outlook.com", // sender address (who sends)
-                        to: rows[0]["email"],
+                        to: settingsRows[0]["email"],
                         subject: "Event finalised", // Subject line
                         text: "Hello world ", // plaintext body
                       };
