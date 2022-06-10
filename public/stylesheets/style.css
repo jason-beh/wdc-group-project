@@ -633,6 +633,10 @@ p.description {
   max-width: 100%;
 }
 
+.event-horizontal-container {
+  margin-bottom: 150px;
+}
+
 .event-horizontal {
   display: flex;
   border-radius: 10px 10px 10px 10px;
@@ -908,6 +912,7 @@ p.description {
   border: 1px solid #eee;
   border-radius: 10px;
   margin-top: 20px;
+  margin-bottom: 150px;
 }
 
 .trash-icon {
