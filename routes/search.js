@@ -13,7 +13,7 @@ router.get("/search", function (req, res, next) {
   req.pool.getConnection(function (err, connection) {
     if (err) {
       connection.release();
-      return next(err);
+      return res.status(500).send("An interval server error occurred.");
     }
 
     let splitQuery = q.split("'");
@@ -23,7 +23,7 @@ router.get("/search", function (req, res, next) {
     connection.query(query, function (err, rows, fields) {
       connection.release();
       if (err) {
-        return next(err);
+        return res.status(500).send("An interval server error occurred.");
       }
       return res.send(rows);
     });

@@ -357,7 +357,7 @@ router.post("/edit-event", function (req, res, next) {
           function (err, rows, fields) {
             connection.release();
             if (err) {
-              return next(err);
+              return res.status(500).send("An interval server error occurred.");
             }
             return res.send("Success in modifying the event!");
           }
@@ -391,7 +391,7 @@ router.post("/edit-event", function (req, res, next) {
             function (err, rows, fields) {
               connection.release();
               if (err) {
-                return next(err);
+                return res.status(500).send("An interval server error occurred.");
               }
               return res.send("Success in modifying the event!");
             }
