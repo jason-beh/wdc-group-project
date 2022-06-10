@@ -50,7 +50,7 @@ There are three types of users in Socialah:
 
 0. (Optional) - Use our dedicated github account to ensure that you can use our Client ID and Google Calendar API key.
 
-See Troubleshooting Section 4 for more info.
+See Troubleshooting Section 3 for more info.
 
 1. Download Node.js and MySQL.
 
@@ -139,7 +139,7 @@ password: wdc2022sem2
 
 4. What should I do if I encounter SQL issues eg. TypeError: Cannot read properties of undefined (reading 'release')?
 
-The options in `db.js` must NOT HAVE the property user and password. After editing, it should look like this:
+The options in `utils/db.js` must NOT HAVE the property user and password. After editing, it should look like this:
 
 ```javascript
 var options = {
@@ -150,7 +150,7 @@ var options = {
 
 5. What should I do if I face an error: Error: ER_ACCESS_DENIED_ERROR: Access denied for user ''@'localhost' (using password: NO)?
 
-The options in `db.js` must HAVE the property user and password. After editing, it should look like this:
+The options in `utils/db.js` must HAVE the property user and password. After editing, it should look like this:
 
 ```javascript
 var options = {
@@ -161,10 +161,17 @@ var options = {
 };
 ```
 
-6. Everything is not working, what should I do?
+6. What should I do if I face this error, Google: Permission denied to generate login hint for target domain NOT on localhost?
+
+Please use localhost instead of 127.0.0.1. You may refer to https://stackoverflow.com/questions/36020374/google-permission-denied-to-generate-login-hint-for-target-domain-not-on-localh for more info.
+
+7. Everything is not working, what should I do?
 
 - Refresh the page
-- Make sure the project is ran in http://localhost:3000 (Using private port)
+- Make sure the project is ran in http://localhost:3000 (Using private port). You can do this by specifying the port number in `bin/www` at line 15:
+  ```javascript
+  var port = normalizePort("3000");
+  ```
 - In the worst case, reach out to anyone in the team members/collaborators list. Our phone numbers are:
 
   - \* Jie Shen Beh - 0466121563
