@@ -251,17 +251,17 @@ router.delete(
         connection.release();
         return res.status(500).send("An interval server error occurred.");
       }
-      
-        // Query the database
-        var query = "delete from Authentication where email = ?;";
-        connection.query(query, [email], function (err, rows, fields) {
-          connection.release();
-          if (err) {
-            console.log(err);
-            return res.status(500).send("An interval server error occurred.");
-          }
-          return res.send("Success in deleting a user!");
-        });
+
+      // Query the database
+      var query = "delete from Authentication where email = ?;";
+      connection.query(query, [email], function (err, rows, fields) {
+        connection.release();
+        if (err) {
+          console.log(err);
+          return res.status(500).send("An interval server error occurred.");
+        }
+        return res.send("Success in deleting a user!");
+      });
     });
   }
 );
@@ -375,7 +375,7 @@ router.post("/edit-event", function (req, res, next) {
           var imagePath = `/images/events/${file.filename}`;
 
           var query =
-            "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ?, event_picture = ? where event_id = ? and created_by = ?";
+            "UPDATE Events set title = ?, description = ?, street_number = ?, street_name = ?, suburb = ?, state = ?, country = ?, postcode = ?, event_picture = ? where event_id = ?";
           connection.query(
             query,
             [
