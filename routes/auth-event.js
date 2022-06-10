@@ -440,7 +440,8 @@ router.post(
                         subject: "Event finalised", // Subject line
                         text: "Hello world ", // plaintext body
                       };
-                      // TODO: Add finalised time into message
+
+                      let fullUrl = req.protocol + "://" + req.get("host");
                       mailOptions["html"] = `<div
                                               style="
                                                 display: flex;
@@ -474,7 +475,7 @@ router.post(
                                                   height: 50px;
                                                   text-decoration: none;
                                                 "
-                                                href="http://localhost:3000/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}"
+                                                href="${fullUrl}/confirm-attendance?email=${mailOptions["to"]}&event_id=${event_id}"
                                               >
                                                 Confirm Attendance
                                               </a>
