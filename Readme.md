@@ -4,6 +4,8 @@
 
 A social event planning system that allows you to create events and ask friends to fill up their availability. With their input, you get to make better decisions and increase event turnout rate!
 
+Video Link: https://www.youtube.com/watch?v=-doZzZLz0QE
+
 ## Features
 
 There are three types of users in Socialah:
